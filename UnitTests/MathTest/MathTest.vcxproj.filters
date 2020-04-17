@@ -24,6 +24,9 @@
     <ClCompile Include="Vector3Test.cpp">
       <Filter>Test Files</Filter>
     </ClCompile>
+    <ClCompile Include="EngineMathTest.cpp">
+      <Filter>Test Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
