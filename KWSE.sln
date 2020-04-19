@@ -15,6 +15,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Math", "Framework\Math\Math
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MathTest", "UnitTests\MathTest\MathTest.vcxproj", "{46FE420D-626C-4B43-87FD-082B0ABCECB8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{35F19A9C-21C8-4210-9A6D-D259336ECDCB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KWSE", "Engine\KWSE\KWSE.vcxproj", "{466BF4DA-1793-4AE1-BF07-3499E184BA80}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VGP242", "VGP242", "{6C57F439-8EAA-497F-BD11-94262D4EBD20}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01_HelloWindow", "VGP242\01_HelloWindow\01_HelloWindow.vcxproj", "{8CA78C8D-7C95-4215-B1B4-E86B16F1646E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -55,6 +63,22 @@ Global
 		{46FE420D-626C-4B43-87FD-082B0ABCECB8}.Release|x64.Build.0 = Release|x64
 		{46FE420D-626C-4B43-87FD-082B0ABCECB8}.Release|x86.ActiveCfg = Release|Win32
 		{46FE420D-626C-4B43-87FD-082B0ABCECB8}.Release|x86.Build.0 = Release|Win32
+		{466BF4DA-1793-4AE1-BF07-3499E184BA80}.Debug|x64.ActiveCfg = Debug|x64
+		{466BF4DA-1793-4AE1-BF07-3499E184BA80}.Debug|x64.Build.0 = Debug|x64
+		{466BF4DA-1793-4AE1-BF07-3499E184BA80}.Debug|x86.ActiveCfg = Debug|Win32
+		{466BF4DA-1793-4AE1-BF07-3499E184BA80}.Debug|x86.Build.0 = Debug|Win32
+		{466BF4DA-1793-4AE1-BF07-3499E184BA80}.Release|x64.ActiveCfg = Release|x64
+		{466BF4DA-1793-4AE1-BF07-3499E184BA80}.Release|x64.Build.0 = Release|x64
+		{466BF4DA-1793-4AE1-BF07-3499E184BA80}.Release|x86.ActiveCfg = Release|Win32
+		{466BF4DA-1793-4AE1-BF07-3499E184BA80}.Release|x86.Build.0 = Release|Win32
+		{8CA78C8D-7C95-4215-B1B4-E86B16F1646E}.Debug|x64.ActiveCfg = Debug|x64
+		{8CA78C8D-7C95-4215-B1B4-E86B16F1646E}.Debug|x64.Build.0 = Debug|x64
+		{8CA78C8D-7C95-4215-B1B4-E86B16F1646E}.Debug|x86.ActiveCfg = Debug|Win32
+		{8CA78C8D-7C95-4215-B1B4-E86B16F1646E}.Debug|x86.Build.0 = Debug|Win32
+		{8CA78C8D-7C95-4215-B1B4-E86B16F1646E}.Release|x64.ActiveCfg = Release|x64
+		{8CA78C8D-7C95-4215-B1B4-E86B16F1646E}.Release|x64.Build.0 = Release|x64
+		{8CA78C8D-7C95-4215-B1B4-E86B16F1646E}.Release|x86.ActiveCfg = Release|Win32
+		{8CA78C8D-7C95-4215-B1B4-E86B16F1646E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,12 +88,14 @@ Global
 		{882303E3-63EC-4B43-9907-7B564FD21E28} = {7399A153-40A7-4664-8A18-7670F5B9FDE4}
 		{557E132E-411D-4464-B981-7F2D9E5B8454} = {75F3C1F8-E92C-4100-B664-78E439CA6DED}
 		{46FE420D-626C-4B43-87FD-082B0ABCECB8} = {7399A153-40A7-4664-8A18-7670F5B9FDE4}
+		{466BF4DA-1793-4AE1-BF07-3499E184BA80} = {35F19A9C-21C8-4210-9A6D-D259336ECDCB}
+		{8CA78C8D-7C95-4215-B1B4-E86B16F1646E} = {6C57F439-8EAA-497F-BD11-94262D4EBD20}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C041DC44-92D1-453E-BCFA-5B9E9DF9D604}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://dev.azure.com/kairusl
 		SccLocalPath0 = .
@@ -89,5 +115,13 @@ Global
 		SccProjectTopLevelParentUniqueName4 = KWSE.sln
 		SccProjectName4 = UnitTests/MathTest
 		SccLocalPath4 = UnitTests\\MathTest
+		SccProjectUniqueName5 = Engine\\KWSE\\KWSE.vcxproj
+		SccProjectTopLevelParentUniqueName5 = KWSE.sln
+		SccProjectName5 = Engine/KWSE
+		SccLocalPath5 = Engine\\KWSE
+		SccProjectUniqueName6 = VGP242\\01_HelloWindow\\01_HelloWindow.vcxproj
+		SccProjectTopLevelParentUniqueName6 = KWSE.sln
+		SccProjectName6 = VGP242/01_HelloWindow
+		SccLocalPath6 = VGP242\\01_HelloWindow
 	EndGlobalSection
 EndGlobal
