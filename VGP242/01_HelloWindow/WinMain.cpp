@@ -6,6 +6,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
 	window.Initialize(hInstance, L"Hello Window", 1280, 720);
 
 	bool running = true;
+
 	while (running &&window.IsActive())
 	{
 

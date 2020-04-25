@@ -7,6 +7,7 @@
 
 //Matrix
 #include "Matrix3.h"
+#include "Matrix4.h"
 
 
 namespace KWSE::Math
@@ -43,21 +44,6 @@ namespace KWSE::Math
 		m._13,m._23,m._33
 		};
 	}
-	
-
-
-
-	constexpr float Dot(const Vector3& v0, const Vector3& v1)
-	{
-		return (v0.x * v1.x) + (v0.y * v1.y) + (v0.z * v1.z);
-	}
-	constexpr float MagnitudeSqr(const Vector3& v)
-	{
-		return (v.x*v.x) + (v.y*v.y) + (v.z*v.z);
-	}
-
-	//Inline
-	//Constexpr
 
 	constexpr float Determinant(const Matrix3& m)
 	{
@@ -96,6 +82,57 @@ namespace KWSE::Math
 		const float inverseDeterminant = 1.0f / determinant;
 		return Adjoint(m) *inverseDeterminant;
 	}
+	
+	//Matrix4
+	const Matrix4 Matrix4::Identity
+	{
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f,
+	};
+	Matrix4 Matrix4::RotationAxis(const Vector3& axis, float radian)
+	{
+		const Vector3 u = Normalize(axis);
+		const float x = u.x;
+		const float y = u.y;
+		const float z = u.z;
+		const float s = sin(radian);
+		const float c = cos(radian);
+
+		return {
+			c + (x * x * (1.0f - c)),
+			x * y * (1.0f - c) + z * s,
+			x * z * (1.0f - c) - y * s,
+			0.0f,
+
+			x * y * (1.0f - c) - z * s,
+			c + (y * y * (1.0f - c)),
+			y * z * (1.0f - c) + x * s,
+			0.0f,
+
+			x * z * (1.0f - c) + y * s,
+			y * z * (1.0f - c) - x * s,
+			c + (z * z * (1.0f - c)),
+			0.0f,
+
+			0.0f, 0.0f, 0.0f, 1.0f
+		};
+	}
+
+
+	constexpr float Dot(const Vector3& v0, const Vector3& v1)
+	{
+		return (v0.x * v1.x) + (v0.y * v1.y) + (v0.z * v1.z);
+	}
+	constexpr float MagnitudeSqr(const Vector3& v)
+	{
+		return (v.x*v.x) + (v.y*v.y) + (v.z*v.z);
+	}
+
+	//Inline
+	//Constexpr
+
 	inline float Magnitude(const Vector3& v)
 	{
 		return sqrtf(MagnitudeSqr(v));

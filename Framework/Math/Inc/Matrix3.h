@@ -15,9 +15,7 @@ namespace KWSE::Math
 			std::array<float, 9> v;
 		};
 
-		//Constuctor
-		//Matrix3() {};
-		// Matrix3() : Matrix3 {0.0f} {}
+
 
 		//Identity
 		const static Matrix3 Identity;
@@ -44,14 +42,14 @@ namespace KWSE::Math
 		{
 			return
 			{
-				(_11 + other._11) , (_12 + other._21) , (_13 + other._31),
+				(_11 + other._11) , (_12 + other._12) , (_13 + other._13),
 				(_21 + other._21) , (_22 + other._22) , (_23 + other._23),
 				(_31 + other._31) , (_32 + other._32) , (_33 + other._33)
 			};
 		}
 		constexpr Matrix3& operator+=(const Matrix3& other)
 		{
-			(_11 += other._11) ; (_12 += other._21) ; (_13 += other._31);
+			(_11 += other._11) ; (_12 += other._12) ; (_13 += other._13);
 			(_21 += other._21) ; (_22 += other._22) ; (_23 += other._23);
 			(_31 += other._31) ; (_32 += other._32) ; (_33 += other._33);
 			return *this;
@@ -60,14 +58,14 @@ namespace KWSE::Math
 		{
 			return
 			{
-				(_11 - other._11) , (_12 - other._21) , (_13 - other._31),
+				(_11 - other._11) , (_12 - other._12) , (_13 - other._13),
 				(_21 - other._21) , (_22 - other._22) , (_23 - other._23),
 				(_31 - other._31) , (_32 - other._32) , (_33 - other._33)
 			};
 		}
 		constexpr Matrix3& operator-=(const Matrix3& other)
 		{
-			(_11 -= other._11); (_12 -= other._21); (_13 -= other._31);
+			(_11 -= other._11); (_12 -= other._12); (_13 -= other._13);
 			(_21 -= other._21); (_22 -= other._22); (_23 -= other._23);
 			(_31 -= other._31); (_32 -= other._32); (_33 -= other._33);
 			return *this;

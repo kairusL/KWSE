@@ -23,6 +23,7 @@
     </ClInclude>
     <ClInclude Include="Inc\Vector2.h" />
     <ClInclude Include="Inc\Matrix3.h" />
+    <ClInclude Include="Inc\Matrix4.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Precompiled.cpp">
