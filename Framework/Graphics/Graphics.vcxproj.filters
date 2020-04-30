@@ -2,23 +2,26 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Inc">
-      <UniqueIdentifier>{b84c7f06-a6c0-46a0-b61e-6ad2ac110d4d}</UniqueIdentifier>
+      <UniqueIdentifier>{4ff0f1a9-baa6-4f1e-98dd-236b81989a90}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src">
-      <UniqueIdentifier>{e808df33-e885-4b74-8555-2706b1a7e64a}</UniqueIdentifier>
+      <UniqueIdentifier>{ff63c7c5-72a9-44fd-aa37-9b7d9817eabc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Inc\Common.h">
       <Filter>Inc</Filter>
     </ClInclude>
-    <ClInclude Include="Inc\KWSE.h">
+    <ClInclude Include="Inc\Graphics.h">
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="Src\Precompiled.h">
       <Filter>Src</Filter>
     </ClInclude>
-    <ClInclude Include="Inc\App.h">
+    <ClInclude Include="Inc\GraphicsSystem.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Colors.h">
       <Filter>Inc</Filter>
     </ClInclude>
   </ItemGroup>
@@ -26,10 +29,7 @@
     <ClCompile Include="Src\Precompiled.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Src\App.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\KWSE.cpp">
+    <ClCompile Include="Src\GraphicsSystem.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>
