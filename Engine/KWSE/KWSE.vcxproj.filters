@@ -21,6 +21,7 @@
     <ClInclude Include="Inc\App.h">
       <Filter>Inc</Filter>
     </ClInclude>
+    <ClInclude Include="Inc\AppState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Precompiled.cpp">
