@@ -27,6 +27,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graphics", "Framework\Graph
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "02_HelloDirectX", "VGP242\02_HelloDirectX\02_HelloDirectX.vcxproj", "{80135703-2A0E-4326-A2DC-39C9F9831309}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Input", "Framework\Input\Input.vcxproj", "{361B75BC-C619-4025-AF24-18C01B197AB8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{670BC9FB-68B6-4DBB-BCB0-7149D64DCAA8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTK_Desktop_2017", "External\DirectXTK\DirectXTK_Desktop_2017.vcxproj", "{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTKAudio_Desktop_2017_Win8", "External\DirectXTK\Audio\DirectXTKAudio_Desktop_2017_Win8.vcxproj", "{4F150A30-CECB-49D1-8283-6A3F57438CF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -99,6 +107,30 @@ Global
 		{80135703-2A0E-4326-A2DC-39C9F9831309}.Release|x64.Build.0 = Release|x64
 		{80135703-2A0E-4326-A2DC-39C9F9831309}.Release|x86.ActiveCfg = Release|Win32
 		{80135703-2A0E-4326-A2DC-39C9F9831309}.Release|x86.Build.0 = Release|Win32
+		{361B75BC-C619-4025-AF24-18C01B197AB8}.Debug|x64.ActiveCfg = Debug|x64
+		{361B75BC-C619-4025-AF24-18C01B197AB8}.Debug|x64.Build.0 = Debug|x64
+		{361B75BC-C619-4025-AF24-18C01B197AB8}.Debug|x86.ActiveCfg = Debug|Win32
+		{361B75BC-C619-4025-AF24-18C01B197AB8}.Debug|x86.Build.0 = Debug|Win32
+		{361B75BC-C619-4025-AF24-18C01B197AB8}.Release|x64.ActiveCfg = Release|x64
+		{361B75BC-C619-4025-AF24-18C01B197AB8}.Release|x64.Build.0 = Release|x64
+		{361B75BC-C619-4025-AF24-18C01B197AB8}.Release|x86.ActiveCfg = Release|Win32
+		{361B75BC-C619-4025-AF24-18C01B197AB8}.Release|x86.Build.0 = Release|Win32
+		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}.Debug|x64.ActiveCfg = Debug|x64
+		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}.Debug|x64.Build.0 = Debug|x64
+		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}.Debug|x86.ActiveCfg = Debug|Win32
+		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}.Debug|x86.Build.0 = Debug|Win32
+		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}.Release|x64.ActiveCfg = Release|x64
+		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}.Release|x64.Build.0 = Release|x64
+		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}.Release|x86.ActiveCfg = Release|Win32
+		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}.Release|x86.Build.0 = Release|Win32
+		{4F150A30-CECB-49D1-8283-6A3F57438CF5}.Debug|x64.ActiveCfg = Debug|x64
+		{4F150A30-CECB-49D1-8283-6A3F57438CF5}.Debug|x64.Build.0 = Debug|x64
+		{4F150A30-CECB-49D1-8283-6A3F57438CF5}.Debug|x86.ActiveCfg = Debug|Win32
+		{4F150A30-CECB-49D1-8283-6A3F57438CF5}.Debug|x86.Build.0 = Debug|Win32
+		{4F150A30-CECB-49D1-8283-6A3F57438CF5}.Release|x64.ActiveCfg = Release|x64
+		{4F150A30-CECB-49D1-8283-6A3F57438CF5}.Release|x64.Build.0 = Release|x64
+		{4F150A30-CECB-49D1-8283-6A3F57438CF5}.Release|x86.ActiveCfg = Release|Win32
+		{4F150A30-CECB-49D1-8283-6A3F57438CF5}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,12 +144,15 @@ Global
 		{8CA78C8D-7C95-4215-B1B4-E86B16F1646E} = {6C57F439-8EAA-497F-BD11-94262D4EBD20}
 		{A60EB9C2-4738-43E7-BD9D-E3CC9B5E9C34} = {75F3C1F8-E92C-4100-B664-78E439CA6DED}
 		{80135703-2A0E-4326-A2DC-39C9F9831309} = {6C57F439-8EAA-497F-BD11-94262D4EBD20}
+		{361B75BC-C619-4025-AF24-18C01B197AB8} = {75F3C1F8-E92C-4100-B664-78E439CA6DED}
+		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E} = {670BC9FB-68B6-4DBB-BCB0-7149D64DCAA8}
+		{4F150A30-CECB-49D1-8283-6A3F57438CF5} = {670BC9FB-68B6-4DBB-BCB0-7149D64DCAA8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C041DC44-92D1-453E-BCFA-5B9E9DF9D604}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 9
+		SccNumberOfProjects = 12
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://dev.azure.com/kairusl
 		SccLocalPath0 = .
@@ -153,5 +188,17 @@ Global
 		SccProjectTopLevelParentUniqueName8 = KWSE.sln
 		SccProjectName8 = VGP242/02_HelloDirectX
 		SccLocalPath8 = VGP242\\02_HelloDirectX
+		SccProjectUniqueName9 = Framework\\Input\\Input.vcxproj
+		SccProjectTopLevelParentUniqueName9 = KWSE.sln
+		SccProjectName9 = Framework/Input
+		SccLocalPath9 = Framework\\Input
+		SccProjectUniqueName10 = External\\DirectXTK\\DirectXTK_Desktop_2017.vcxproj
+		SccProjectTopLevelParentUniqueName10 = KWSE.sln
+		SccProjectName10 = External/DirectXTK
+		SccLocalPath10 = External\\DirectXTK
+		SccProjectUniqueName11 = External\\DirectXTK\\Audio\\DirectXTKAudio_Desktop_2017_Win8.vcxproj
+		SccProjectTopLevelParentUniqueName11 = KWSE.sln
+		SccProjectName11 = External/DirectXTK/Audio
+		SccLocalPath11 = External\\DirectXTK\\Audio
 	EndGlobalSection
 EndGlobal
