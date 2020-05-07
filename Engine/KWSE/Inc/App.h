@@ -10,6 +10,10 @@ namespace KWSE
 		// Default Constructor 
 		AppConfig() = default;
 
+		AppConfig(std::wstring appName)
+			: appName(std::move(appName))
+		{}
+
 		AppConfig(std::wstring appName, uint32_t windowWidth, uint32_t windowHeight)
 			: appName(std::move(appName)), windowWidth(windowWidth), windonHeight(windowHeight)
 		{}
@@ -29,6 +33,7 @@ namespace KWSE
 			auto state = mAppStates.emplace(std::move(stateName), std::make_unique<StateType>());
 			if (mCurrentState == nullptr)
 			{
+				LOG("App -- Starting state: &s", mCurrentState);
 				mCurrentState = state.first->second.get();
 			}
 		}

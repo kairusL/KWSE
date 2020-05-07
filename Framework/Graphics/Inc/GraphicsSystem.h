@@ -38,6 +38,9 @@ namespace KWSE::Graphics
 
 		float GetBackBufferAspectRatio() const;
 
+		ID3D11Device* GetDevice() { return mD3DDevice; }
+		ID3D11DeviceContext* GetContext() { return mImmediateContext; }
+
 	private:
 		friend LRESULT CALLBACK GraphicsSystemMessageHandler(HWND window, UINT message, WPARAM wParam, LPARAM lParam);
 

@@ -6,6 +6,7 @@
 using namespace KWSE;
 using namespace KWSE::Core;
 using namespace KWSE::Graphics;
+using namespace KWSE::Input;
 
 
 
@@ -13,6 +14,7 @@ void KWSE::App::ChangeState(const std::string & stateName)
 {
 	if (auto iter = mAppStates.find(stateName); iter!=mAppStates.end())
 	{
+		LOG("App -- Changing state: &s", stateName.c_str());
 		mNextState = iter->second.get();
 	}
 }
@@ -35,8 +37,15 @@ void App::Run(AppConfig appConfig)
 
 	auto handle = mWindow.GetWindowHandle();
 
+	// Initialize the input system
+	InputSystem::StaticInitialize(handle);
+
 	// Initialize the graphics system
 	GraphicsSystem::StaticInitialize(handle, false);
+
+	//Initialize the starting state
+	ASSERT(mCurrentState, "App -- No app state found! App must have at lease one AppState.");
+	mCurrentState->Initialize();
 
 	LOG("APP -- Entering main loop ...");
 
@@ -47,12 +56,6 @@ void App::Run(AppConfig appConfig)
 	{
 
 		mWindow.ProcessMessage();
-		if (mNextState)
-		{
-			mCurrentState->Terminate();
-			mCurrentState = std::exchange(mNextState, nullptr);
-			mCurrentState->Initialize();
-		}
 
 		if (!mWindow.IsActive())
 		{
@@ -61,7 +64,18 @@ void App::Run(AppConfig appConfig)
 			continue;
 		}
 
-		if (GetAsyncKeyState(VK_ESCAPE))
+		if (mNextState)
+		{
+			mCurrentState->Terminate();
+			mCurrentState = std::exchange(mNextState, nullptr);
+			mCurrentState->Initialize();
+		}
+
+
+		auto inputSystem = InputSystem::Get();
+		inputSystem->Update();
+
+		if (inputSystem->IsKeyPressed(KeyCode::ESCAPE))
 		{
 			LOG("APP -- window destroyed. Exiting app ...");
 			Quit();
@@ -76,16 +90,22 @@ void App::Run(AppConfig appConfig)
 		// Draw stuff here...
 		mCurrentState->Render();
 
+		//DebugUI:: BeginRender();
+		mCurrentState->Terminate();
+		//DebugUI::EndRender();
+
 
 		GraphicsSystem::Get()->EndRender();
 	}
+	
+	LOG("APP -- Shutting down ...");
 
 	// CleanState
 	mCurrentState->Terminate();
 
 	GraphicsSystem::StaticTerminate();
+	InputSystem::StaticTerminate();
 
-	LOG("APP -- Shutting down ...");
 
 	mWindow.Terminate();
 

@@ -7,6 +7,7 @@ namespace
 }
 
 using namespace KWSE::Graphics;
+using namespace KWSE::Input;
 
 
 // --Black-- //
@@ -17,7 +18,8 @@ void BlackState::Initialize()
 
 void BlackState::Update(float deltaTime)
 {
-	if (GetAsyncKeyState(VK_SPACE)&1)
+
+	if (InputSystem::Get()->IsKeyPressed(KeyCode::SPACE))
 	{
 		if (mTime < KWSE::Core::TimeUtil::GetTime())
 		{
