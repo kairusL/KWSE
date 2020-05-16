@@ -37,6 +37,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTKAudio_Desktop_2017
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "03_HelloTriangle", "VGP242\03_HelloTriangle\03_HelloTriangle.vcxproj", "{03106871-8BFC-4F22-AA41-F995D69C80B5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "04_HelloShaders", "VGP242\04_HelloShaders\04_HelloShaders.vcxproj", "{CC6328D1-2E9D-424B-B092-C1A92830099A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{258D5CE8-17EB-42D5-ABA0-0BCC84E66C04}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{B20E9147-8412-44B7-9A18-AAA03187C134}"
+	ProjectSection(SolutionItems) = preProject
+		Assets\Shaders\DoNothing.fx = Assets\Shaders\DoNothing.fx
+		Assets\Shaders\DoSomething.fx = Assets\Shaders\DoSomething.fx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -141,6 +151,14 @@ Global
 		{03106871-8BFC-4F22-AA41-F995D69C80B5}.Release|x64.Build.0 = Release|x64
 		{03106871-8BFC-4F22-AA41-F995D69C80B5}.Release|x86.ActiveCfg = Release|Win32
 		{03106871-8BFC-4F22-AA41-F995D69C80B5}.Release|x86.Build.0 = Release|Win32
+		{CC6328D1-2E9D-424B-B092-C1A92830099A}.Debug|x64.ActiveCfg = Debug|x64
+		{CC6328D1-2E9D-424B-B092-C1A92830099A}.Debug|x64.Build.0 = Debug|x64
+		{CC6328D1-2E9D-424B-B092-C1A92830099A}.Debug|x86.ActiveCfg = Debug|Win32
+		{CC6328D1-2E9D-424B-B092-C1A92830099A}.Debug|x86.Build.0 = Debug|Win32
+		{CC6328D1-2E9D-424B-B092-C1A92830099A}.Release|x64.ActiveCfg = Release|x64
+		{CC6328D1-2E9D-424B-B092-C1A92830099A}.Release|x64.Build.0 = Release|x64
+		{CC6328D1-2E9D-424B-B092-C1A92830099A}.Release|x86.ActiveCfg = Release|Win32
+		{CC6328D1-2E9D-424B-B092-C1A92830099A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -158,12 +176,14 @@ Global
 		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E} = {670BC9FB-68B6-4DBB-BCB0-7149D64DCAA8}
 		{4F150A30-CECB-49D1-8283-6A3F57438CF5} = {670BC9FB-68B6-4DBB-BCB0-7149D64DCAA8}
 		{03106871-8BFC-4F22-AA41-F995D69C80B5} = {6C57F439-8EAA-497F-BD11-94262D4EBD20}
+		{CC6328D1-2E9D-424B-B092-C1A92830099A} = {6C57F439-8EAA-497F-BD11-94262D4EBD20}
+		{B20E9147-8412-44B7-9A18-AAA03187C134} = {258D5CE8-17EB-42D5-ABA0-0BCC84E66C04}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C041DC44-92D1-453E-BCFA-5B9E9DF9D604}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 13
+		SccNumberOfProjects = 14
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://dev.azure.com/kairusl
 		SccLocalPath0 = .
@@ -215,5 +235,9 @@ Global
 		SccProjectTopLevelParentUniqueName12 = KWSE.sln
 		SccProjectName12 = VGP242/03_HelloTriangle
 		SccLocalPath12 = VGP242\\03_HelloTriangle
+		SccProjectUniqueName13 = VGP242\\04_HelloShaders\\04_HelloShaders.vcxproj
+		SccProjectTopLevelParentUniqueName13 = KWSE.sln
+		SccProjectName13 = VGP242/04_HelloShaders
+		SccLocalPath13 = VGP242\\04_HelloShaders
 	EndGlobalSection
 EndGlobal

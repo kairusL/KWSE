@@ -12,21 +12,10 @@ public:
 	void Update(float deltaTime) override;
 	void Render() override;
 private:
-	struct Vertex
-	{
-		KWSE::Math::Vector3 position;
-		KWSE::Graphics::Color color;
-	};
+	KWSE::Graphics::MeshPC mMesh;
+	KWSE::Graphics::MeshBuffer mMeshBuffer;
 
-	std::vector<Vertex> mVertices;
-
-	ID3D11Buffer* mVertexBuffer = nullptr;
-
-	ID3D11VertexShader* mVertexShader = nullptr;
-	ID3D11InputLayout* mInputLayout = nullptr;
-
-	ID3D11PixelShader* mPixelShader = nullptr;
-
-
+	KWSE::Graphics::PixelShader mPixelShader;
+	KWSE::Graphics::VertexShader mVertexShader;
 
 };

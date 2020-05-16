@@ -15,12 +15,12 @@ namespace KWSE
 		{}
 
 		AppConfig(std::wstring appName, uint32_t windowWidth, uint32_t windowHeight)
-			: appName(std::move(appName)), windowWidth(windowWidth), windonHeight(windowHeight)
+			: appName(std::move(appName)), windowWidth(windowWidth), windowHeight(windowHeight)
 		{}
 
 		std::wstring appName = L"KWSE";
 		uint32_t windowWidth = 1280;
-		uint32_t windonHeight = 720;
+		uint32_t windowHeight = 720;
 	};
 
 	class App
@@ -33,7 +33,7 @@ namespace KWSE
 			auto state = mAppStates.emplace(std::move(stateName), std::make_unique<StateType>());
 			if (mCurrentState == nullptr)
 			{
-				LOG("App -- Starting state: &s", mCurrentState);
+				LOG("App -- Starting state: %s", state.first->first.c_str());
 				mCurrentState = state.first->second.get();
 			}
 		}

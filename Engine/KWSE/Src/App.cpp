@@ -14,7 +14,7 @@ void KWSE::App::ChangeState(const std::string & stateName)
 {
 	if (auto iter = mAppStates.find(stateName); iter!=mAppStates.end())
 	{
-		LOG("App -- Changing state: &s", stateName.c_str());
+		LOG("App -- Changing state: %s", stateName.c_str());
 		mNextState = iter->second.get();
 	}
 }
@@ -33,7 +33,7 @@ void App::Run(AppConfig appConfig)
 	TimeUtil::Initialize();
 
 	// Import own value for the window  
-	mWindow.Initialize(GetModuleHandle(NULL), mAppConfig.appName.c_str(), mAppConfig.windowWidth,mAppConfig.windonHeight);
+	mWindow.Initialize(GetModuleHandle(NULL), mAppConfig.appName.c_str(), mAppConfig.windowWidth,mAppConfig.windowHeight);
 
 	auto handle = mWindow.GetWindowHandle();
 
@@ -91,7 +91,7 @@ void App::Run(AppConfig appConfig)
 		mCurrentState->Render();
 
 		//DebugUI:: BeginRender();
-		mCurrentState->Terminate();
+		//mCurrentState->Terminate();
 		//DebugUI::EndRender();
 
 
