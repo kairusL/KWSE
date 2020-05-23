@@ -25,6 +25,7 @@
     <ClInclude Include="Inc\Matrix3.h" />
     <ClInclude Include="Inc\Matrix4.h" />
     <ClInclude Include="Inc\Vector4.h" />
+    <ClInclude Include="Inc\Constants.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Precompiled.cpp">

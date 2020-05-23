@@ -11,8 +11,12 @@ KWSE::Graphics::MeshBuffer::~MeshBuffer()
 	ASSERT(mIndexBuffer == nullptr, "MeshBuffer -- Index buffer not released!");
 
 }
+void KWSE::Graphics::MeshBuffer::Initialize(const void* vertexData, uint32_t vertexSize, uint32_t verticesCount)
+{
+	Initialize(vertexData, vertexSize, verticesCount, nullptr, 0);
+}
 
-void KWSE::Graphics::MeshBuffer::Initialize(const void* vertexData, uint32_t vertexSize,uint32_t verticesCount, const uint32_t* indices, uint32_t indexCount)
+void KWSE::Graphics::MeshBuffer::Initialize(const void* vertexData, uint32_t vertexSize,uint32_t verticesCount, const uint32_t* indexData, uint32_t indexCount)
 {
 	mVertexSize = vertexSize;
 	mVertexCount = verticesCount;
@@ -36,13 +40,13 @@ void KWSE::Graphics::MeshBuffer::Initialize(const void* vertexData, uint32_t ver
 	HRESULT hr = device->CreateBuffer(&bufferDesc, &initData, &mVertexBuffer);
 	ASSERT(SUCCEEDED(hr), "Failed to create vertex buffer.");
 
-	if (indices != nullptr && indexCount > 0)
+	if (indexData && indexCount > 0)
 	{
 		// Create index buffer
 		bufferDesc.ByteWidth = indexCount* sizeof(uint32_t);
 		bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
-		initData.pSysMem = indices;
+		initData.pSysMem = indexData;
 
 		hr = device->CreateBuffer(&bufferDesc, &initData, &mIndexBuffer);
 		ASSERT(SUCCEEDED(hr), "Failed to create index buffer.");
@@ -66,9 +70,15 @@ void KWSE::Graphics::MeshBuffer::Render()
 	UINT offset = 0;
 	context->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
 
-	//context->Draw((UINT)mVertexCount, 0);
+	if (mIndexBuffer != nullptr)
+	{
 	context->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	context->DrawIndexed(mIndexCount, 0, 0);
+	}
+	else
+	{
+		context->Draw((UINT)mVertexCount, 0);
+	}
 }
 
 

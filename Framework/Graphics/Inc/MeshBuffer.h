@@ -10,7 +10,8 @@ namespace KWSE::Graphics
 		template <class MeshT>
 		void Initialize(const MeshT& mesh)
 		{
-			Initialize(mesh.vertices.data(),
+			Initialize(
+				mesh.vertices.data(),
 				static_cast<uint32_t>(sizeof(MeshT::VertexType)), //verticesSize  //<--- Geting from MeshTypes.h
 				static_cast<uint32_t>(mesh.vertices.size()),      //verticesCount //<--- Geting from MeshTypes.h 
 				mesh.indices.data(),											  //<--- Geting from MeshTypes.h
@@ -19,8 +20,10 @@ namespace KWSE::Graphics
 			);
 			
 		}
+
+		void Initialize(const void* vertexData, uint32_t vertexSize, uint32_t verticesCount);
 		void Initialize(const void* vertexData, uint32_t vertexSize,uint32_t verticesCount,
-						const uint32_t* indices, uint32_t indexCount);
+						const uint32_t* indexData, uint32_t indexCount);
 		void Terminate();
 
 		void Render();

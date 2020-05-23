@@ -18,7 +18,7 @@ void VertexShader::Initialize(const std::filesystem::path& filePath)
 	ID3DBlob* errorBlob = nullptr;
 
 	HRESULT hr = D3DCompileFromFile(
-		L"../../Assets/Shaders/DoNothing.fx",
+		filePath.wstring().c_str(),
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"VS", "vs_5_0",
