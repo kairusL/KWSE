@@ -17,7 +17,7 @@ void KWSE::Graphics::ConstantBuffer::Initialize(uint32_t constantBufferSize)
 
 	auto device = GraphicsSystem::Get()->GetDevice();
 	HRESULT hr = device->CreateBuffer(&bufferDesc, nullptr, &mConstantBuffer);
-	ASSERT(SUCCEEDED(hr), "Failed to create constant buffer.");
+	ASSERT(SUCCEEDED(hr), "ConstantBuffer - Failed to create constant buffer.");
 }
 
 void KWSE::Graphics::ConstantBuffer::Terminate()
@@ -25,13 +25,20 @@ void KWSE::Graphics::ConstantBuffer::Terminate()
 	SafeRelease(mConstantBuffer);
 }
 
-void KWSE::Graphics::ConstantBuffer::Set(const void * data)
+void KWSE::Graphics::ConstantBuffer::Update(const void * data)const
 {
 	GraphicsSystem::Get()->GetContext()->UpdateSubresource(mConstantBuffer, 0, nullptr, data, 0, 0);
 }
 
-void KWSE::Graphics::ConstantBuffer::Bind()
+void KWSE::Graphics::ConstantBuffer::BindVS(uint32_t slot) const
 {
-	UINT slot = 0; // This needs to match the shader register index.
+	//UINT slot = 0; // This needs to match the shader register index.
 	GraphicsSystem::Get()->GetContext()->VSSetConstantBuffers(slot, 1, &mConstantBuffer);
+}
+
+void KWSE::Graphics::ConstantBuffer::BindPS(uint32_t slot) const
+{
+	auto context = GraphicsSystem::Get()->GetContext();
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////
 }

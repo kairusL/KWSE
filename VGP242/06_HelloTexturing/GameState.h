@@ -21,8 +21,13 @@ private:
 	using TransformBuffer = KWSE::Graphics::TypedConstantBuffer<TransformData>;
 
 	KWSE::Graphics::Camera mCamera;
-	KWSE::Graphics::MeshPC mMesh;
+	KWSE::Graphics::MeshPX mMesh;
 	KWSE::Graphics::MeshBuffer mMeshBuffer;
+	KWSE::Graphics::MeshBuffer mMeshPlaneBuffer;
+	KWSE::Graphics::Texture mTexrure;
+	KWSE::Graphics::Sampler mSampler;
+	KWSE::Graphics::Sampler mSampler1;
+	KWSE::Graphics::Sampler mSampler2;
 	//KWSE::Graphics::ConstantBuffer mConstantBuffer;  //<- it is danagurous.
 
 	KWSE::Graphics::VertexShader mVertexShader;

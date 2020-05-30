@@ -8,9 +8,10 @@ namespace KWSE::Graphics
 	struct MeshBase
 	{
 		using VertexType = VertexT;
-		std::vector<VertexPC> vertices;
+		std::vector<VertexT> vertices;
 		std::vector<uint32_t> indices;
 	};
 
 	using MeshPC = MeshBase<VertexPC>;
+	using MeshPX = MeshBase<VertexPX>;
 }

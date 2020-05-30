@@ -33,6 +33,9 @@
     <ClInclude Include="Inc\VertexShader.h" />
     <ClInclude Include="Inc\Camera.h" />
     <ClInclude Include="Inc\ConstantBuffer.h" />
+    <ClInclude Include="Inc\Sampler.h" />
+    <ClInclude Include="Inc\Texture.h" />
+    <ClInclude Include="Inc\MeshBuilder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Precompiled.cpp">
@@ -46,5 +49,8 @@
     <ClCompile Include="Src\VertexShader.cpp" />
     <ClCompile Include="Src\Camera.cpp" />
     <ClCompile Include="Src\ConstantBuffer.cpp" />
+    <ClCompile Include="Src\Sampler.cpp" />
+    <ClCompile Include="Src\Texture.cpp" />
+    <ClCompile Include="Src\MeshBuilder.cpp" />
   </ItemGroup>
 </Project>

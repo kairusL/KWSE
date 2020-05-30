@@ -100,9 +100,9 @@ void GameState::Initialize()
 
 
 	mMeshBuffer.Initialize(mMesh);
-	mConstantBuffer.Initialize(sizeof(TransformData));
+	mTransformBuffer.Initialize();
 
-	mVertexShader.Initialize(L"../../Assets/Shaders/DoTransform.fx");
+	mVertexShader.Initialize(L"../../Assets/Shaders/DoTransform.fx",VertexPC::Format);
 	mPixelShader.Initialize(L"../../Assets/Shaders/DoTransform.fx");
 
 
@@ -112,7 +112,7 @@ void GameState::Terminate()
 	mPixelShader.Terminate();
 	mVertexShader.Terminate();
 	mMeshBuffer.Terminate();
-	mConstantBuffer.Terminate();
+	mTransformBuffer.Terminate();
 	
 }
 void GameState::Update(float deltaTime)
@@ -156,12 +156,12 @@ void GameState::Render()
 	TransformData data;
 	data.wvp = Transpose(matWorld*matView*matProj);
 
-	
-	mConstantBuffer.Bind();
+	UINT slot = 0; // This needs to match the shader register index.
+	mTransformBuffer.BindVS(slot);
 	mVertexShader.Bind();
 	mPixelShader.Bind();
 
-	mConstantBuffer.Set(&data);
+	mTransformBuffer.Update(data);
 	mMeshBuffer.Render();
 
 	Matrix4 translation = Matrix4::Translation({2.0f,0.f,0.f});
@@ -169,7 +169,7 @@ void GameState::Render()
 						Matrix4::RotationZ(-mRotation)*
 						Matrix4::RotationX(-mRotation);
 	data.wvp = Transpose(translation*rotation*matWorld*matView*matProj);
-	mConstantBuffer.Set(&data);
+	mTransformBuffer.Update(data);
 	mMeshBuffer.Render();
 }
 

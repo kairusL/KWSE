@@ -6,7 +6,13 @@ namespace KWSE::Graphics
 	class MeshBuffer
 	{
 	public:
+		MeshBuffer() = default;
 		~MeshBuffer();
+
+		MeshBuffer(const MeshBuffer&) = delete;
+		MeshBuffer& operator=(const MeshBuffer&) = delete;
+
+
 		template <class MeshT>
 		void Initialize(const MeshT& mesh)
 		{

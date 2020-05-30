@@ -51,7 +51,7 @@ void GameState::Initialize()
 
 
 
-	mVertexShader.Initialize(L"../../Assets/Shaders/DoNothing.fx");
+	mVertexShader.Initialize(L"../../Assets/Shaders/DoNothing.fx", VertexPC::Format);
 	mPixelShader.Initialize(L"../../Assets/Shaders/DoNothing.fx");
 
 

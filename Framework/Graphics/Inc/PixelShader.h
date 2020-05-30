@@ -9,6 +9,11 @@ namespace KWSE::Graphics
 		PixelShader() = default;
 		~PixelShader();
 
+
+		PixelShader(const PixelShader&) = delete;
+		PixelShader& operator=(const PixelShader&) = delete;
+
+
 		void Initialize(const std::filesystem::path& filePath);
 		void Terminate();
 

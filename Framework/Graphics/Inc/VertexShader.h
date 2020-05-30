@@ -9,7 +9,10 @@ namespace KWSE::Graphics
 		VertexShader() = default;
 		~VertexShader();
 
-		void Initialize(const std::filesystem::path& filePath);
+		VertexShader(const VertexShader&) = delete;
+		VertexShader& operator=(const VertexShader&) = delete;
+
+		void Initialize(const std::filesystem::path& filePath, uint32_t vertexFormat);
 		void Terminate();
 
 		void Bind() const;

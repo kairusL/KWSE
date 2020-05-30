@@ -1,9 +1,34 @@
 #include "Precompiled.h"
 #include "VertexShader.h"
 #include "GraphicsSystem.h"
-
+#include "VertexTypes.h"
 
 using namespace KWSE::Graphics;
+
+namespace
+{
+
+	auto GetVertexLayout(uint32_t vertexFormat)
+	{
+		std::vector<D3D11_INPUT_ELEMENT_DESC> vertexLayout;
+		if (vertexFormat & VE_Position)
+			vertexLayout.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+		if (vertexFormat & VE_Normal)
+			vertexLayout.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+		if (vertexFormat & VE_Tangent)
+			vertexLayout.push_back({ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+		if (vertexFormat & VE_Color)
+			vertexLayout.push_back({ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+		if (vertexFormat & VE_TexCoord)
+			vertexLayout.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+		if (vertexFormat & VE_BlendIndex)
+			vertexLayout.push_back({ "BLENDINDICES", 0, DXGI_FORMAT_R32G32B32A32_SINT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+		if (vertexFormat & VE_BlendWeight)
+			vertexLayout.push_back({ "BLENDWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+		return vertexLayout;
+	}
+
+}
 
 VertexShader::~VertexShader()
 {
@@ -11,7 +36,7 @@ VertexShader::~VertexShader()
 }
 
 
-void VertexShader::Initialize(const std::filesystem::path& filePath)
+void VertexShader::Initialize(const std::filesystem::path& filePath, uint32_t vertexFormat)
 {
 	DWORD shaderFlags = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG;
 	ID3DBlob* shaderBlob = nullptr;
@@ -36,10 +61,9 @@ void VertexShader::Initialize(const std::filesystem::path& filePath)
 		&mVertexShader);
 	ASSERT(SUCCEEDED(hr), "Failed to create vertex shader.");
 
-	// Define vertex element descriptions
-	std::vector<D3D11_INPUT_ELEMENT_DESC> vertexLayout;
-	vertexLayout.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 });
-	vertexLayout.push_back({ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+	//Get the vertex layout
+	auto vertexLayout = GetVertexLayout(vertexFormat);
+
 
 	// Create the input layout
 	hr = device->CreateInputLayout(
