@@ -10,6 +10,9 @@ namespace KWSE::Graphics
 		void SetPosition(const Math::Vector3& position);
 		void SetDirection(const Math::Vector3& direction);
 
+		const Math::Vector3& GetPosition() const;
+		const Math::Vector3& GetDirection() const;
+
 		void SetFov(float fov);
 		void SetAspectRation(float ratio);
 		void SetNearPlane(float nearPlane);

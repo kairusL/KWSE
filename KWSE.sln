@@ -47,11 +47,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{B20E
 		Assets\Shaders\DoSomething.fx = Assets\Shaders\DoSomething.fx
 		Assets\Shaders\DoTexturing.fx = Assets\Shaders\DoTexturing.fx
 		Assets\Shaders\DoTransform.fx = Assets\Shaders\DoTransform.fx
+		Assets\Shaders\Particles.fx = Assets\Shaders\Particles.fx
+		Assets\Shaders\SimpleDraw.fx = Assets\Shaders\SimpleDraw.fx
+		Assets\Shaders\Skybox.fx = Assets\Shaders\Skybox.fx
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "05_HelloCube", "VGP242\05_HelloCube\05_HelloCube.vcxproj", "{01309542-FDDB-4B2F-AB82-85DD73CFEA2E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "06_HelloTexturing", "VGP242\06_HelloTexturing\06_HelloTexturing.vcxproj", "{775A9B3D-CC07-419B-919E-B6531696BED1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "07_HelloSimpleDraw", "VGP242\07_HelloSimpleDraw\07_HelloSimpleDraw.vcxproj", "{A5D71F37-8B63-4C22-948E-B865DB0BA829}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "External\ImGui\ImGui.vcxproj", "{775F1C26-9D5C-4627-904B-9919551EF687}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "08_HelloObjModel", "VGP242\08_HelloObjModel\08_HelloObjModel.vcxproj", "{8814116B-F6CD-45C7-AFFD-F824241A99CA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "09_HelloSolarSystem", "VGP242\09_HelloSolarSystem\09_HelloSolarSystem.vcxproj", "{F05626A1-980D-42FF-98DC-F25A63C5BBF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -181,6 +192,38 @@ Global
 		{775A9B3D-CC07-419B-919E-B6531696BED1}.Release|x64.Build.0 = Release|x64
 		{775A9B3D-CC07-419B-919E-B6531696BED1}.Release|x86.ActiveCfg = Release|Win32
 		{775A9B3D-CC07-419B-919E-B6531696BED1}.Release|x86.Build.0 = Release|Win32
+		{A5D71F37-8B63-4C22-948E-B865DB0BA829}.Debug|x64.ActiveCfg = Debug|x64
+		{A5D71F37-8B63-4C22-948E-B865DB0BA829}.Debug|x64.Build.0 = Debug|x64
+		{A5D71F37-8B63-4C22-948E-B865DB0BA829}.Debug|x86.ActiveCfg = Debug|Win32
+		{A5D71F37-8B63-4C22-948E-B865DB0BA829}.Debug|x86.Build.0 = Debug|Win32
+		{A5D71F37-8B63-4C22-948E-B865DB0BA829}.Release|x64.ActiveCfg = Release|x64
+		{A5D71F37-8B63-4C22-948E-B865DB0BA829}.Release|x64.Build.0 = Release|x64
+		{A5D71F37-8B63-4C22-948E-B865DB0BA829}.Release|x86.ActiveCfg = Release|Win32
+		{A5D71F37-8B63-4C22-948E-B865DB0BA829}.Release|x86.Build.0 = Release|Win32
+		{775F1C26-9D5C-4627-904B-9919551EF687}.Debug|x64.ActiveCfg = Debug|x64
+		{775F1C26-9D5C-4627-904B-9919551EF687}.Debug|x64.Build.0 = Debug|x64
+		{775F1C26-9D5C-4627-904B-9919551EF687}.Debug|x86.ActiveCfg = Debug|Win32
+		{775F1C26-9D5C-4627-904B-9919551EF687}.Debug|x86.Build.0 = Debug|Win32
+		{775F1C26-9D5C-4627-904B-9919551EF687}.Release|x64.ActiveCfg = Release|x64
+		{775F1C26-9D5C-4627-904B-9919551EF687}.Release|x64.Build.0 = Release|x64
+		{775F1C26-9D5C-4627-904B-9919551EF687}.Release|x86.ActiveCfg = Release|Win32
+		{775F1C26-9D5C-4627-904B-9919551EF687}.Release|x86.Build.0 = Release|Win32
+		{8814116B-F6CD-45C7-AFFD-F824241A99CA}.Debug|x64.ActiveCfg = Debug|x64
+		{8814116B-F6CD-45C7-AFFD-F824241A99CA}.Debug|x64.Build.0 = Debug|x64
+		{8814116B-F6CD-45C7-AFFD-F824241A99CA}.Debug|x86.ActiveCfg = Debug|Win32
+		{8814116B-F6CD-45C7-AFFD-F824241A99CA}.Debug|x86.Build.0 = Debug|Win32
+		{8814116B-F6CD-45C7-AFFD-F824241A99CA}.Release|x64.ActiveCfg = Release|x64
+		{8814116B-F6CD-45C7-AFFD-F824241A99CA}.Release|x64.Build.0 = Release|x64
+		{8814116B-F6CD-45C7-AFFD-F824241A99CA}.Release|x86.ActiveCfg = Release|Win32
+		{8814116B-F6CD-45C7-AFFD-F824241A99CA}.Release|x86.Build.0 = Release|Win32
+		{F05626A1-980D-42FF-98DC-F25A63C5BBF6}.Debug|x64.ActiveCfg = Debug|x64
+		{F05626A1-980D-42FF-98DC-F25A63C5BBF6}.Debug|x64.Build.0 = Debug|x64
+		{F05626A1-980D-42FF-98DC-F25A63C5BBF6}.Debug|x86.ActiveCfg = Debug|Win32
+		{F05626A1-980D-42FF-98DC-F25A63C5BBF6}.Debug|x86.Build.0 = Debug|Win32
+		{F05626A1-980D-42FF-98DC-F25A63C5BBF6}.Release|x64.ActiveCfg = Release|x64
+		{F05626A1-980D-42FF-98DC-F25A63C5BBF6}.Release|x64.Build.0 = Release|x64
+		{F05626A1-980D-42FF-98DC-F25A63C5BBF6}.Release|x86.ActiveCfg = Release|Win32
+		{F05626A1-980D-42FF-98DC-F25A63C5BBF6}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -202,12 +245,16 @@ Global
 		{B20E9147-8412-44B7-9A18-AAA03187C134} = {258D5CE8-17EB-42D5-ABA0-0BCC84E66C04}
 		{01309542-FDDB-4B2F-AB82-85DD73CFEA2E} = {6C57F439-8EAA-497F-BD11-94262D4EBD20}
 		{775A9B3D-CC07-419B-919E-B6531696BED1} = {6C57F439-8EAA-497F-BD11-94262D4EBD20}
+		{A5D71F37-8B63-4C22-948E-B865DB0BA829} = {6C57F439-8EAA-497F-BD11-94262D4EBD20}
+		{775F1C26-9D5C-4627-904B-9919551EF687} = {670BC9FB-68B6-4DBB-BCB0-7149D64DCAA8}
+		{8814116B-F6CD-45C7-AFFD-F824241A99CA} = {6C57F439-8EAA-497F-BD11-94262D4EBD20}
+		{F05626A1-980D-42FF-98DC-F25A63C5BBF6} = {6C57F439-8EAA-497F-BD11-94262D4EBD20}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C041DC44-92D1-453E-BCFA-5B9E9DF9D604}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 16
+		SccNumberOfProjects = 20
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://dev.azure.com/kairusl
 		SccLocalPath0 = .
@@ -271,5 +318,21 @@ Global
 		SccProjectTopLevelParentUniqueName15 = KWSE.sln
 		SccProjectName15 = VGP242/06_HelloTexturing
 		SccLocalPath15 = VGP242\\06_HelloTexturing
+		SccProjectUniqueName16 = VGP242\\07_HelloSimpleDraw\\07_HelloSimpleDraw.vcxproj
+		SccProjectTopLevelParentUniqueName16 = KWSE.sln
+		SccProjectName16 = VGP242/07_HelloSimpleDraw
+		SccLocalPath16 = VGP242\\07_HelloSimpleDraw
+		SccProjectUniqueName17 = External\\ImGui\\ImGui.vcxproj
+		SccProjectTopLevelParentUniqueName17 = KWSE.sln
+		SccProjectName17 = External/ImGui
+		SccLocalPath17 = External\\ImGui
+		SccProjectUniqueName18 = VGP242\\08_HelloObjModel\\08_HelloObjModel.vcxproj
+		SccProjectTopLevelParentUniqueName18 = KWSE.sln
+		SccProjectName18 = VGP242/08_HelloObjModel
+		SccLocalPath18 = VGP242\\08_HelloObjModel
+		SccProjectUniqueName19 = VGP242\\09_HelloSolarSystem\\09_HelloSolarSystem.vcxproj
+		SccProjectTopLevelParentUniqueName19 = KWSE.sln
+		SccProjectName19 = VGP242/09_HelloSolarSystem
+		SccLocalPath19 = VGP242\\09_HelloSolarSystem
 	EndGlobalSection
 EndGlobal

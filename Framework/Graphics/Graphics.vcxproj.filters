@@ -36,6 +36,14 @@
     <ClInclude Include="Inc\Sampler.h" />
     <ClInclude Include="Inc\Texture.h" />
     <ClInclude Include="Inc\MeshBuilder.h" />
+    <ClInclude Include="Inc\SimpleDraw.h" />
+    <ClInclude Include="Inc\DebugUI.h" />
+    <ClInclude Include="Inc\RasterizerState.h" />
+    <ClInclude Include="Inc\DepthStencilState.h" />
+    <ClInclude Include="Inc\Skybox.h" />
+    <ClInclude Include="Inc\ModelLoader.h" />
+    <ClInclude Include="Inc\BlendState.h" />
+    <ClInclude Include="Inc\ParticleEmitter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Precompiled.cpp">
@@ -52,5 +60,13 @@
     <ClCompile Include="Src\Sampler.cpp" />
     <ClCompile Include="Src\Texture.cpp" />
     <ClCompile Include="Src\MeshBuilder.cpp" />
+    <ClCompile Include="Src\SimpleDraw.cpp" />
+    <ClCompile Include="Src\DebugUI.cpp" />
+    <ClCompile Include="Src\RasterizerState.cpp" />
+    <ClCompile Include="Src\DepthStencilState.cpp" />
+    <ClCompile Include="Src\Skybox.cpp" />
+    <ClCompile Include="Src\ModelLoader.cpp" />
+    <ClCompile Include="Src\BlendState.cpp" />
+    <ClCompile Include="Src\ParticleEmitter.cpp" />
   </ItemGroup>
 </Project>

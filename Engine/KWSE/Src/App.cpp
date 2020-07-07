@@ -42,6 +42,10 @@ void App::Run(AppConfig appConfig)
 
 	// Initialize the graphics system
 	GraphicsSystem::StaticInitialize(handle, false);
+	SimpleDraw::StaticInitialize();
+	DebugUI::StaticInitialize(handle);
+
+
 
 	//Initialize the starting state
 	ASSERT(mCurrentState, "App -- No app state found! App must have at lease one AppState.");
@@ -90,9 +94,9 @@ void App::Run(AppConfig appConfig)
 		// Draw stuff here...
 		mCurrentState->Render();
 
-		//DebugUI:: BeginRender();
-		//mCurrentState->Terminate();
-		//DebugUI::EndRender();
+		DebugUI:: BeginRender();
+		mCurrentState->DebugUI();
+		DebugUI::EndRender();
 
 
 		GraphicsSystem::Get()->EndRender();
@@ -103,6 +107,8 @@ void App::Run(AppConfig appConfig)
 	// CleanState
 	mCurrentState->Terminate();
 
+	DebugUI::StaticTerminate();
+	SimpleDraw::StaticTerminate();
 	GraphicsSystem::StaticTerminate();
 	InputSystem::StaticTerminate();
 

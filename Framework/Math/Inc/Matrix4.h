@@ -106,6 +106,18 @@ namespace KWSE::Math
 		}
 
 		static Matrix4 RotationAxis(const Vector3& axis, float radian);
+
+		static Matrix4 Scaling(float scale)
+		{
+			return
+			{
+				scale, 0.0f , 0.0f , 0.0f,
+				0.0f , scale, 0.0f , 0.0f,
+				0.0f , 0.0f , scale, 0.0f,
+				0.0f , 0.0f , 0.0f , 1.0f
+			};
+		}
+
 	};
 }
 

@@ -10,6 +10,9 @@
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 
+//External headers
+#include <ImGui/Inc/imgui.h>
+
 // DirectX libraries
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")

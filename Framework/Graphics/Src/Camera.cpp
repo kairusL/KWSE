@@ -21,6 +21,18 @@ void KWSE::Graphics::Camera::SetDirection(const Math::Vector3 & direction)
 	}
 }
 
+const Math::Vector3& KWSE::Graphics::Camera::GetPosition() const
+{
+	return mPosition;
+}
+
+const Math::Vector3& KWSE::Graphics::Camera::GetDirection() const
+{
+	return mDirection;
+}
+
+
+
 void KWSE::Graphics::Camera::SetFov(float fov)
 {
 	constexpr float kMinFov = 10.0f*Math::Constants::DegToRad;
@@ -75,7 +87,11 @@ void KWSE::Graphics::Camera::Pitch(float radian)
 
 	const Math::Matrix4 matRot= Math::Matrix4::RotationAxis(right,radian);
 	const Math::Vector3 newLook = Math::TransformNormal(mDirection, matRot);
-	SetDirection(newLook);
+	// Check to prevent our new look direction from being colinear with the Y-Axis
+	// Look Direction can not be same as Y-Axis(0,1,0)
+	const float dot = Math::Dot(newLook, Math::Vector3::YAxis);
+	if (Math::Abs(dot) < 0.995f)
+		mDirection = newLook;
 }
 
 void KWSE::Graphics::Camera::Zoom(float amount)

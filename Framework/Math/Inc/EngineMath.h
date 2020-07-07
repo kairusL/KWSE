@@ -89,7 +89,11 @@ namespace KWSE::Math
 	}
 	inline Vector3 Normalize(const Vector3& v)
 	{
-		ASSERT(Magnitude(v) != 0," Tring to / length , length is 0 !!! ");
+		//ASSERT(Magnitude(v) != 0," Tring to / length , length is 0 !!! ");
+		if (Magnitude(v) == 0.0f)
+		{
+			return v;
+		}
 		return v / Magnitude(v);
 	}
 	

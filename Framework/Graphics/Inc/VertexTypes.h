@@ -51,4 +51,24 @@ namespace KWSE::Graphics
 			Math::Vector3 position;
 			Math::Vector2 uv;
 		};
+
+		struct VertexPCX
+		{
+			// uv is texture coord
+			VERTEX_FORMAT(VE_Position | VE_Color | VE_TexCoord);
+
+			constexpr VertexPCX() = default;
+			constexpr VertexPCX(
+				const Math::Vector3 position,
+				const Color& color,
+				const Math::Vector2& uv)noexcept
+				: position(position),color(color),
+				uv(uv)
+
+			{}
+
+			Math::Vector3 position;
+			Color color;
+			Math::Vector2 uv;
+		};
 }

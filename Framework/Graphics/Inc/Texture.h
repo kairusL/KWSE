@@ -10,6 +10,12 @@ namespace KWSE::Graphics
 
 		Texture(const Texture&) = delete;
 		Texture& operator=(const Texture&) = delete;
+		// Move Constructor
+		// When use std vector needs a move constructor .
+		// In the begining when delete the copy constructor
+		// will also delete the move constructor
+		// put a defaule move constructor here tells the compiler the program do wnat to use it.
+		Texture( Texture&&) = default; 
 
 		void Initialize(const std::filesystem::path& fileName);
 		void Terminate();

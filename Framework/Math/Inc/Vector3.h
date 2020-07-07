@@ -57,6 +57,7 @@ namespace KWSE::Math
 		constexpr Vector3 operator/(float scalar)const { return Vector3(x / scalar, y / scalar, z / scalar); };
 		// Operator overloads for += , -= , *= ,/=  
 		constexpr Vector3& operator+=(const Vector3& vector) { x += vector.x; y += vector.y; z += vector.z; return *this; };
+		constexpr Vector3& operator+=(float f) { x += f; y+=f; z+=f; return *this; };
 		constexpr Vector3& operator-=(const Vector3& vector) { x -= vector.x; y -= vector.y; z -= vector.z; return *this; };
 		constexpr Vector3& operator*=(float scalar) {x *= scalar; y *= scalar; z *= scalar; return *this; };
 		constexpr Vector3& operator/=(float scalar) {x /= scalar; y /= scalar; z /= scalar; return *this; };
