@@ -7,11 +7,13 @@
 #include "PixelShader.h"
 #include "VertexShader.h"
 #include "VertexTypes.h"
+#include "GraphicsSystem.h"
+
 
 using namespace KWSE;
 using namespace KWSE::Graphics;
 
-namespace 
+namespace
 {
 	class SimpleDrawImpl
 	{
@@ -19,24 +21,39 @@ namespace
 		void Initialize(uint32_t maxVertexCount);
 		void Terminate();
 
+
+		// Functions to add 3D lines
 		void AddLine(const Math::Vector3& v0, const Math::Vector3& v1, const Color& color);
+		void AddAABB(const Math::AABB& aabb, const Color& color);
+		void AddSphere(const Math::Sphere& sphere, const Color& color, uint32_t slices, uint32_t rings);
+		void AddTransform(const Math::Matrix4& transform);
 		void AddFace(const Math::Vector3& v0, const Math::Vector3& v1, const Math::Vector3& v2, const Color& color);
+
+		// Functions to add screen lines
+		void AddScreenLine(const Math::Vector2& v0, const Math::Vector2& v1, const Color& color);
+		void AddScreenRect(const Math::Rect& rect, const Color& color);
+		void AddScreenCircle(const Math::Circle& circle, const Color& color);
+		void AddScreenArc(const Math::Vector2& center, float radius, float fromAngle, float toAngle, const Color& color);
+		void AddScreenDiamond(const Math::Vector2& center, float size, const Color& color);
+
 
 		void Render(const Camera& camera);
 
-	private: 
+	private:
 		VertexShader mVertexShader;
 		PixelShader mPixelShader;
 		ConstantBuffer mConstantBuffer;
 		MeshBuffer mMeshBuffer;
 
 		// Unique ownership
-		std::unique_ptr<VertexPC[]> mLineVertices;
+		std::unique_ptr<VertexPC[]> mVertices2D;
+		std::unique_ptr<VertexPC[]> mVertices3D;
 		std::unique_ptr<VertexPC[]> mFillVertices;
-		uint32_t mLineVertexCount = 0;
+		uint32_t mVertices2DCount = 0;
+		uint32_t mVertex3DCount = 0;
 		uint32_t mMaxVertexCount = 0;
 		uint32_t mFillVertexCount = 0;
-	
+
 	};
 
 	void SimpleDrawImpl::Initialize(uint32_t maxVertexCount)
@@ -46,9 +63,11 @@ namespace
 		mConstantBuffer.Initialize(sizeof(Math::Matrix4));
 		mMeshBuffer.Initialize(nullptr, sizeof(VertexPC), maxVertexCount, true);
 
-		mLineVertices = std::make_unique<VertexPC[]>(maxVertexCount);
+		mVertices2D = std::make_unique<VertexPC[]>(maxVertexCount);
+		mVertices3D = std::make_unique<VertexPC[]>(maxVertexCount);
 		mFillVertices = std::make_unique<VertexPC[]>(maxVertexCount);
-		mLineVertexCount = 0;
+		mVertices2DCount = 0;
+		mVertex3DCount = 0;
 		mMaxVertexCount = maxVertexCount;
 	}
 	void SimpleDrawImpl::Terminate()
@@ -58,17 +77,213 @@ namespace
 		mPixelShader.Terminate();
 		mVertexShader.Terminate();
 	}
+	void SimpleDrawImpl::AddScreenArc(const Math::Vector2& center, float radius, float fromAngle, float toAngle, const Color& color)
+	{
+		// Check if we have enough space
+		if (mVertices2DCount + 32 <= mMaxVertexCount)
+		{
+			float x = center.x;
+			float y = center.y;
+			float r = radius;
+
+			// Add line
+			const float kAngle = (toAngle - fromAngle) / 16.0f;
+			for (uint32_t i = 0; i < 16; ++i)
+			{
+				const float alpha = i * kAngle + fromAngle;
+				const float beta = alpha + kAngle;
+				const float x0 = x + (r * cos(alpha));
+				const float y0 = y + (r * sin(alpha));
+				const float x1 = x + (r * cos(beta));
+				const float y1 = y + (r * sin(beta));
+				mVertices2D[mVertices2DCount++] = { Math::Vector3(x0, y0, 0.0f), color };
+				mVertices2D[mVertices2DCount++] = { Math::Vector3(x1, y1, 0.0f), color };
+			}
+		}
+	}
+	void SimpleDrawImpl::AddScreenDiamond(const Math::Vector2& center, float size, const Color& color)
+	{
+		// Check if we have enough space
+		if (mVertices2DCount + 8 <= mMaxVertexCount)
+		{
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(center.x, center.y - size, 0.0f), color };
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(center.x + size, center.y, 0.0f), color };
+
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(center.x + size, center.y, 0.0f), color };
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(center.x, center.y + size, 0.0f), color };
+
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(center.x, center.y + size, 0.0f), color };
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(center.x - size, center.y, 0.0f), color };
+
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(center.x - size, center.y, 0.0f), color };
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(center.x, center.y - size, 0.0f), color };
+		}
+	}
+	void SimpleDrawImpl::AddScreenLine(const Math::Vector2& v0, const Math::Vector2& v1, const Color& color)
+	{
+		if (mVertices2DCount + 2 <= mMaxVertexCount)
+		{
+			mVertices2D[mVertices2DCount++] = VertexPC{ Math::Vector3(v0.x,v0.y,0.f),color };
+			mVertices2D[mVertices2DCount++] = VertexPC{ Math::Vector3(v1.x,v1.y,0.f),color };
+		}
+	}
+	void SimpleDrawImpl::AddScreenRect(const Math::Rect & rect, const Color & color)
+	{
+		if (mVertices2DCount + 8 <= mMaxVertexCount)
+		{
+			float l = rect.left;
+			float t = rect.top;
+			float r = rect.right;
+			float b = rect.bottom;
+
+			// Add lines
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(l, t, 0.0f), color };
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(r, t, 0.0f), color };
+
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(r, t, 0.0f), color };
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(r, b, 0.0f), color };
+
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(r, b, 0.0f), color };
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(l, b, 0.0f), color };
+
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(l, b, 0.0f), color };
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(l, t, 0.0f), color };
+		}
+
+	}
 	void SimpleDrawImpl::AddLine(const Math::Vector3& v0, const Math::Vector3& v1, const Color& color)
 	{
-		if (mLineVertexCount +2 <=mMaxVertexCount)
+		if (mVertex3DCount + 2 <= mMaxVertexCount)
 		{
-			mLineVertices[mLineVertexCount++] = VertexPC{ v0,color };
-			mLineVertices[mLineVertexCount++] = VertexPC{ v1,color };
+			mVertices3D[mVertex3DCount++] = VertexPC{ v0,color };
+			mVertices3D[mVertex3DCount++] = VertexPC{ v1,color };
 		}
+	}
+
+	void SimpleDrawImpl::AddAABB(const Math::AABB & aabb, const Color & color)
+	{
+		// Check if we have enough space
+		if (mVertex3DCount + 24 <= mMaxVertexCount)
+		{
+			float minX = aabb.center.x - aabb.extend.x;
+			float minY = aabb.center.y - aabb.extend.y;
+			float minZ = aabb.center.z - aabb.extend.z;
+			float maxX = aabb.center.x + aabb.extend.x;
+			float maxY = aabb.center.y + aabb.extend.y;
+			float maxZ = aabb.center.z + aabb.extend.z;
+
+			// Add lines
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(minX, minY, minZ), color };
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(minX, minY, maxZ), color };
+
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(minX, minY, maxZ), color };
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(maxX, minY, maxZ), color };
+
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(maxX, minY, maxZ), color };
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(maxX, minY, minZ), color };
+
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(maxX, minY, minZ), color };
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(minX, minY, minZ), color };
+
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(minX, minY, minZ), color };
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(minX, maxY, minZ), color };
+
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(minX, minY, maxZ), color };
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(minX, maxY, maxZ), color };
+
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(maxX, minY, maxZ), color };
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(maxX, maxY, maxZ), color };
+
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(maxX, minY, minZ), color };
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(maxX, maxY, minZ), color };
+
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(minX, maxY, minZ), color };
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(minX, maxY, maxZ), color };
+
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(minX, maxY, maxZ), color };
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(maxX, maxY, maxZ), color };
+
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(maxX, maxY, maxZ), color };
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(maxX, maxY, minZ), color };
+
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(maxX, maxY, minZ), color };
+			mVertices3D[mVertex3DCount++] = { Math::Vector3(minX, maxY, minZ), color };
+		}
+
+	}
+
+	void SimpleDrawImpl::AddSphere(const Math::Sphere & sphere, const Color & color, uint32_t slices, uint32_t rings)
+	{
+	
+		const float x = sphere.center.x;
+		const float y = sphere.center.y;
+		const float z = sphere.center.z;
+		const float radius = sphere.radius;
+
+		const uint32_t kSlices = Math::Max(3u, slices);
+		const uint32_t kRings = Math::Max(2u, rings);
+		const uint32_t kLines = (4 * kSlices * kRings) - (2 * kSlices);
+
+		// Check if we have enough space
+		if (mVertex3DCount + kLines <= mMaxVertexCount)
+		{
+			// Add lines
+			const float kTheta = Math::Constants::Pi / (float)kRings;
+			const float kPhi = Math::Constants::TwoPi / (float)kSlices;
+			for (uint32_t j = 0; j < kSlices; ++j)
+			{
+				for (uint32_t i = 0; i < kRings; ++i)
+				{
+					const float a = i * kTheta;
+					const float b = a + kTheta;
+					const float ay = radius * cos(a);
+					const float by = radius * cos(b);
+
+					const float theta = j * kPhi;
+					const float phi = theta + kPhi;
+
+					const float ar = sqrt(radius * radius - ay * ay);
+					const float br = sqrt(radius * radius - by * by);
+
+					const float x0 = x + (ar * sin(theta));
+					const float y0 = y + (ay);
+					const float z0 = z + (ar * cos(theta));
+
+					const float x1 = x + (br * sin(theta));
+					const float y1 = y + (by);
+					const float z1 = z + (br * cos(theta));
+
+					const float x2 = x + (br * sin(phi));
+					const float y2 = y + (by);
+					const float z2 = z + (br * cos(phi));
+
+					mVertices3D[mVertex3DCount++] = { Math::Vector3(x0, y0, z0), color };
+					mVertices3D[mVertex3DCount++] = { Math::Vector3(x1, y1, z1), color };
+
+					if (i < kRings - 1)
+					{
+						mVertices3D[mVertex3DCount++] = { Math::Vector3(x1, y1, z1), color };
+						mVertices3D[mVertex3DCount++] = { Math::Vector3(x2, y2, z2), color };
+					}
+				}
+			}
+		}
+
+	}
+
+	void SimpleDrawImpl::AddTransform(const Math::Matrix4 & transform)
+	{
+		auto r = Math::GetRight(transform);
+		auto u = Math::GetUp(transform);
+		auto l = Math::GetLook(transform);
+		auto p = Math::GetTranslation(transform);
+		sInstance->AddLine(p, p + r, Colors::Red);
+		sInstance->AddLine(p, p + u, Colors::Green);
+		sInstance->AddLine(p, p + l, Colors::Blue);
 	}
 	void SimpleDrawImpl::AddFace(const Math::Vector3& v0, const Math::Vector3& v1, const Math::Vector3& v2, const Color& color)
 	{
-		if (mFillVertexCount +3 <= mMaxVertexCount)
+		if (mFillVertexCount + 3 <= mMaxVertexCount)
 		{
 			mFillVertices[mFillVertexCount++] = VertexPC{ v0,color };
 			mFillVertices[mFillVertexCount++] = VertexPC{ v1,color };
@@ -89,7 +304,7 @@ namespace
 		mVertexShader.Bind();
 		mPixelShader.Bind();
 
-		mMeshBuffer.Update(mLineVertices.get(), mLineVertexCount);
+		mMeshBuffer.Update(mVertices3D.get(), mVertex3DCount);
 		mMeshBuffer.SetTopology(MeshBuffer::Topology::Lines);
 		mMeshBuffer.Render();
 
@@ -97,7 +312,20 @@ namespace
 		mMeshBuffer.SetTopology(MeshBuffer::Topology::Triangles);
 		mMeshBuffer.Render();
 
-		mLineVertexCount = 0;
+		const uint32_t width = GraphicsSystem::Get()->GetBackBufferWidth();
+		const uint32_t height = GraphicsSystem::Get()->GetBackBufferHeight();
+		Math::Matrix4 screenToNDC = { 2.0f / width, 0.f        ,0.f, 0.f,
+									  0.f         , -2.f / height,0.f,0.f,
+									  0.f         , 0.f        ,1.f,0.f,
+									 -1.f         , 1.f        ,0.f,1.f, };
+		mConstantBuffer.Update(&Math::Transpose(screenToNDC));
+		mConstantBuffer.BindVS(0);
+		mMeshBuffer.Update(mVertices2D.get(), mVertices2DCount);
+		mMeshBuffer.SetTopology(MeshBuffer::Topology::Lines);
+		mMeshBuffer.Render();
+
+		mVertices2DCount = 0;
+		mVertex3DCount = 0;
 		mFillVertexCount = 0;
 	}
 
@@ -105,22 +333,42 @@ namespace
 	std::unique_ptr<SimpleDrawImpl> sInstance;
 }
 
-void KWSE::Graphics::SimpleDraw::StaticInitialize(uint32_t maxVertexCount)
-{
-	sInstance = std::make_unique<SimpleDrawImpl>();
-	sInstance->Initialize(maxVertexCount);
-}
 
-void KWSE::Graphics::SimpleDraw::StaticTerminate()
+
+void SimpleDrawImpl::AddScreenCircle(const Math::Circle & circle, const Color& color)
 {
-	sInstance->Terminate();
-	sInstance.reset();
+	if (mVertices2DCount + 32 <= mMaxVertexCount)
+	{
+		float x = circle.center.x;
+		float y = circle.center.y;
+		float r = circle.radius;
+
+		// Add line
+		const float kAngle = Math::Constants::Pi / 8.0f;
+		for (uint32_t i = 0; i < 16; ++i)
+		{
+			const float alpha = i * kAngle;
+			const float beta = alpha + kAngle;
+			const float x0 = x + (r * sin(alpha));
+			const float y0 = y + (r * cos(alpha));
+			const float x1 = x + (r * sin(beta));
+			const float y1 = y + (r * cos(beta));
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(x0, y0, 0.0f), color };
+			mVertices2D[mVertices2DCount++] = { Math::Vector3(x1, y1, 0.0f), color };
+		}
+	}
+
 }
 
 void KWSE::Graphics::SimpleDraw::AddLine(const Math::Vector3 & v0, const Math::Vector3 & v1, const Color & color)
 {
 	sInstance->AddLine(v0, v1, color);
 }
+void SimpleDraw::AddLine(float x0, float y0, float z0, float x1, float y1, float z1, const Color& color)
+{
+	AddLine(Math::Vector3(x0, y0, z0), Math::Vector3(x1, y1, z1), color);
+}
+
 void KWSE::Graphics::SimpleDraw::AddAABB(const Math::Vector3 & center, const Math::Vector3 & extend, const Color & color, bool fill)
 {
 	const float minX = center.x - extend.x;
@@ -235,10 +483,86 @@ void KWSE::Graphics::SimpleDraw::AddCone(const Math::Vector3 & base, const Math:
 	}
 
 }
+void KWSE::Graphics::SimpleDraw::StaticInitialize(uint32_t maxVertexCount)
+{
+	sInstance = std::make_unique<SimpleDrawImpl>();
+	sInstance->Initialize(maxVertexCount);
+}
+
+void KWSE::Graphics::SimpleDraw::StaticTerminate()
+{
+	sInstance->Terminate();
+	sInstance.reset();
+}
+
+void KWSE::Graphics::SimpleDraw::AddScreenLine(const Math::Vector2 & v0, const Math::Vector2 & v1, const Color & color)
+{
+	sInstance->AddScreenLine(v0, v1, color);
+}
+void SimpleDraw::AddScreenLine(float x0, float y0, float x1, float y1, const Color& color)
+{
+	AddScreenLine(Math::Vector2(x0, y0), Math::Vector2(x1, y1), color);
+}
+
+void SimpleDraw::AddScreenRect(const Math::Rect& rect, const Color& color)
+{
+	sInstance->AddScreenRect(rect, color);
+}
+void SimpleDraw::AddScreenCircle(const Math::Circle& circle, const Color& color)
+{
+	sInstance->AddScreenCircle(circle, color);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void SimpleDraw::AddScreenCircle(const Math::Vector2& center, float r, const Color& color)
+{
+	AddScreenCircle(Math::Circle(center, r), color);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void SimpleDraw::AddScreenCircle(float x, float y, float r, const Color& color)
+{
+	AddScreenCircle(Math::Circle(x, y, r), color);
+}
+//----------------------------------------------------------------------------------------------------
+void SimpleDraw::AddScreenArc(const Math::Vector2& center, float r, float fromAngle, float toAngle, const Color& color)
+{
+	sInstance->AddScreenArc(center, r, fromAngle, toAngle, color);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void SimpleDraw::AddScreenDiamond(const Math::Vector2& center, float size, const Color& color)
+{
+	sInstance->AddScreenDiamond(center, size, color);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void SimpleDraw::AddScreenDiamond(float x, float y, float size, const Color& color)
+{
+	AddScreenDiamond(Math::Vector2(x, y), size, color);
+}
+
+void SimpleDraw::AddScreenRect(const Math::Vector2& min, const Math::Vector2& max, const Color& color)
+{
+	AddScreenRect(Math::Rect(min.x, min.y, max.x, max.y), color);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void SimpleDraw::AddScreenRect(float left, float top, float right, float bottom, const Color& color)
+{
+	AddScreenRect(Math::Rect(left, top, right, bottom), color);
+}
+
+
 void KWSE::Graphics::SimpleDraw::AddGroundPlane(float size, const Color & color)
 {
-	const float halfsize = size*0.5f;
-	for (float i = -halfsize; i <= halfsize; i+=1.0f)
+	const float halfsize = size * 0.5f;
+	for (float i = -halfsize; i <= halfsize; i += 1.0f)
 	{
 		AddLine({ i,0.0f,-halfsize }, { i,0.0f,halfsize }, color);
 		AddLine({ -halfsize,0.0f,i }, { halfsize,0.0f,i }, color);
@@ -310,51 +634,27 @@ void KWSE::Graphics::SimpleDraw::AddCylinder(const Math::Vector3 & base, const M
 	//	angle += angleStep;
 	//}
 }
-void KWSE::Graphics::SimpleDraw::AddSphere(const Math::Vector3 & center, float radius, const Color & color, int rings, int slices)
+
+void KWSE::Graphics::SimpleDraw::AddSphere(const Math::Sphere& sphere, const Color& color, uint32_t slices, uint32_t rings)
 {
-	std::vector<Math::Vector3> vec3;
-	//
-	float phi = 0.0f;
-	float theta = 0.0f;
-	float thetaIncrement = Math::Constants::TwoPi / slices;
-	float phiIncrement = Math::Constants::Pi / rings;
-
-	for (uint32_t z = 0; z <= rings; ++z)
-	{
-		theta = 0.0f;
-		for (uint32_t x = 0; x <= slices; ++x)
-		{
-			float newRadius = radius * sinf(phi);
-			vec3.push_back(Math::Vector3{ newRadius*sinf(theta) , radius*cosf(phi), newRadius*-cosf(theta) }+center);
-			theta += thetaIncrement;
-		}
-		phi += phiIncrement;
-	}
-
-	for (uint32_t y = 0; y < rings; ++y)
-	{
-		for (uint32_t x = 0; x < slices; ++x)
-		{
-			AddLine(vec3[y*slices + x], vec3[(y + 1)*slices + (x + 1)], color);
-			AddLine(vec3[(y )*slices + (x+1)], vec3[y*slices + x], color);
-			AddLine(vec3[(y+1)*slices + (x)], vec3[(y + 1)*slices + (x + 1)], color);
-		}
-	}
-
+	sInstance->AddSphere(sphere, color, slices, rings);
 }
-void KWSE::Graphics::SimpleDraw::AddCapsule(const Math::Vector3 & center, float height, float radius, const Color & color, int rings, int slices)
+
+
+void SimpleDraw::AddSphere(const Math::Vector3& center, float radius, const Color& color, uint32_t slices, uint32_t rings)
 {
+	AddSphere(Math::Sphere(center, radius), color, slices, rings);
 }
+
+void SimpleDraw::AddSphere(float x, float y, float z, float radius, const Color& color, uint32_t slices, uint32_t rings)
+{
+	AddSphere(Math::Sphere(x, y, z, radius), color, slices, rings);
+}
+
+
 void KWSE::Graphics::SimpleDraw::AddTransform(const Math::Matrix4& transform)
 {
-	auto r = Math::GetRight(transform);
-	auto u = Math::GetUp(transform);
-	auto l = Math::GetLook(transform);
-	auto p = Math::GetTranslation(transform);
-	sInstance->AddLine(p, p + r, Colors::Red);
-	sInstance->AddLine(p, p + u, Colors::Green);
-	sInstance->AddLine(p, p + l, Colors::Blue);
-
+	sInstance->AddTransform(transform);
 }
 
 void KWSE::Graphics::SimpleDraw::Render(const Camera & camera)
@@ -362,3 +662,29 @@ void KWSE::Graphics::SimpleDraw::Render(const Camera & camera)
 	sInstance->Render(camera);
 }
 
+void SimpleDraw::AddAABB(const Math::AABB& aabb, const Color& color)
+{
+	
+	sInstance->AddAABB(aabb, color);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void SimpleDraw::AddAABB(const Math::Vector3& min, const Math::Vector3& max, const Color& color)
+{
+	AddAABB(Math::AABB((min + max) * 0.5f, (max - min) * 0.5f), color);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void SimpleDraw::AddAABB(const Math::Vector3& center, float radius, const Color& color)
+{
+	AddAABB(Math::AABB(center, Math::Vector3(radius, radius, radius)), color);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void SimpleDraw::AddAABB(float minX, float minY, float minZ, float maxX, float maxY, float maxZ, const Color& color)
+{
+	AddAABB(Math::Vector3(minX, minY, minZ), Math::Vector3(maxX, maxY, maxZ), color);
+}

@@ -64,6 +64,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "08_HelloObjModel", "VGP242\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "09_HelloSolarSystem", "VGP242\09_HelloSolarSystem\09_HelloSolarSystem.vcxproj", "{F05626A1-980D-42FF-98DC-F25A63C5BBF6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AI", "Framework\AI\AI.vcxproj", "{8A3FF389-DF4A-476E-9D7D-26BF0A53B6EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -224,6 +226,14 @@ Global
 		{F05626A1-980D-42FF-98DC-F25A63C5BBF6}.Release|x64.Build.0 = Release|x64
 		{F05626A1-980D-42FF-98DC-F25A63C5BBF6}.Release|x86.ActiveCfg = Release|Win32
 		{F05626A1-980D-42FF-98DC-F25A63C5BBF6}.Release|x86.Build.0 = Release|Win32
+		{8A3FF389-DF4A-476E-9D7D-26BF0A53B6EB}.Debug|x64.ActiveCfg = Debug|x64
+		{8A3FF389-DF4A-476E-9D7D-26BF0A53B6EB}.Debug|x64.Build.0 = Debug|x64
+		{8A3FF389-DF4A-476E-9D7D-26BF0A53B6EB}.Debug|x86.ActiveCfg = Debug|Win32
+		{8A3FF389-DF4A-476E-9D7D-26BF0A53B6EB}.Debug|x86.Build.0 = Debug|Win32
+		{8A3FF389-DF4A-476E-9D7D-26BF0A53B6EB}.Release|x64.ActiveCfg = Release|x64
+		{8A3FF389-DF4A-476E-9D7D-26BF0A53B6EB}.Release|x64.Build.0 = Release|x64
+		{8A3FF389-DF4A-476E-9D7D-26BF0A53B6EB}.Release|x86.ActiveCfg = Release|Win32
+		{8A3FF389-DF4A-476E-9D7D-26BF0A53B6EB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -249,14 +259,15 @@ Global
 		{775F1C26-9D5C-4627-904B-9919551EF687} = {670BC9FB-68B6-4DBB-BCB0-7149D64DCAA8}
 		{8814116B-F6CD-45C7-AFFD-F824241A99CA} = {6C57F439-8EAA-497F-BD11-94262D4EBD20}
 		{F05626A1-980D-42FF-98DC-F25A63C5BBF6} = {6C57F439-8EAA-497F-BD11-94262D4EBD20}
+		{8A3FF389-DF4A-476E-9D7D-26BF0A53B6EB} = {75F3C1F8-E92C-4100-B664-78E439CA6DED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C041DC44-92D1-453E-BCFA-5B9E9DF9D604}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 20
+		SccNumberOfProjects = 21
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://dev.azure.com/kairusl
+		SccTeamFoundationServer = https://dev.azure.com/KairusL
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Framework\\Core\\Core.vcxproj
 		SccProjectTopLevelParentUniqueName1 = KWSE.sln
@@ -334,5 +345,9 @@ Global
 		SccProjectTopLevelParentUniqueName19 = KWSE.sln
 		SccProjectName19 = VGP242/09_HelloSolarSystem
 		SccLocalPath19 = VGP242\\09_HelloSolarSystem
+		SccProjectUniqueName20 = Framework\\AI\\AI.vcxproj
+		SccProjectTopLevelParentUniqueName20 = KWSE.sln
+		SccProjectName20 = Framework/AI
+		SccLocalPath20 = Framework\\AI
 	EndGlobalSection
 EndGlobal

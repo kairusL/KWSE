@@ -4,7 +4,7 @@ namespace KWSE::Math
 {
 	struct Matrix3
 	{
-		union
+		union // Can access the data either from _11 or v[0]  // _11 and v[0] are the same . 
 		{
 			struct // 
 			{
@@ -12,6 +12,7 @@ namespace KWSE::Math
 				float	_21, _22, _23;
 				float	_31, _32, _33;
 			};
+
 			std::array<float, 9> v;
 		};
 

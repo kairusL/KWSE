@@ -20,13 +20,13 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{557E132E-411D-4464-B981-7F2D9E5B8454}</ProjectGuid>
+    <ProjectGuid>{8A3FF389-DF4A-476E-9D7D-26BF0A53B6EB}</ProjectGuid>
     <SccProjectName>SAK</SccProjectName>
     <SccAuxPath>SAK</SccAuxPath>
     <SccLocalPath>SAK</SccLocalPath>
     <SccProvider>SAK</SccProvider>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Math</RootNamespace>
+    <RootNamespace>AI</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -78,10 +78,10 @@
     <Import Project="..\..\VSProps\Framework.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -90,12 +90,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -103,12 +103,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -151,32 +151,67 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Inc\2DShapes.h" />
-    <ClInclude Include="Inc\3DShapes.h" />
+    <ClInclude Include="Inc\Agent.h" />
+    <ClInclude Include="Inc\AI.h" />
+    <ClInclude Include="Inc\AIWorld.h" />
+    <ClInclude Include="Inc\AlignmentBehavior.h" />
+    <ClInclude Include="Inc\ArriveBehavior.h" />
+    <ClInclude Include="Inc\AStar.h" />
+    <ClInclude Include="Inc\BFS.h" />
+    <ClInclude Include="Inc\CohesionBehavior.h" />
     <ClInclude Include="Inc\Common.h" />
-    <ClInclude Include="Inc\Constants.h" />
-    <ClInclude Include="Inc\EngineMath.h" />
-    <ClInclude Include="Inc\Matrix3.h" />
-    <ClInclude Include="Inc\Matrix4.h" />
-    <ClInclude Include="Inc\Random.h" />
-    <ClInclude Include="Inc\Vector2.h" />
-    <ClInclude Include="Inc\Vector3.h" />
-    <ClInclude Include="Inc\Vector4.h" />
+    <ClInclude Include="Inc\DecisionModule.h" />
+    <ClInclude Include="Inc\DFS.h" />
+    <ClInclude Include="Inc\Dijkstras.h" />
+    <ClInclude Include="Inc\Entity.h" />
+    <ClInclude Include="Inc\FleeBehavior.h" />
+    <ClInclude Include="Inc\Goal.h" />
+    <ClInclude Include="Inc\GoalComposite.h" />
+    <ClInclude Include="Inc\Graph.h" />
+    <ClInclude Include="Inc\HideBehavior.h" />
+    <ClInclude Include="Inc\MemoryRecord.h" />
+    <ClInclude Include="Inc\ObstacleAvoidBehavior.h" />
+    <ClInclude Include="Inc\PartitionGrid.h" />
+    <ClInclude Include="Inc\PerceptionModule.h" />
+    <ClInclude Include="Inc\SeekBehavior.h" />
+    <ClInclude Include="Inc\Sensor.h" />
+    <ClInclude Include="Inc\SeperationBehavior.h" />
+    <ClInclude Include="Inc\State.h" />
+    <ClInclude Include="Inc\StateMachine.h" />
+    <ClInclude Include="Inc\SteeringBehavior.h" />
+    <ClInclude Include="Inc\SteeringModule.h" />
+    <ClInclude Include="Inc\Strategy.h" />
+    <ClInclude Include="Inc\VisualSensor.h" />
+    <ClInclude Include="Inc\WanderBehavior.h" />
     <ClInclude Include="Src\Precompiled.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Src\EngineMath.cpp" />
+    <ClCompile Include="Src\Agent.cpp" />
+    <ClCompile Include="Src\AIWorld.cpp" />
+    <ClCompile Include="Src\AlignmentBehavior.cpp" />
+    <ClCompile Include="Src\ArriveBehavior.cpp" />
+    <ClCompile Include="Src\AStar.cpp" />
+    <ClCompile Include="Src\BFS.cpp" />
+    <ClCompile Include="Src\CohesionBehavior.cpp" />
+    <ClCompile Include="Src\DFS.cpp" />
+    <ClCompile Include="Src\Dijkstras.cpp" />
+    <ClCompile Include="Src\Entity.cpp" />
+    <ClCompile Include="Src\FleeBehavior.cpp" />
+    <ClCompile Include="Src\Graph.cpp" />
+    <ClCompile Include="Src\HideBehavior.cpp" />
+    <ClCompile Include="Src\ObstacleAvoidBehavior.cpp" />
+    <ClCompile Include="Src\PerceptionModule.cpp" />
     <ClCompile Include="Src\Precompiled.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Core\Core.vcxproj">
-      <Project>{71886c49-dc83-4aa6-ae34-601e516430bf}</Project>
-    </ProjectReference>
+    <ClCompile Include="Src\SeekBehavior.cpp" />
+    <ClCompile Include="Src\SeperationBehavior.cpp" />
+    <ClCompile Include="Src\SteeringModule.cpp" />
+    <ClCompile Include="Src\VisualSensor.cpp" />
+    <ClCompile Include="Src\WanderBehavior.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
