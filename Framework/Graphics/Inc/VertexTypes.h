@@ -23,7 +23,7 @@ namespace KWSE::Graphics
 
 
 		constexpr VertexPC() = default;
-		constexpr VertexPC(const Math::Vector3 position,
+		constexpr VertexPC(const Math::Vector3 &  position,
 			const Color& color)noexcept
 			: position(position),
 			color(color)
@@ -41,7 +41,7 @@ namespace KWSE::Graphics
 
 			constexpr VertexPX() = default;
 			constexpr VertexPX(
-				const Math::Vector3 position,
+				const Math::Vector3 & position,
 				const Math::Vector2& uv)noexcept
 				: position(position),
 				uv(uv)
@@ -59,7 +59,7 @@ namespace KWSE::Graphics
 
 			constexpr VertexPCX() = default;
 			constexpr VertexPCX(
-				const Math::Vector3 position,
+				const Math::Vector3 & position,
 				const Color& color,
 				const Math::Vector2& uv)noexcept
 				: position(position),color(color),
@@ -69,6 +69,58 @@ namespace KWSE::Graphics
 
 			Math::Vector3 position;
 			Color color;
+			Math::Vector2 uv;
+		};
+
+		struct VertexPNX
+		{
+			// uv is texture coord
+			VERTEX_FORMAT(VE_Position | VE_Normal | VE_TexCoord);
+
+			constexpr VertexPNX() = default;
+			constexpr VertexPNX(
+				const Math::Vector3 & position,
+				const Math::Vector3  & normal,
+				const Math::Vector2& uv)noexcept
+				: position(position), normal(normal),
+				uv(uv){}
+
+			Math::Vector3 position;
+			Math::Vector3 normal;
+			Math::Vector2 uv;
+		};
+
+		struct VertexPN
+		{
+			// Position  
+			// Normal
+			VERTEX_FORMAT(VE_Position | VE_Normal);
+
+			constexpr VertexPN() = default;
+			constexpr VertexPN(
+				const Math::Vector3  & position,
+				const Math::Vector3  & normal)noexcept
+				: position(position), normal(normal){}
+
+			Math::Vector3 position;
+			Math::Vector3 normal;
+		};
+
+		struct Vertex
+		{
+			VERTEX_FORMAT(VE_Position | VE_Normal | VE_Tangent | VE_TexCoord);
+
+			constexpr Vertex() = default;
+			constexpr Vertex(
+				const Math::Vector3 & position,
+				const Math::Vector3 &normal,
+				const Math::Vector3 & tangent,
+				const Math::Vector2 & uv)noexcept
+				: position(position), normal(normal),tangent(tangent),uv(uv) {}
+
+			Math::Vector3 position;
+			Math::Vector3 normal;
+			Math::Vector3 tangent;
 			Math::Vector2 uv;
 		};
 }

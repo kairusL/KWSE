@@ -10,10 +10,10 @@ namespace KWSE::Graphics
 	public:
 		enum class Mode
 		{
-			Opaque,
-			AlphaBlend,
-			AlphaPremultiplied,
-			Additive
+			Opaque,   //no mixing no blending or transparent
+			AlphaBlend, //0.7 0.3 
+			AlphaPremultiplied, // 0.4 0.6
+			Additive // 0.5 1 ++until 1 (white)
 		};
 
 		BlendState() = default;

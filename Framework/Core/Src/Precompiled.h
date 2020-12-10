@@ -1,5 +1,5 @@
 //------------------------ You can include your code in Precompiled.h                                                        -------------------------------//
-//------------------------ Cpp you don't need to include so the copy and paste is kind of stop                               -------------------------------//
+//------------------------ Cpp you don't need to include so the copy and paste is kind of step                               -------------------------------//
 //------------------------ If your stuff in the header every changes you will have to do the whole copy and paste again      -------------------------------//
 //------------------------ So better include the stuff you wont change in Precompiled                                        -------------------------------//
 //------------------------ Ex:Good guidline is that everything is outside of our library, should put in Precompiled.h        -------------------------------//

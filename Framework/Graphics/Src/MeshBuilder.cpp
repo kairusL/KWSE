@@ -323,6 +323,40 @@ MeshPX KWSE::Graphics::MeshBuilder::CreatePlanePX(uint32_t rows, uint32_t column
 	return mesh;
 }
 
+Mesh KWSE::Graphics::MeshBuilder::CreatePlane(uint32_t rows, uint32_t columns, float spacing)
+{
+	Mesh mesh;
+	//Ground plane y-axis stay 0 ,
+	for (uint32_t z = 0; z <= rows; ++z)
+	{
+		for (uint32_t x = 0; x <= columns; ++x)
+		{
+			float xAxis = -0.5f* columns;
+			float zAxis = 0.5f* rows;
+			float xSpacing = x * spacing;
+			float zSpacing = z * spacing;
+			float u = static_cast<float>(x) / columns;
+			float v = static_cast <float>(z) / rows;
+
+			mesh.vertices.emplace_back(Vector3{ (xAxis* spacing + xSpacing) , (0.0f), (zAxis* spacing - zSpacing) }, Vector3::YAxis, Vector3::XAxis, Vector2{ u,v });
+			if (x != columns)
+			{
+				// Draw 2 Triangles in one box;
+				mesh.indices.emplace_back(z*rows + x);
+				mesh.indices.emplace_back((z + 1)*rows + (x + 1));
+				mesh.indices.emplace_back((z + 1)*rows + (x));
+
+				mesh.indices.emplace_back(z*rows + x);
+				mesh.indices.emplace_back((z)*rows + (x + 1));
+				mesh.indices.emplace_back((z + 1)*rows + (x + 1));
+			}
+		}
+
+	}
+
+	return mesh;
+}
+
 MeshPX KWSE::Graphics::MeshBuilder::CreateSpherePX(float radiu, int rings, int slices)  //rings-> rows // slices ->columns
 {
 	MeshPX mesh;
@@ -333,6 +367,7 @@ MeshPX KWSE::Graphics::MeshBuilder::CreateSpherePX(float radiu, int rings, int s
 
 	for (uint32_t z = 0; z <= rings; ++z)
 	{
+
 		float v = static_cast <float>(z) / rings;
 		theta = 0.0f;
 		for (uint32_t x = 0; x <= slices; ++x)
@@ -341,6 +376,171 @@ MeshPX KWSE::Graphics::MeshBuilder::CreateSpherePX(float radiu, int rings, int s
 
 			float u = static_cast<float>(x) / slices;
 			mesh.vertices.emplace_back(Vector3{ newRadius*sinf(theta) , radiu*cosf(phi), newRadius*-cosf(theta) }, Vector2{ u,v });
+			theta += thetaIncrement;
+		}
+		phi += phiIncrement;
+	}
+
+	for (uint32_t z = 0; z <= rings; ++z)
+	{
+		for (uint32_t x = 0; x <= slices; ++x)
+		{
+			mesh.indices.emplace_back(z*slices + x);
+			mesh.indices.emplace_back((z + 1)*slices + (x + 1));
+			mesh.indices.emplace_back((z + 1)*slices + (x));
+
+			mesh.indices.emplace_back(z*slices + x);
+			mesh.indices.emplace_back((z)*slices + (x + 1));
+			mesh.indices.emplace_back((z + 1)*slices + (x + 1));
+		}
+	}
+	return mesh;
+}
+
+MeshPN KWSE::Graphics::MeshBuilder::CreateSpherePN(float radiu, int rings, int slices)
+{
+	MeshPN mesh;
+	float phi = 0.0f;
+	float theta = 0.0f;
+	float thetaIncrement = Math::Constants::TwoPi / slices;
+	float phiIncrement = Math::Constants::Pi / rings;
+
+	for (uint32_t z = 0; z <= rings; ++z)
+	{
+		theta = 0.0f;
+		for (uint32_t x = 0; x <= slices; ++x)
+		{
+			float newRadius = radiu * sinf(phi);
+			Vector3 position = Vector3{ newRadius*sinf(theta) , radiu*cosf(phi), newRadius*-cosf(theta) };
+			Vector3 normal = Normalize(position);
+			mesh.vertices.emplace_back(position,normal);
+			theta += thetaIncrement;
+		}
+		phi += phiIncrement;
+	}
+
+	for (uint32_t z = 0; z <= rings; ++z)
+	{
+		for (uint32_t x = 0; x <= slices; ++x)
+		{
+			mesh.indices.emplace_back(z*slices + x);
+			mesh.indices.emplace_back((z + 1)*slices + (x + 1));
+			mesh.indices.emplace_back((z + 1)*slices + (x));
+
+			mesh.indices.emplace_back(z*slices + x);
+			mesh.indices.emplace_back((z)*slices + (x + 1));
+			mesh.indices.emplace_back((z + 1)*slices + (x + 1));
+		}
+	}
+	return mesh;
+}
+
+MeshPNX KWSE::Graphics::MeshBuilder::CreateSpherePNX(float radiu, int rings, int slices)
+{
+	MeshPNX mesh;
+	float phi = 0.0f;
+	float theta = 0.0f;
+	float phiIncrement = Math::Constants::Pi / rings;
+	float thetaIncrement = Math::Constants::TwoPi / slices;
+	
+	for (uint32_t z = 0; z <= rings; ++z)
+	{
+		float v = static_cast <float>(z) / rings;
+		theta = 0.0f;
+		for (uint32_t x = 0; x <= slices; ++x)
+		{
+			float newRadius = radiu * sinf(phi);
+			float u = static_cast<float>(x) / slices;
+			Vector3 position = Vector3{ newRadius*sinf(theta) , radiu*cosf(phi), newRadius*-cosf(theta) };
+			Vector3 normal = Normalize(position);
+			Vector2 uv = Vector2{ u,v };
+			mesh.vertices.emplace_back(position, normal, uv);
+			theta += thetaIncrement;
+		}
+		phi += phiIncrement;
+	}
+	
+	for (uint32_t z = 0; z <= rings; ++z)
+	{
+		for (uint32_t x = 0; x <= slices; ++x)
+		{
+			mesh.indices.emplace_back(z*slices + x);
+			mesh.indices.emplace_back((z + 1)*slices + (x + 1));
+			mesh.indices.emplace_back((z + 1)*slices + (x));
+	
+			mesh.indices.emplace_back(z*slices + x);
+			mesh.indices.emplace_back((z)*slices + (x + 1));
+			mesh.indices.emplace_back((z + 1)*slices + (x + 1));
+		}
+	}
+	return mesh;
+	//MeshPNX mesh;
+	//
+	//const float ringStep = Math::Constants::Pi / (rings - 1);
+	//const float sliceStep = Math::Constants::TwoPi / slices;
+	//
+	//const float uPercentage = 1.0f / slices;
+	//const float vPercentage = 1.0f / (rings - 1);
+	//
+	//for (uint32_t r = 0; r < rings; ++r)
+	//{
+	//	const float phi = r * ringStep;
+	//	const float y = -cos(phi) * radiu;
+	//	const float newRadius = sin(phi) * radiu;
+	//	const float v = 1.0f - r * vPercentage;
+	//
+	//	for (uint32_t s = 0; s <= slices; ++s)
+	//	{
+	//		const float x = -sin(s * sliceStep) * newRadius;
+	//		const float z = cos(s * sliceStep) * newRadius;
+	//		const float u = s * uPercentage;
+	//
+	//		mesh.vertices.push_back
+	//		({
+	//			{x,y,z}                                // position
+	//			, Math::Normalize({x,y,z})            // normal
+	//			, { u, v }                            // uv
+	//			});
+	//	}
+	//}
+	//
+	//for (uint32_t r = 0; r + 1 < rings; ++r)
+	//{
+	//	for (uint32_t s = 0; s < slices; ++s)
+	//	{
+	//		mesh.indices.push_back((s + 0) + (r + 0) * (slices + 1));
+	//		mesh.indices.push_back((s + 0) + (r + 1) * (slices + 1));
+	//		mesh.indices.push_back((s + 1) + (r + 1) * (slices + 1));
+	//
+	//		mesh.indices.push_back((s + 0) + (r + 0) * (slices + 1));
+	//		mesh.indices.push_back((s + 1) + (r + 1) * (slices + 1));
+	//		mesh.indices.push_back((s + 1) + (r + 0) * (slices + 1));
+	//	}
+	//}
+	//
+	//return mesh;
+}
+
+Mesh KWSE::Graphics::MeshBuilder::CreateSphere(float radiu, int rings, int slices)
+{
+	Mesh mesh;
+	float phi = 0.0f;
+	float theta = 0.0f;
+	float phiIncrement = Math::Constants::Pi / rings;
+	float thetaIncrement = Math::Constants::TwoPi / slices;
+
+	for (uint32_t z = 0; z <= rings; ++z)
+	{
+		float v = static_cast <float>(z) / rings;
+		theta = 0.0f;
+		for (uint32_t x = 0; x <= slices; ++x)
+		{
+			float newRadius = radiu * sinf(phi);
+			float u = static_cast<float>(x) / slices;
+			Vector3 position = Vector3{ newRadius*sinf(theta) , radiu*cosf(phi), newRadius*-cosf(theta) };
+			Vector3 normal = Normalize(position);
+			Vector2 uv = Vector2{ u,v };
+			mesh.vertices.emplace_back( position, normal, Vector3{-normal.z,0.0f,normal.x }, uv );
 			theta += thetaIncrement;
 		}
 		phi += phiIncrement;

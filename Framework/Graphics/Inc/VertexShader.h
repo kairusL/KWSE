@@ -12,7 +12,7 @@ namespace KWSE::Graphics
 		VertexShader(const VertexShader&) = delete;
 		VertexShader& operator=(const VertexShader&) = delete;
 
-		void Initialize(const std::filesystem::path& filePath, uint32_t vertexFormat);
+		void Initialize(const std::filesystem::path& filePath, uint32_t vertexFormat, const char* shaderName="VS");
 		void Terminate();
 
 		void Bind() const;

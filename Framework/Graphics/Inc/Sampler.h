@@ -18,6 +18,7 @@ namespace KWSE::Graphics
 		void Terminate();
 
 		void BindPS(uint32_t slot) const;
+		void BindVS(uint32_t slot) const;
 
 	private:
 		ID3D11SamplerState* mSampler = nullptr;

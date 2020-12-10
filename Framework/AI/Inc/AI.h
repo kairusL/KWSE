@@ -2,8 +2,8 @@
 #include"Common.h"
 
 //FSM headers
-#include "State.h";
-#include "StateMachine.h";
+#include "State.h"
+#include "StateMachine.h"
 
 //Pathing headers
 #include "BFS.h"

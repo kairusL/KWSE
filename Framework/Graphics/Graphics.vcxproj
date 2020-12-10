@@ -160,6 +160,8 @@
     <ClInclude Include="Inc\DepthStencilState.h" />
     <ClInclude Include="Inc\Graphics.h" />
     <ClInclude Include="Inc\GraphicsSystem.h" />
+    <ClInclude Include="Inc\LightTypes.h" />
+    <ClInclude Include="Inc\Material.h" />
     <ClInclude Include="Inc\MeshBuffer.h" />
     <ClInclude Include="Inc\MeshBuilder.h" />
     <ClInclude Include="Inc\MeshTypes.h" />
@@ -167,6 +169,7 @@
     <ClInclude Include="Inc\ParticleEmitter.h" />
     <ClInclude Include="Inc\PixelShader.h" />
     <ClInclude Include="Inc\RasterizerState.h" />
+    <ClInclude Include="Inc\RenderTarget.h" />
     <ClInclude Include="Inc\Sampler.h" />
     <ClInclude Include="Inc\SimpleDraw.h" />
     <ClInclude Include="Inc\Skybox.h" />
@@ -194,6 +197,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Src\RasterizerState.cpp" />
+    <ClCompile Include="Src\RenderTarget.cpp" />
     <ClCompile Include="Src\Sampler.cpp" />
     <ClCompile Include="Src\SimpleDraw.cpp" />
     <ClCompile Include="Src\Skybox.cpp" />

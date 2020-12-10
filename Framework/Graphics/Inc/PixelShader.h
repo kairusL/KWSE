@@ -14,7 +14,7 @@ namespace KWSE::Graphics
 		PixelShader& operator=(const PixelShader&) = delete;
 
 
-		void Initialize(const std::filesystem::path& filePath);
+		void Initialize(const std::filesystem::path& filePath, const char* shaderName ="PS");
 		void Terminate();
 
 		void Bind() const;

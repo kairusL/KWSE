@@ -17,7 +17,7 @@ void GameState::Initialize()
 	mCamera.SetNearPlane(0.1f);
 	mCamera.SetFarPlane(100.0f);
 
-	ModelLoader::LoadObj(L"../../Assets/Models/sci_fi_fighter/sci_fi_fighter.obj", 1.0f, mMesh);
+	ModelLoader::LoadObjPX(L"../../Assets/Models/sci_fi_fighter/sci_fi_fighter.obj", 1.0f, mMesh);
 	mMeshBuffer.Initialize(mMesh);
 
 	mTransformBuffer.Initialize();

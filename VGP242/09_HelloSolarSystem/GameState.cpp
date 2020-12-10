@@ -15,7 +15,7 @@ void GameState::Initialize()
 
 
 	// Sci_fi_fighter
-	ModelLoader::LoadObj(L"../../Assets/Models/sci_fi_fighter/sci_fi_fighter.obj", 10.0f, mMesh);
+	ModelLoader::LoadObjPX(L"../../Assets/Models/sci_fi_fighter/sci_fi_fighter.obj", 10.0f, mMesh);
 
 	mMeshBuffer.Initialize(mMesh);
 	// Planets
@@ -42,8 +42,8 @@ void GameState::Initialize()
 	mPixelShader.Initialize(L"../../Assets/Shaders/DoTexturing.fx");
 
 
-	// Planets
 	mSci_fi_Texrures.Initialize("../../Assets/Models/sci_fi_fighter/sci_fi_fighter_diffuse.jpg");
+	// Planets
 	mTexrures.resize(10);
 	mTexrures[0].Initialize("../../Assets/Images/8k_sun.jpg");
 	mTexrures[1].Initialize("../../Assets/Images/8k_mercury.jpg");

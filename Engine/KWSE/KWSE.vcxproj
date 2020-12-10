@@ -168,6 +168,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Framework\AI\AI.vcxproj">
+      <Project>{8a3ff389-df4a-476e-9d7d-26bf0a53b6eb}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\Framework\Core\Core.vcxproj">
       <Project>{71886c49-dc83-4aa6-ae34-601e516430bf}</Project>
     </ProjectReference>
@@ -179,6 +182,9 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Framework\Math\Math.vcxproj">
       <Project>{557e132e-411d-4464-b981-7f2d9e5b8454}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\ML\ML.vcxproj">
+      <Project>{1a59deaf-0ff0-494d-8764-c60f7ab513ed}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

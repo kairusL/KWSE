@@ -100,7 +100,8 @@ void GameState::Render()
 	matViewSkybox._41 = 0.0f;
 	matViewSkybox._42 = 0.0f;
 	matViewSkybox._43 = 0.0f;
-	mSkybox.Render(Math::Transpose(matViewSkybox*matProj));
+	//mSkybox.Render(Math::Transpose(matViewSkybox*matProj));
+	mSkybox.Render(mCamera);
 
 	// Pass transform data to the GPU.
 	TransformData data;

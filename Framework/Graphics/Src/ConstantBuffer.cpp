@@ -38,7 +38,5 @@ void KWSE::Graphics::ConstantBuffer::BindVS(uint32_t slot) const
 
 void KWSE::Graphics::ConstantBuffer::BindPS(uint32_t slot) const
 {
-	auto context = GraphicsSystem::Get()->GetContext();
-	
-	//////////////////////////////////////////////////////////////////////////////////////////////
+	GraphicsSystem::Get()->GetContext()->PSSetConstantBuffers(slot, 1, &mConstantBuffer);
 }

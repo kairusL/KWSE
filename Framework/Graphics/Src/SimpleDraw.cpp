@@ -3,12 +3,11 @@
 
 #include "Camera.h"
 #include "ConstantBuffer.h"
+#include "GraphicsSystem.h"
 #include "MeshBuffer.h"
 #include "PixelShader.h"
 #include "VertexShader.h"
 #include "VertexTypes.h"
-#include "GraphicsSystem.h"
-
 
 using namespace KWSE;
 using namespace KWSE::Graphics;
@@ -77,6 +76,31 @@ namespace
 		mPixelShader.Terminate();
 		mVertexShader.Terminate();
 	}
+
+	void SimpleDrawImpl::AddScreenCircle(const Math::Circle & circle, const Color& color)
+	{
+		if (mVertices2DCount + 32 <= mMaxVertexCount)
+		{
+			float x = circle.center.x;
+			float y = circle.center.y;
+			float r = circle.radius;
+
+			// Add line
+			const float kAngle = Math::Constants::Pi / 8.0f;
+			for (uint32_t i = 0; i < 16; ++i)
+			{
+				const float alpha = i * kAngle;
+				const float beta = alpha + kAngle;
+				const float x0 = x + (r * sin(alpha));
+				const float y0 = y + (r * cos(alpha));
+				const float x1 = x + (r * sin(beta));
+				const float y1 = y + (r * cos(beta));
+				mVertices2D[mVertices2DCount++] = { Math::Vector3(x0, y0, 0.0f), color };
+				mVertices2D[mVertices2DCount++] = { Math::Vector3(x1, y1, 0.0f), color };
+			}
+		}
+	}
+
 	void SimpleDrawImpl::AddScreenArc(const Math::Vector2& center, float radius, float fromAngle, float toAngle, const Color& color)
 	{
 		// Check if we have enough space
@@ -277,9 +301,9 @@ namespace
 		auto u = Math::GetUp(transform);
 		auto l = Math::GetLook(transform);
 		auto p = Math::GetTranslation(transform);
-		sInstance->AddLine(p, p + r, Colors::Red);
-		sInstance->AddLine(p, p + u, Colors::Green);
-		sInstance->AddLine(p, p + l, Colors::Blue);
+		AddLine(p, p + r, Colors::Red);
+		AddLine(p, p + u, Colors::Green);
+		AddLine(p, p + l, Colors::Blue);
 	}
 	void SimpleDrawImpl::AddFace(const Math::Vector3& v0, const Math::Vector3& v1, const Math::Vector3& v2, const Color& color)
 	{
@@ -331,33 +355,6 @@ namespace
 
 
 	std::unique_ptr<SimpleDrawImpl> sInstance;
-}
-
-
-
-void SimpleDrawImpl::AddScreenCircle(const Math::Circle & circle, const Color& color)
-{
-	if (mVertices2DCount + 32 <= mMaxVertexCount)
-	{
-		float x = circle.center.x;
-		float y = circle.center.y;
-		float r = circle.radius;
-
-		// Add line
-		const float kAngle = Math::Constants::Pi / 8.0f;
-		for (uint32_t i = 0; i < 16; ++i)
-		{
-			const float alpha = i * kAngle;
-			const float beta = alpha + kAngle;
-			const float x0 = x + (r * sin(alpha));
-			const float y0 = y + (r * cos(alpha));
-			const float x1 = x + (r * sin(beta));
-			const float y1 = y + (r * cos(beta));
-			mVertices2D[mVertices2DCount++] = { Math::Vector3(x0, y0, 0.0f), color };
-			mVertices2D[mVertices2DCount++] = { Math::Vector3(x1, y1, 0.0f), color };
-		}
-	}
-
 }
 
 void KWSE::Graphics::SimpleDraw::AddLine(const Math::Vector3 & v0, const Math::Vector3 & v1, const Color & color)
@@ -508,6 +505,7 @@ void SimpleDraw::AddScreenRect(const Math::Rect& rect, const Color& color)
 {
 	sInstance->AddScreenRect(rect, color);
 }
+
 void SimpleDraw::AddScreenCircle(const Math::Circle& circle, const Color& color)
 {
 	sInstance->AddScreenCircle(circle, color);
@@ -526,7 +524,9 @@ void SimpleDraw::AddScreenCircle(float x, float y, float r, const Color& color)
 {
 	AddScreenCircle(Math::Circle(x, y, r), color);
 }
+
 //----------------------------------------------------------------------------------------------------
+
 void SimpleDraw::AddScreenArc(const Math::Vector2& center, float r, float fromAngle, float toAngle, const Color& color)
 {
 	sInstance->AddScreenArc(center, r, fromAngle, toAngle, color);

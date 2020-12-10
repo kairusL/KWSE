@@ -4,6 +4,8 @@
 using namespace KWSE;
 using namespace KWSE::Math;
 
+
+
 //Vector2
 const Vector2 Vector2::XAxis{ 1.0f, 0.0f };
 const Vector2 Vector2::YAxis{ 0.0f, 1.0f };
@@ -385,4 +387,84 @@ bool KWSE::Math::Intersect(const Vector3 & point, const AABB & aabb)
 	if (abs(test.y) > aabb.extend.y) return false;
 	if (abs(test.z) > aabb.extend.z) return false;
 	return true;
+}
+
+int KWSE::Math::Random()
+{
+	return std::uniform_int_distribution<>{ 0, (std::numeric_limits<int>::max)() }(myRandomEngine);
+}
+
+int KWSE::Math::Random(int min, int max)
+{
+	return std::uniform_int_distribution<>{ min, max }(myRandomEngine);
+}
+
+float KWSE::Math::RandomFloat()
+{
+	return std::uniform_real_distribution<float>{ 0, 1.0f }(myRandomEngine);
+}
+
+float KWSE::Math::RandomFloat(float min, float max)
+{
+	return std::uniform_real_distribution<float>{ min, max }(myRandomEngine);
+}
+
+Vector2 KWSE::Math::RandomVector2()
+{
+	return Vector2
+	(
+		RandomFloat(),
+		RandomFloat()
+	);
+}
+
+Vector2 KWSE::Math::RandomVector2(const Vector2& min, const Vector2& max)
+{
+	return Vector2
+	(
+		RandomFloat(min.x, max.x),
+		RandomFloat(min.y, max.y)
+	);
+}
+
+
+Vector2 KWSE::Math::RandomUnitCircle(bool normalized)
+{
+	Vector2 randVal{
+		RandomFloat(-1.0f, 1.0f) + 0.001f,
+		RandomFloat(-1.0f, 1.0f)
+	};
+	if (normalized)
+
+		return Normalize(randVal);
+	return randVal;
+}
+
+Vector3 KWSE::Math::RandomVector3()
+{
+	return Vector3
+	(
+		RandomFloat(),
+		RandomFloat(),
+		RandomFloat()
+	);
+}
+
+Vector3 KWSE::Math::RandomVector3(const Vector3& min, const Vector3& max)
+{
+	return Vector3
+	(
+		RandomFloat(min.x, max.x),
+		RandomFloat(min.y, max.y),
+		RandomFloat(min.z, max.z)
+	);
+}
+
+Vector3 KWSE::Math::RandomUnitSphere()
+{
+	return Normalize(Vector3(
+		RandomFloat(-1.0f, 1.0f) + 0.001f,
+		RandomFloat(-1.0f, 1.0f),
+		RandomFloat(-1.0f, 1.0f))
+	);
 }

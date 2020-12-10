@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Inc">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Src\Datasets">
+      <UniqueIdentifier>{050efd6a-cb52-4c07-a717-b7e03fb88b3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inc\Dataset">
+      <UniqueIdentifier>{7a69deaa-0290-41cf-a1bc-fb92e2edf2c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inc\LinearModel">
+      <UniqueIdentifier>{1274754a-59ea-4478-bd09-b14df671a8d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\LinearModel">
+      <UniqueIdentifier>{e4539b8d-8fbd-42ae-a06a-4d47f09a7a39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inc\ANN">
+      <UniqueIdentifier>{55af7883-905c-41c4-bcc9-06cfc5ea220b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ANN">
+      <UniqueIdentifier>{351c333f-4687-4c44-bd77-cb6131c54449}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\GA">
+      <UniqueIdentifier>{4c4fe071-480f-402a-8933-e908986721c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inc\GA">
+      <UniqueIdentifier>{5c6f45b9-7d15-4599-b79b-0d68e0eca4cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inc\KMean">
+      <UniqueIdentifier>{d5290543-f54a-4455-8599-e4439c3a1f78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\KMean">
+      <UniqueIdentifier>{0dd6caca-6950-419d-bf7d-e6d45a0974a7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Inc\Common.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\ML.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Precompiled.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Datasets.h">
+      <Filter>Inc\Dataset</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\LinearRegression.h">
+      <Filter>Inc\LinearModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\LogisticRegression.h">
+      <Filter>Inc\LinearModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\NeuralNetwork.h">
+      <Filter>Inc\ANN</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\GeneticAlgorithm.h">
+      <Filter>Inc\GA</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\KMean.h">
+      <Filter>Inc\KMean</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Src\Precompiled.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Datasets.cpp">
+      <Filter>Src\Datasets</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\LinearRegression.cpp">
+      <Filter>Src\LinearModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\LogisticRegression.cpp">
+      <Filter>Src\LinearModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\NeuralNetwork.cpp">
+      <Filter>Src\ANN</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GeneticAlgorithm.cpp">
+      <Filter>Src\GA</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\KMean.cpp">
+      <Filter>Src\KMean</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

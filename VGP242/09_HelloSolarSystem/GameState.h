@@ -53,6 +53,7 @@ private:
 	float mShipRotation = 0.0f;
 	float mShipElevation = 0.0f;
 	float mShipTilt = 0.0f;
+
 	// Planets 
 	std::vector<float> mRotationSpeed;
 	std::vector<float> mSelfRotationSpeed;

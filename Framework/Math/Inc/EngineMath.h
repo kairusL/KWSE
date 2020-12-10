@@ -328,102 +328,41 @@ namespace KWSE::Math
 
 	//-----------------------------------------------------------------
 
-	int Random()
-	{
-		return std::uniform_int_distribution<>{ 0, (std::numeric_limits<int>::max)() }(myRandomEngine);
-	}
+	int Random();
 
 	//----------------------------------------------------------------------------------------------------
 
-	int Random(int min, int max)
-	{
-		return std::uniform_int_distribution<>{ min, max }(myRandomEngine);
-	}
+	int Random(int min, int max);
 
 	//----------------------------------------------------------------------------------------------------
 
-	float RandomFloat()
-	{
-		return std::uniform_real_distribution<float>{ 0, 1.0f }(myRandomEngine);
-	}
+	float RandomFloat();
 
 	//----------------------------------------------------------------------------------------------------
 
-	float RandomFloat(float min, float max)
-	{
-		return std::uniform_real_distribution<float>{ min, max }(myRandomEngine);
-	}
+	float RandomFloat(float min, float max);
 
 	//----------------------------------------------------------------------------------------------------
 
-	Vector2 RandomVector2()
-	{
-		return Vector2
-		(
-			RandomFloat(),
-			RandomFloat()
-		);
-	}
+	Vector2 RandomVector2();
 
 	//----------------------------------------------------------------------------------------------------
 
-	Vector2 RandomVector2(const Vector2& min, const Vector2& max)
-	{
-		return Vector2
-		(
-			RandomFloat(min.x, max.x),
-			RandomFloat(min.y, max.y)
-		);
-	}
+	Vector2 RandomVector2(const Vector2& min, const Vector2& max);
 
 	//----------------------------------------------------------------------------------------------------
 
-	Vector2 RandomUnitCircle(bool normalized)
-	{
-		Vector2 randVal{
-			RandomFloat(-1.0f, 1.0f) + 0.001f,
-			RandomFloat(-1.0f, 1.0f)
-		};
-		if (normalized)
+	Vector2 RandomUnitCircle(bool normalized);
+	//----------------------------------------------------------------------------------------------------
 
-			return Normalize(randVal);
-		return randVal;
-	}
+	Vector3 RandomVector3();
 
 	//----------------------------------------------------------------------------------------------------
 
-	Vector3 RandomVector3()
-	{
-		return Vector3
-		(
-			RandomFloat(),
-			RandomFloat(),
-			RandomFloat()
-		);
-	}
-
+	Vector3 RandomVector3(const Vector3& min, const Vector3& max);
 	//----------------------------------------------------------------------------------------------------
 
-	Vector3 RandomVector3(const Vector3& min, const Vector3& max)
-	{
-		return Vector3
-		(
-			RandomFloat(min.x, max.x),
-			RandomFloat(min.y, max.y),
-			RandomFloat(min.z, max.z)
-		);
-	}
-
-	//----------------------------------------------------------------------------------------------------
-
-	Vector3 RandomUnitSphere()
-	{
-		return Normalize(Vector3(
-			RandomFloat(-1.0f, 1.0f) + 0.001f,
-			RandomFloat(-1.0f, 1.0f),
-			RandomFloat(-1.0f, 1.0f))
-		);
-	}
+	Vector3 RandomUnitSphere();
 
 	//Inline
 	//Constexpr

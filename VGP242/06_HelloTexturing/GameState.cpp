@@ -26,7 +26,7 @@ void GameState::Initialize()
 
 	mVertexShader.Initialize(L"../../Assets/Shaders/DoTexturing.fx",VertexPX::Format);
 	mPixelShader.Initialize(L"../../Assets/Shaders/DoTexturing.fx");
-	mTexrure.Initialize("../../Assets/Images/nature.jpg");
+	mTexrure.Initialize("../../Assets/Images/Skybox_04.jpg");
 	mSampler.Initialize(Sampler::Filter::Anisotropic,Sampler::AddressMode::Border);
 	mSampler1.Initialize(Sampler::Filter::Linear, Sampler::AddressMode::Clamp);
 	mSampler2.Initialize(Sampler::Filter::Point, Sampler::AddressMode::Mirror);

@@ -14,4 +14,7 @@ namespace KWSE::Graphics
 
 	using MeshPC = MeshBase<VertexPC>;
 	using MeshPX = MeshBase<VertexPX>;
+	using MeshPN = MeshBase<VertexPN>;
+	using MeshPNX = MeshBase<VertexPNX>;
+	using Mesh = MeshBase<Vertex>;
 }
