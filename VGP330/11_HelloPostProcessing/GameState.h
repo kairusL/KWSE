@@ -37,6 +37,12 @@ private:
 		float specularWeight = 1.0f;
 		float padding;
 	};
+	struct OilSetting
+	{
+		float screenSizeScale = 2.0f;
+		float paintRadius = 3.0f;
+		float padding[2];
+	};
 	//ID3D11Buffer* mConstantBuffer = nullptr;
 
 	using TransformBuffer = KWSE::Graphics::TypedConstantBuffer<TransformData>;
@@ -44,6 +50,7 @@ private:
 	using LightBuffer = KWSE::Graphics::TypedConstantBuffer< KWSE::Graphics::DirectionalLight>;
 	using MaterialBuffer = KWSE::Graphics::TypedConstantBuffer<KWSE::Graphics::Material>;
 	using SettingBuffer = KWSE::Graphics::TypedConstantBuffer<Setting>;
+	using OilSettingBuffer = KWSE::Graphics::TypedConstantBuffer<OilSetting>;
 
 
 	KWSE::Graphics::DirectionalLight mDirectionLight;
@@ -55,7 +62,8 @@ private:
 
 	KWSE::Graphics::RenderTarget mRenderTarger;
 
-
+	OilSettingBuffer mOilSettingBuffer;
+	OilSetting mOilSetting;
 
 
 	KWSE::Graphics::Mesh mMesh;
@@ -85,7 +93,6 @@ private:
 	//float mRotationY= 0.f;
 	//float mRotationX= 0.f;
 	//float mRotation = 0.f;
-
 
 	TransformBuffer mTransformBuffer;
 	TransformCloudBuffer mTransformCloudBuffer;

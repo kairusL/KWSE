@@ -54,6 +54,23 @@ void KWSE::ML::GeneticAlgorithm::Initialize(
 	EvaluatePopulation();
 }
 
+void KWSE::ML::GeneticAlgorithm::Initialize(int populationSize, int chromoLength, int maxGeneValue, float crossoverRate, float mutationRate, GeneratePopulationFunc generatePopulationFunc, ComputeFitnessFunc computeFitness, ComputeCrossOverMateFunc computeCrossOverMateFunc)
+{
+	mComputeFitness = std::move(computeFitness);
+	mComputeCrossOverMateFunc = std::move(computeCrossOverMateFunc);
+
+	//Reset
+	mGeneration = 0;
+	mMaxGeneValue = maxGeneValue;
+	mCrosssoverRate = crossoverRate; 
+	mMutationRate = mutationRate;
+
+	// Create initial population
+	mPopulation.clear();
+	generatePopulationFunc(mPopulation);
+	EvaluatePopulation();
+}
+
 void KWSE::ML::GeneticAlgorithm::Advance() //Moev on to the next generation.
 {
 	++mGeneration;

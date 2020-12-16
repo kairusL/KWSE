@@ -30,9 +30,10 @@ void GameState::Initialize()
 
 
 
+
 	const wchar_t* shaderFileNames = L"../../Assets/Shaders/DarkStandard.fx";
-	//const wchar_t* shaderFileNames1 = L"../../Assets/Shaders/PostProcessOilPainting.fx";
-	const wchar_t* shaderFileNames1 = L"../../Assets/Shaders/PostProcess.fx";
+	const wchar_t* shaderFileNames1 = L"../../Assets/Shaders/PostProcessOilPainting.fx";
+	//const wchar_t* shaderFileNames1 = L"../../Assets/Shaders/PostProcess.fx";
 	const wchar_t* shaderFileNames2 = L"../../Assets/Shaders/DoLightTexturing.fx";
 
 	mPostProcessVertexShader.Initialize(shaderFileNames1,VertexPX::Format);
@@ -77,6 +78,7 @@ void GameState::Initialize()
 	mRasterizerStateSolid.Initialize(RasterizerState::CullMode::Back, RasterizerState::FillMode::Solid);
 	mRasterizerStateWireframe.Initialize(RasterizerState::CullMode::Back, RasterizerState::FillMode::Wireframe);
 
+	mOilSettingBuffer.Initialize();
 
 	// NPC Space
 	mScreenMesh.vertices.push_back({ {-1.0f,-1.0f,0.0f}, {0.0f,1.0f} });
@@ -97,6 +99,7 @@ void GameState::Initialize()
 void GameState::Terminate()
 {
 	mScreenMeshBuffer.Terminate();
+	mOilSettingBuffer.Terminate();
 	mBlendState.Terminate();
 	mRasterizerStateWireframe.Terminate();
 	mRasterizerStateSolid.Terminate();
@@ -204,6 +207,11 @@ void  GameState::DebugUI()
 			DebugUI::SetTheme(DebugUI::Theme::Light);
 
 		}
+	}
+	if (ImGui::CollapsingHeader("OilSetting"))
+	{
+		ImGui::DragFloat("Screen Size Scale", &mOilSetting.screenSizeScale, 0.1f, 0.0f, 1000.0f);
+		ImGui::DragFloat("Brush Radius", &mOilSetting.paintRadius, 0.01f, 0.0f, 1000.0f);
 	}
 	if (ImGui::CollapsingHeader("Light"))
 	{
@@ -346,6 +354,9 @@ void GameState::PostProcess()
 {
 	mPostProcessVertexShader.Bind();
 	mPostProcessPixelShader.Bind();
+
+	mOilSettingBuffer.Update(mOilSetting);
+	mOilSettingBuffer.BindPS(0);
 
 	mSampler.BindVS(0);
 

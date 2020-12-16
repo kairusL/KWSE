@@ -20,5 +20,12 @@ private:
 	AppLog mAppLog;
 
 	KWSE::ML::GeneticAlgorithm mGA;
+
+
+	KWSE::Math::Vector2 mStartPos;
+	KWSE::Math::Vector2 mEndPos;
+	KWSE::Math::Vector2 mCurPos;
+	KWSE::Math::Vector2 mCircleSize;
+	bool mIsFounded = false;
 	bool mInitialized = false;
 };

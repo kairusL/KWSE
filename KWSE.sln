@@ -56,6 +56,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{B20E
 		Assets\Shaders\Particles.fx = Assets\Shaders\Particles.fx
 		Assets\Shaders\PostProcess.fx = Assets\Shaders\PostProcess.fx
 		Assets\Shaders\PostProcessOilPainting.fx = Assets\Shaders\PostProcessOilPainting.fx
+		Assets\Shaders\PostProcessOilPainting_S.fx = Assets\Shaders\PostProcessOilPainting_S.fx
 		Assets\Shaders\SimpleDraw.fx = Assets\Shaders\SimpleDraw.fx
 		Assets\Shaders\Skybox.fx = Assets\Shaders\Skybox.fx
 		Assets\Shaders\Standard.fx = Assets\Shaders\Standard.fx
@@ -113,6 +114,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GA_Path", "VGP337\GA_Path\GA_Path.vcxproj", "{E76AE204-511C-4AEA-88CF-A1A3AE3B61BA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "14_HelloFinalShader", "VGP330\14_HelloFinalShader\14_HelloFinalShader.vcxproj", "{6DB3CE80-F0E7-4ED8-BA72-D89BD1C13868}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GA_TSP", "VGP337\GA_TSP\GA_TSP.vcxproj", "{6C82AF58-FA76-4DA8-B8B9-95C56BB74131}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -394,6 +397,14 @@ Global
 		{6DB3CE80-F0E7-4ED8-BA72-D89BD1C13868}.Release|x64.Build.0 = Release|x64
 		{6DB3CE80-F0E7-4ED8-BA72-D89BD1C13868}.Release|x86.ActiveCfg = Release|Win32
 		{6DB3CE80-F0E7-4ED8-BA72-D89BD1C13868}.Release|x86.Build.0 = Release|Win32
+		{6C82AF58-FA76-4DA8-B8B9-95C56BB74131}.Debug|x64.ActiveCfg = Debug|x64
+		{6C82AF58-FA76-4DA8-B8B9-95C56BB74131}.Debug|x64.Build.0 = Debug|x64
+		{6C82AF58-FA76-4DA8-B8B9-95C56BB74131}.Debug|x86.ActiveCfg = Debug|Win32
+		{6C82AF58-FA76-4DA8-B8B9-95C56BB74131}.Debug|x86.Build.0 = Debug|Win32
+		{6C82AF58-FA76-4DA8-B8B9-95C56BB74131}.Release|x64.ActiveCfg = Release|x64
+		{6C82AF58-FA76-4DA8-B8B9-95C56BB74131}.Release|x64.Build.0 = Release|x64
+		{6C82AF58-FA76-4DA8-B8B9-95C56BB74131}.Release|x86.ActiveCfg = Release|Win32
+		{6C82AF58-FA76-4DA8-B8B9-95C56BB74131}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -434,12 +445,13 @@ Global
 		{C5B4D5E6-5928-49F4-8B55-75BF128200E9} = {F79DA8D6-BB7B-4CB9-9858-BA986F881591}
 		{E76AE204-511C-4AEA-88CF-A1A3AE3B61BA} = {F79DA8D6-BB7B-4CB9-9858-BA986F881591}
 		{6DB3CE80-F0E7-4ED8-BA72-D89BD1C13868} = {B23D2D4B-6CFF-4A38-8CA4-3BACFB5BE0FE}
+		{6C82AF58-FA76-4DA8-B8B9-95C56BB74131} = {F79DA8D6-BB7B-4CB9-9858-BA986F881591}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C041DC44-92D1-453E-BCFA-5B9E9DF9D604}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 35
+		SccNumberOfProjects = 36
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://dev.azure.com/kairusl
 		SccLocalPath0 = .
@@ -579,5 +591,9 @@ Global
 		SccProjectTopLevelParentUniqueName34 = KWSE.sln
 		SccProjectName34 = VGP330/14_HelloFinalShader
 		SccLocalPath34 = VGP330\\14_HelloFinalShader
+		SccProjectUniqueName35 = VGP337\\GA_TSP\\GA_TSP.vcxproj
+		SccProjectTopLevelParentUniqueName35 = KWSE.sln
+		SccProjectName35 = VGP337/GA_TSP
+		SccLocalPath35 = VGP337\\GA_TSP
 	EndGlobalSection
 EndGlobal

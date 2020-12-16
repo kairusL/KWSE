@@ -19,6 +19,7 @@ namespace KWSE::ML
 		// pass Genome calculate fitness and return fitness 
 		using ComputeFitnessFunc = std::function<float(const Genome&)>;
 		using ComputeCrossOverMateFunc = std::function<void(Genome&, const Genome&, const Genome&, const float, const float, const float)>;
+		using GeneratePopulationFunc = std::function<void(std::vector<Genome>&)>;
 		//using ComputeCrossOverFunc = std::function<void(Genome&, const Genome&, const Genome&, const float)>;
 		//using ComputeMateFunc = std::function<void(Genome&, const float, const float)>;
 
@@ -33,6 +34,16 @@ namespace KWSE::ML
 			ComputeCrossOverMateFunc computeCrossOverMateFunc
 			//ComputeCrossOverFunc computeCrossOverFunc,
 			//ComputeMateFunc		 computeMateFunc
+		);
+		void Initialize(
+			int populationSize,
+			int chromoLength,
+			int maxGeneValue,
+			float crossoverRate,
+			float mutationRate,
+			GeneratePopulationFunc generatePopulationFunc,
+			ComputeFitnessFunc computeFitness,
+			ComputeCrossOverMateFunc computeCrossOverMateFunc
 		);
 		//  2 . Would generate a new group of population.
 		void Advance();

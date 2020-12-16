@@ -21,11 +21,6 @@ namespace
 		Left	 //3
 	};
 
-	ImVec2 winPos;
-	ImVec2 winSize;
-	ImVec2 startPos;
-	ImVec2 endPos;
-	ImVec2 curPos;
 	int target = 100;
 
 	auto pathfitnessF = [](auto& genome)
@@ -96,6 +91,10 @@ void GameState::Initialize()
 	auto graphicsSystem = GraphicsSystem::Get();
 	graphicsSystem->SetClearColor(Colors::DarkGray);
 
+	mCircleSize = { 10.0f, 10.0f };
+	mStartPos = mCircleSize;
+	mEndPos = { Vector2{371,242} -mCircleSize };
+
 
 
 }
@@ -116,22 +115,7 @@ void GameState::Update(float deltaTime)
 		KWSE::MainApp().Quit();
 		return;
 	}
-	if (mInitialized)
-	{
-		auto& best = mGA.GetBestGenome();  
-		if (best.fitness < (int)KTarget.size())
-		{
-			mGA.Advance();
 
-			// Print the next best genome
-			std::string bestStr;
-			for (auto& gene : mGA.GetBestGenome().chromosome)
-			{
-				bestStr += (char)(gene + 32);
-			}
-			mAppLog.AddLog("Generation %d: %s\n",mGA.GetGeneration(), bestStr.c_str());
-		}
-	}
 
 }
 
@@ -180,18 +164,32 @@ void GameState::DrawMap()
 {
 
 	ImGui::Begin(" ",nullptr,ImGuiWindowFlags_NoTitleBar);
-	 winPos = ImGui::GetWindowPos();
-	 winSize = ImGui::GetWindowSize();
+	ImVec2 winPos = ImGui::GetWindowPos();
+	ImVec2 winSize = ImGui::GetWindowSize();
 	ImDrawList* drawList = ImGui::GetForegroundDrawList();
 	
 	ImColor color{ 1.0f, 1.0f, 1.0f };
-	ImVec2 circleSize{ 10.0f, 10.0f };
-	 startPos={ circleSize };
-	 endPos={ winSize- circleSize};
 
-	drawList->AddCircle(winPos+ startPos, 10.0f, color);
-	drawList->AddCircle(winPos+ endPos, 10.0f, color);
 
+	drawList->AddCircle(winPos + ImVec2{mStartPos.x,mStartPos.y}, 10.0f, color);
+	drawList->AddCircle(winPos+ ImVec2{ mEndPos.x,mEndPos.y }, 10.0f, color);
+
+	if (mInitialized)
+	{
+		auto& best = mGA.GetBestGenome();
+		if (best.fitness < (int)KTarget.size())
+		{
+			mGA.Advance();
+
+			// Print the next best genome
+			std::string bestStr;
+			for (auto& gene : mGA.GetBestGenome().chromosome)
+			{
+				bestStr += (char)(gene + 32);
+			}
+			mAppLog.AddLog("Generation %d: %s\n", mGA.GetGeneration(), bestStr.c_str());
+		}
+	}
 	
 	ImGui::End();
 

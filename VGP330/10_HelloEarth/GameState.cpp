@@ -21,6 +21,9 @@ void GameState::Initialize()
 	mMesh = MeshBuilder::CreateSphere(1.5f, 256, 256);
 	mMeshBuffer.Initialize(mMesh);
 
+	//mMesh = MeshBuilder::CreatePlane(10, 10,5);
+	//mMeshBuffer.Initialize(mMesh);
+
 	mCloudMesh = MeshBuilder::CreateSpherePNX(1.52f, 256, 256);
 	mCloudMeshBuffer.Initialize(mCloudMesh);
 

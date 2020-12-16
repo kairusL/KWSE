@@ -45,6 +45,13 @@ private:
 		float specularWeight = 0.0f;
 		float depthBias= 0.000029f;
 	};
+	struct OilSetting
+	{
+		float screenSizeScale=2.0f;
+		float paintRadius=3.0f;
+		float minSigma =1.0f;
+		float sizeWeight=0.0f;
+	};
 	//ID3D11Buffer* mConstantBuffer = nullptr;
 
 	
@@ -55,6 +62,7 @@ private:
 	using LightBuffer = KWSE::Graphics::TypedConstantBuffer< KWSE::Graphics::DirectionalLight>;
 	using MaterialBuffer = KWSE::Graphics::TypedConstantBuffer<KWSE::Graphics::Material>;
 	using SettingBuffer = KWSE::Graphics::TypedConstantBuffer<Setting>;
+	using OilSettingBuffer = KWSE::Graphics::TypedConstantBuffer<OilSetting>;
 
 
 	KWSE::Graphics::DirectionalLight mDirectionLight;
@@ -73,6 +81,12 @@ private:
 	KWSE::Graphics::RenderTarget mBaseRenderTarget;     // < - original scene, think "screenshot"
 	KWSE::Graphics::RenderTarget mBloomRenderTarget;  // <- only the "bright" pixels
 	KWSE::Graphics::RenderTarget mBlurRenderTarget;     // <- amplify the brightness
+
+	//Terrain
+	KWSE::Graphics::Mesh mTerrainMesh;
+	KWSE::Graphics::Texture mTerrainTexrures;
+	KWSE::Graphics::MeshBuffer mTerrainMeshBuffer;
+
 
 	//SciFi
 	KWSE::Graphics::Mesh mSciFiMesh;
@@ -117,11 +131,15 @@ private:
 	KWSE::Graphics::PixelShader  mGaussianBlurPixelShaderX;
 	KWSE::Graphics::PixelShader  mGaussianBlurPixelShaderY;
 
-	KWSE::Graphics::VertexShader mBloomVertexShader;
-	KWSE::Graphics::PixelShader mBloomPixelShader;
+	KWSE::Graphics::VertexShader mOilPaintingVertexShader;
+	KWSE::Graphics::PixelShader mOilPaintingPixelShader;
+
+	OilSettingBuffer mOilSettingBuffer;
+	OilSetting mOilSetting;
 
 	KWSE::Math::Vector3 mRotation;
 	KWSE::Math::Vector3 mSriFiPosition;
+	KWSE::Math::Vector3 mTerrainPosition;
 	//float mRotationY= 0.f;
 	//float mRotationX= 0.f;
 	//float mRotation = 0.f;

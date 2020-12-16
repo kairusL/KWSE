@@ -10,9 +10,14 @@ void GameState::Initialize()
 {
 
 	GraphicsSystem::Get()->SetClearColor(Colors::DarkGray);
+	// Terrain
+	ModelLoader::LoadObj(L"../../Assets/Models/Mountain/terrain.obj", 500.0f, mTerrainMesh);
+	mTerrainMeshBuffer.Initialize(mTerrainMesh);
+	mTerrainTexrures.Initialize("../../Assets/Models/Mountain/file_.jpg");
+
 
 	// Sci_fi_fighter
-	ModelLoader::LoadObj(L"../../Assets/Models/sci_fi_fighter/sci_fi_fighter.obj", 10.0f, mSciFiMesh);
+	ModelLoader::LoadObj(L"../../Assets/Models/sci_fi_fighter/sci_fi_fighter.obj", 20.0f, mSciFiMesh);
 	mSciFiMeshBuffer.Initialize(mSciFiMesh);
 	mSci_fi_Texrures.Initialize("../../Assets/Models/sci_fi_fighter/sci_fi_fighter_diffuse.jpg");
 	//2.15
@@ -25,13 +30,14 @@ void GameState::Initialize()
 	mTransformBuffer.Initialize();
 
 	mSriFiPosition = { 1.0f,1.1f,1.0f };
-	mDefaultCamera.SetPosition({ 0.0f,5.0f,15.0f });
-	mDefaultCamera.SetDirection({ 0.0f,0.0f,-1.0f });
+	mTerrainPosition = {0.0f,-5.0f,0.0f};
+	mDefaultCamera.SetPosition({ 1.492f, 32.04f, 46.69f });
+	mDefaultCamera.SetDirection({ -0.019f,-0.659f,-0.751f });
 	mDefaultCamera.SetNearPlane(0.001f);
 	//mDefaultCamera.SetFarPlane(100.0f);
 
 	mLightCamera.SetNearPlane(0.1f);
-	mLightCamera.SetFarPlane(200.0f);
+	mLightCamera.SetFarPlane(500.0f);
 	mLightCamera.SetAspectRation(1.0f);
 
 	mActiveCamera = &mDefaultCamera;
@@ -79,8 +85,9 @@ void GameState::Initialize()
 	mTexturePixelShader.Initialize(shaderFileNames3);
 	mTextureVertexShader.Initialize(shaderFileNames3, VertexPX::Format);
 
-	mBloomVertexShader.Initialize(L"../../Assets/Shaders/PostProcessOilPainting.fx", VertexPX::Format);
-	mBloomPixelShader.Initialize(L"../../Assets/Shaders/PostProcessOilPainting.fx");
+	mOilPaintingVertexShader.Initialize(L"../../Assets/Shaders/PostProcessOilPainting_S.fx", VertexPX::Format);
+	mOilPaintingPixelShader.Initialize(L"../../Assets/Shaders/PostProcessOilPainting_S.fx");
+	mOilSettingBuffer.Initialize();
 
 	constexpr uint32_t depthMapSize = 4096;
 	mDepthRebderTarget.Initialize(depthMapSize, depthMapSize,Texture::Format::RGBA_F32);
@@ -96,7 +103,7 @@ void GameState::Initialize()
 	mSettingBuffer.Initialize();
 
 
-	mDirectionLight.direction = Math::Normalize({ 0.854f, -0.552f, 0.229f });
+	mDirectionLight.direction = Math::Normalize({ 0.379f, -0.920f, 0.102f });
 	mDirectionLight.ambient = { 0.5f };
 	mDirectionLight.diffuse = { 0.784f };
 	mDirectionLight.specular = { 0.858f };
@@ -110,7 +117,7 @@ void GameState::Initialize()
 	//mSkybox.Initialize("../../Assets/Images/Space_Skybox.jpg");
 	mSkybox.Initialize("../../Assets/Images/Skybox_04.jpg");
 
-	mSampler.Initialize(Sampler::Filter::Anisotropic, Sampler::AddressMode::Wrap);
+	mSampler.Initialize(Sampler::Filter::Anisotropic, Sampler::AddressMode::Clamp);
 	mBlendState.Initialize(KWSE::Graphics::BlendState::Mode::Additive);
 	mRasterizerStateSolid.Initialize(RasterizerState::CullMode::Back, RasterizerState::FillMode::Solid);
 	mRasterizerStateWireframe.Initialize(RasterizerState::CullMode::Back, RasterizerState::FillMode::Wireframe);
@@ -142,8 +149,9 @@ void GameState::Terminate()
 	mSampler.Terminate();
 
 	mSkybox.Terminate();
-	mBloomPixelShader.Terminate();
-	mBloomVertexShader.Terminate();
+	mOilSettingBuffer.Terminate();
+	mOilPaintingPixelShader.Terminate();
+	mOilPaintingVertexShader.Terminate();
 	mTextureVertexShader.Terminate();
 	mTexturePixelShader.Terminate();
 	mCloudVertexShader.Terminate();
@@ -182,6 +190,9 @@ void GameState::Terminate()
 
 	mSci_fi_Texrures.Terminate();
 	mSciFiMeshBuffer.Terminate();
+
+	mTerrainTexrures.Terminate();
+	mTerrainMeshBuffer.Terminate();
 }
 void GameState::Update(float deltaTime)
 {
@@ -347,6 +358,17 @@ void  GameState::DebugUI()
 		}
 		ImGui::DragFloat("Depth Bias", &mSetting.depthBias, 0.000001f,0.0f,1.0f,"%.7f");
 	}
+	if (ImGui::CollapsingHeader("OilSetting"))
+	{
+		ImGui::DragFloat("Screen Size Scale", &mOilSetting.screenSizeScale, 0.1f, 0.0f, 1000.0f);
+		ImGui::DragFloat("Brush Radius", &mOilSetting.paintRadius, 1.0f, 3.0f, 9.0f );
+		ImGui::DragFloat("Intensity", &mOilSetting.minSigma, 0.0f, 0.0f, 1.0f );
+		bool _sizeWeight = mOilSetting.sizeWeight == 1.0f;
+		if (ImGui::Checkbox("Oil Stretch Width", &_sizeWeight))
+		{
+			mOilSetting.sizeWeight = _sizeWeight ? 1.0f : 0.0f;
+		}
+	}
 	if (ImGui::CollapsingHeader("Blur"))
 	{
 		ImGui::DragInt("Blur Iterations", &mBlurIterations, 1, 0, 100);
@@ -458,20 +480,26 @@ void GameState::RenderScene()
 	//Texture::UnbindPS(0);
 	//Texture::UnbindPS(4);
 
-
-	//Plane
-	matWorld = Transpose(Matrix4::Identity);
+	// Terrain
+	matWorld =Matrix4::Translation({ mTerrainPosition.x,mTerrainPosition.y,mTerrainPosition.z });
 	data.world = Transpose(matWorld);
-	data.wvp[0] = Transpose((matView)*matProj);
+	data.wvp[0] = Transpose(matWorld*(matView)*matProj);
 	data.wvp[1] = Transpose(matWorld*(matViewLight)*matProjLight);
 	mTransformBuffer.Update(data);
-	mPlane_Texrures.BindPS(0);
+	mTerrainTexrures.BindPS(0);
+	mTerrainMeshBuffer.Render();
 
-	mMeshPlaneBuffer.Render();
+	//Plane
+	//matWorld = Transpose(Matrix4::Identity);
+	//data.world = Transpose(matWorld);
+	//data.wvp[0] = Transpose((matView)*matProj);
+	//data.wvp[1] = Transpose(matWorld*(matViewLight)*matProjLight);
+	//mTransformBuffer.Update(data);
+	//mPlane_Texrures.BindPS(0);
+	//
+	//mMeshPlaneBuffer.Render();
 
 	Texture::UnbindPS(4);
-
-
 
 
 
@@ -563,8 +591,13 @@ void GameState::ApplyBlur()
 
 void GameState::PostProcess()
 {
-	mBloomVertexShader.Bind();
-	mBloomPixelShader.Bind();
+	mOilPaintingVertexShader.Bind();
+	mOilPaintingPixelShader.Bind();
+
+
+	mOilSettingBuffer.Update(mOilSetting);
+	mOilSettingBuffer.BindPS(0);
+
 
 	mSampler.BindVS(0);
 
