@@ -19,6 +19,7 @@
 #include "RasterizerState.h"
 #include "RenderTarget.h"
 #include "Sampler.h"
+#include "SpriteRenderer.h"
 #include "SimpleDraw.h"
 #include "Skybox.h"
 #include "Texture.h"

@@ -42,6 +42,7 @@ void App::Run(AppConfig appConfig)
 
 	// Initialize the graphics system
 	GraphicsSystem::StaticInitialize(handle, false);
+	SpriteRenderer::StaticInitialize();
 	SimpleDraw::StaticInitialize();
 	DebugUI::StaticInitialize(handle);
 
@@ -109,6 +110,7 @@ void App::Run(AppConfig appConfig)
 
 	DebugUI::StaticTerminate();
 	SimpleDraw::StaticTerminate();
+	SpriteRenderer::StaticTerminate();
 	GraphicsSystem::StaticTerminate();
 	InputSystem::StaticTerminate();
 

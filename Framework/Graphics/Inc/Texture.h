@@ -30,14 +30,21 @@ namespace KWSE::Graphics
 
 		void BindVS(uint32_t slot) const;
 		void BindPS(uint32_t slot) const;
-		void* GetRawData() { return mShaderResourceView; };
 
+		void* GetRawData() const { return mShaderResourceView; } 
+
+		uint32_t GetWidth() const { return mWidth; }
+		uint32_t GetHeight() const { return mHeight; }
+	protected:
+		ID3D11ShaderResourceView* mShaderResourceView = nullptr;
 
 	private:
 		//friend ID3D11ShaderResourceView* GetShaderResourceView(const Texture&);
 
-	protected:
-		ID3D11ShaderResourceView* mShaderResourceView = nullptr;
+		friend class SpriteRenderer;
+
+		uint32_t mWidth;
+		uint32_t mHeight;
 
 
 	};
