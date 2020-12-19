@@ -13,11 +13,12 @@ void GameState::Initialize()
 	
 	mTexture.Initialize("../../Assets/Images/WaterTurtle.jpg");
 	mPosition = Vector2(GraphicsSystem::Get()->GetBackBufferWidth() * 0.5f, GraphicsSystem::Get()->GetBackBufferHeight()* 0.5f);
-
+	mFont.Initialize();
 	
 }
 void GameState::Terminate()
 {
+	mFont.Terminate();
 	mTexture.Terminate();
 }
 void GameState::Update(float deltaTime)
@@ -40,10 +41,10 @@ void GameState::Update(float deltaTime)
 }
 void GameState::Render()
 {
-	SpriteRenderer::Get()->BeginRender();
+	//SpriteRenderer::Get()->BeginRender();
 	SpriteRenderer::Get()->Draw(mTexture,mPosition);
-
-	SpriteRenderer::Get()->EndRender();
+	mFont.Draw("okay bye", 10.0f, 10.0f, 20.0f, Colors::DarkCyan);
+	//SpriteRenderer::Get()->EndRender();
 }
 
 

@@ -15,8 +15,8 @@ namespace KWSE::Graphics
 		Texture() = default;
 		virtual ~Texture();
 
-		Texture(const Texture&) = delete;
-		Texture& operator=(const Texture&) = delete;
+		Texture(const Texture&) = default;
+		Texture& operator=(const Texture&) = default;
 		// Move Constructor
 		// When use std vector needs a move constructor .
 		// In the beginning when delete the copy constructor

@@ -119,6 +119,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GA_TSP", "VGP337\GA_TSP\GA_
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "15_HelloTestSprite", "VGP330\15_HelloTestSprite\15_HelloTestSprite.vcxproj", "{0D16BE11-0833-4BD0-8CC8-0590D7A56217}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FW1FontWrapper", "External\FW1FontWrapper\FW1FontWrapper.vcxproj", "{C813E58B-976C-4E40-B7B4-77676256FD7B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NEAT_Bird", "VGP337\NEAT_Bird\NEAT_Bird.vcxproj", "{EA92BF7B-F2FD-426D-85BA-1D8267E3660C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -415,6 +419,22 @@ Global
 		{0D16BE11-0833-4BD0-8CC8-0590D7A56217}.Release|x64.Build.0 = Release|x64
 		{0D16BE11-0833-4BD0-8CC8-0590D7A56217}.Release|x86.ActiveCfg = Release|Win32
 		{0D16BE11-0833-4BD0-8CC8-0590D7A56217}.Release|x86.Build.0 = Release|Win32
+		{C813E58B-976C-4E40-B7B4-77676256FD7B}.Debug|x64.ActiveCfg = Debug|x64
+		{C813E58B-976C-4E40-B7B4-77676256FD7B}.Debug|x64.Build.0 = Debug|x64
+		{C813E58B-976C-4E40-B7B4-77676256FD7B}.Debug|x86.ActiveCfg = Debug|Win32
+		{C813E58B-976C-4E40-B7B4-77676256FD7B}.Debug|x86.Build.0 = Debug|Win32
+		{C813E58B-976C-4E40-B7B4-77676256FD7B}.Release|x64.ActiveCfg = Release|x64
+		{C813E58B-976C-4E40-B7B4-77676256FD7B}.Release|x64.Build.0 = Release|x64
+		{C813E58B-976C-4E40-B7B4-77676256FD7B}.Release|x86.ActiveCfg = Release|Win32
+		{C813E58B-976C-4E40-B7B4-77676256FD7B}.Release|x86.Build.0 = Release|Win32
+		{EA92BF7B-F2FD-426D-85BA-1D8267E3660C}.Debug|x64.ActiveCfg = Debug|x64
+		{EA92BF7B-F2FD-426D-85BA-1D8267E3660C}.Debug|x64.Build.0 = Debug|x64
+		{EA92BF7B-F2FD-426D-85BA-1D8267E3660C}.Debug|x86.ActiveCfg = Debug|Win32
+		{EA92BF7B-F2FD-426D-85BA-1D8267E3660C}.Debug|x86.Build.0 = Debug|Win32
+		{EA92BF7B-F2FD-426D-85BA-1D8267E3660C}.Release|x64.ActiveCfg = Release|x64
+		{EA92BF7B-F2FD-426D-85BA-1D8267E3660C}.Release|x64.Build.0 = Release|x64
+		{EA92BF7B-F2FD-426D-85BA-1D8267E3660C}.Release|x86.ActiveCfg = Release|Win32
+		{EA92BF7B-F2FD-426D-85BA-1D8267E3660C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -457,12 +477,14 @@ Global
 		{6DB3CE80-F0E7-4ED8-BA72-D89BD1C13868} = {B23D2D4B-6CFF-4A38-8CA4-3BACFB5BE0FE}
 		{6C82AF58-FA76-4DA8-B8B9-95C56BB74131} = {F79DA8D6-BB7B-4CB9-9858-BA986F881591}
 		{0D16BE11-0833-4BD0-8CC8-0590D7A56217} = {B23D2D4B-6CFF-4A38-8CA4-3BACFB5BE0FE}
+		{C813E58B-976C-4E40-B7B4-77676256FD7B} = {670BC9FB-68B6-4DBB-BCB0-7149D64DCAA8}
+		{EA92BF7B-F2FD-426D-85BA-1D8267E3660C} = {F79DA8D6-BB7B-4CB9-9858-BA986F881591}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C041DC44-92D1-453E-BCFA-5B9E9DF9D604}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 37
+		SccNumberOfProjects = 39
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://dev.azure.com/kairusl
 		SccLocalPath0 = .
@@ -610,5 +632,13 @@ Global
 		SccProjectTopLevelParentUniqueName36 = KWSE.sln
 		SccProjectName36 = VGP330/15_HelloTestSprite
 		SccLocalPath36 = VGP330\\15_HelloTestSprite
+		SccProjectUniqueName37 = External\\FW1FontWrapper\\FW1FontWrapper.vcxproj
+		SccProjectTopLevelParentUniqueName37 = KWSE.sln
+		SccProjectName37 = External/FW1FontWrapper
+		SccLocalPath37 = External\\FW1FontWrapper
+		SccProjectUniqueName38 = VGP337\\NEAT_Bird\\NEAT_Bird.vcxproj
+		SccProjectTopLevelParentUniqueName38 = KWSE.sln
+		SccProjectName38 = VGP337/NEAT_Bird
+		SccLocalPath38 = VGP337\\NEAT_Bird
 	EndGlobalSection
 EndGlobal

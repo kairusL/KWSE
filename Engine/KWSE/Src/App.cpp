@@ -91,6 +91,7 @@ void App::Run(AppConfig appConfig)
 		mCurrentState->Update(deltaTime);
 
 		GraphicsSystem::Get()->BeginRender();
+		SpriteRenderer::Get()->BeginRender();
 
 		// Draw stuff here...
 		mCurrentState->Render();
@@ -100,6 +101,7 @@ void App::Run(AppConfig appConfig)
 		DebugUI::EndRender();
 
 
+		SpriteRenderer::Get()->EndRender();
 		GraphicsSystem::Get()->EndRender();
 	}
 	

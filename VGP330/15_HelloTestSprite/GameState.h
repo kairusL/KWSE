@@ -21,5 +21,7 @@ private:
 
 	Vector2 mPosition;
 	Texture mTexture;
+	Font mFont;
+	//const auto &mInputSystem = InputSystem::Get();
 	
 };
