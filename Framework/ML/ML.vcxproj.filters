@@ -39,6 +39,12 @@
     <Filter Include="Src\KMean">
       <UniqueIdentifier>{0dd6caca-6950-419d-bf7d-e6d45a0974a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Inc\Neat">
+      <UniqueIdentifier>{e1d12eff-eec2-4f7c-9ad1-5f639aeec6ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Neat">
+      <UniqueIdentifier>{7613170f-43e7-41c8-8da8-f53bf32429ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Inc\Common.h">
@@ -68,6 +74,24 @@
     <ClInclude Include="Inc\KMean.h">
       <Filter>Inc\KMean</Filter>
     </ClInclude>
+    <ClInclude Include="Inc\Config.h">
+      <Filter>Inc\Neat</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Genome.h">
+      <Filter>Inc\Neat</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\InnovationContainer.h">
+      <Filter>Inc\Neat</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\NeuralNet.h">
+      <Filter>Inc\Neat</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Population.h">
+      <Filter>Inc\Neat</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Species.h">
+      <Filter>Inc\Neat</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Precompiled.cpp">
@@ -90,6 +114,15 @@
     </ClCompile>
     <ClCompile Include="Src\KMean.cpp">
       <Filter>Src\KMean</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\InnovationContainer.cpp">
+      <Filter>Src\Neat</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\NeuralNet.cpp">
+      <Filter>Src\Neat</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Population.cpp">
+      <Filter>Src\Neat</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

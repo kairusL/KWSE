@@ -24,3 +24,11 @@
 
 //Logistic Regression
 #include"LogisticRegression.h"
+
+// NEAT headers
+#include "Config.h"
+#include "Genome.h"
+#include "InnovationContainer.h"
+#include "NeuralNet.h"
+#include "Population.h"
+#include "Species.h"

@@ -408,6 +408,14 @@ float KWSE::Math::RandomFloat(float min, float max)
 {
 	return std::uniform_real_distribution<float>{ min, max }(myRandomEngine);
 }
+double KWSE::Math::RandomDouble()
+{
+	return std::uniform_real_distribution<double>{ 0, 1 }(myRandomEngine);
+}
+double KWSE::Math::RandomDouble(double min, double max)
+{
+	return std::uniform_real_distribution<double>{ min, max }(myRandomEngine);
+}
 
 Vector2 KWSE::Math::RandomVector2()
 {
