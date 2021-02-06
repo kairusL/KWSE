@@ -2,7 +2,7 @@
 
 void Pipe::Load()
 {
-	mTextureId.Initialize("../../Assets/Bird/pipe.png");
+	mTextureId = KWSE::LoadTexture("Bird/pipe.png");
 }
 
 void Pipe::Update(float deltaTime)
@@ -15,19 +15,19 @@ void Pipe::Render()
 	auto topRect = GetTopRect();
 	auto bottomRect = GetBottomRect();
 
-	SpriteRenderer::Get()->Draw(mTextureId, { topRect.left, topRect.bottom }, 0.0f,Pivot::BottomLeft, Flip::Vertical);
-	SpriteRenderer::Get()->Draw(mTextureId, { bottomRect.left, bottomRect.top }, 0.0f,Pivot::TopLeft);
+	KWSE::DrawSprite(mTextureId, { topRect.left, topRect.bottom },0.0f, Pivot::BottomLeft, Flip::Vertical);
+	KWSE::DrawSprite(mTextureId, { bottomRect.left, bottomRect.top },0.0f, Pivot::TopLeft);
 }
 
 void Pipe::Spawn(float gapSize)
 {
 	mGapSize = gapSize;
-	mVelocity = Math::Vector2{ -100.0f, 0.0f };
+	mVelocity = Vector2{ -100.0f, 0.0f };
 	mPosition.x = (float)GraphicsSystem::Get()->GetBackBufferWidth();
-	mPosition.y = RandomFloat(gapSize,(float)GraphicsSystem::Get()->GetBackBufferHeight() - gapSize);
+	mPosition.y = RandomFloat(gapSize, (float)GraphicsSystem::Get()->GetBackBufferHeight() - gapSize);
 }
 
-Math::Rect Pipe::GetTopRect() const
+Rect Pipe::GetTopRect() const
 {
 	return {
 		mPosition.x,
@@ -37,7 +37,7 @@ Math::Rect Pipe::GetTopRect() const
 	};
 }
 
-Math::Rect Pipe::GetBottomRect() const
+Rect Pipe::GetBottomRect() const
 {
 	return {
 		mPosition.x,

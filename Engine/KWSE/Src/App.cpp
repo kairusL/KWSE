@@ -43,6 +43,8 @@ void App::Run(AppConfig appConfig)
 	// Initialize the graphics system
 	GraphicsSystem::StaticInitialize(handle, false);
 	SpriteRenderer::StaticInitialize();
+	TextureManager::StaticInitialize("../../Assets/Images/");
+	FontManager::StaticInitialize();
 	SimpleDraw::StaticInitialize();
 	DebugUI::StaticInitialize(handle);
 
@@ -92,6 +94,8 @@ void App::Run(AppConfig appConfig)
 
 		GraphicsSystem::Get()->BeginRender();
 		SpriteRenderer::Get()->BeginRender();
+		mCurrentState->UpdateXRender(deltaTime);
+		SpriteRenderer::Get()->EndRender();
 
 		// Draw stuff here...
 		mCurrentState->Render();
@@ -101,7 +105,7 @@ void App::Run(AppConfig appConfig)
 		DebugUI::EndRender();
 
 
-		SpriteRenderer::Get()->EndRender();
+		FontManager::Get()->Draw();
 		GraphicsSystem::Get()->EndRender();
 	}
 	
@@ -112,6 +116,8 @@ void App::Run(AppConfig appConfig)
 
 	DebugUI::StaticTerminate();
 	SimpleDraw::StaticTerminate();
+	FontManager::StaticTerminate();
+	TextureManager::StaticTerminate();
 	SpriteRenderer::StaticTerminate();
 	GraphicsSystem::StaticTerminate();
 	InputSystem::StaticTerminate();

@@ -59,12 +59,8 @@ float Font::GetStringWidth(const wchar_t* str, float size) const
 
 //----------------------------------------------------------------------------------------------------
 
-void Font::Draw(const char* str, float x, float y, float size, const Color& color)
+void Font::Draw(const wchar_t* str, float x, float y, float size, const Color& color)
 {
 	ID3D11DeviceContext* context = GraphicsSystem::Get()->GetContext();
-	int len = (int)strlen(str);
-	int sizeNeeded = MultiByteToWideChar(CP_UTF8, 0, str, len, NULL, 0);
-	std::wstring wstr(sizeNeeded, 0);
-	MultiByteToWideChar(CP_UTF8, 0, str, len, &wstr[0], sizeNeeded);
-	mFontWrapper->DrawString(context, std::move(wstr).c_str(), size, x, y, ToColor(color), FW1_RESTORESTATE);
+	mFontWrapper->DrawString(context, str, size, x, y, ToColor(color), FW1_RESTORESTATE);
 }

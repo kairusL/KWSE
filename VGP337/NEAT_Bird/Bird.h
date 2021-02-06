@@ -1,12 +1,9 @@
 #pragma once
-#include "KWSE/Inc/KWSE.h"
-#include "PipeManager.h"
+
+#include<KWSE/Inc/KWSE.h>
 using namespace KWSE;
 using namespace KWSE::Graphics;
-using namespace KWSE::Input;
-using namespace KWSE::ML;
 using namespace KWSE::Math;
-
 class PipeManager;
 
 class Bird
@@ -18,22 +15,21 @@ public:
 	void Render();
 
 	void Flap();
-	void Terminate();
-	void Spawn(const Math::Vector2& pos);
+
+	void Spawn(const Vector2& pos);
 	void Kill();
 
-	Math::Circle GetBound() const { return { mPosition, mRadius }; }
+	Circle GetBound() const { return { mPosition, mRadius }; }
 	bool IsAlive() const { return mAlive; }
 
 	std::unique_ptr<ML::NEAT::NeuralNet> brain;
 	float fitness = 0.0f;
 
 private:
-	std::array<Texture, 5> mTextureIds;
-	Math::Vector2 mPosition;
-	Math::Vector2 mVelocity;
+	std::array<TextureId, 5> mTextureIds;
+	Vector2 mPosition;
+	Vector2 mVelocity;
 	float mRadius = 30.0f;
 	float mAnimationFrame = 0.0f;
 	bool mAlive = false;
-	Font mfont;
 };

@@ -1,12 +1,5 @@
 #pragma once
-#include<KWSE/Inc/KWSE.h>
 #include "Pipe.h"
-
-using namespace KWSE;
-using namespace KWSE::Graphics;
-using namespace KWSE::Input;
-using namespace KWSE::ML;
-using namespace KWSE::Math;
 
 class Bird;
 

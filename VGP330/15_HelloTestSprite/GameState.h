@@ -14,11 +14,11 @@ public:
 
 	void DebugUI() override;
 
-	void Update(float deltaTime) override;
-	void Render() override;
+	void UpdateXRender(float deltaTime) override;
+	//void Render() override;
 private:
 
-
+	TextureId mTextureId;
 	Vector2 mPosition;
 	Texture mTexture;
 	Font mFont;

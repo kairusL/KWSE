@@ -2,18 +2,14 @@
 
 void Background::Load()
 {
-	mTextureId.Initialize(L"../../Assets/Bird/background.png");
-	mOffset.x = mTextureId.GetWidth();
-}
 
-void Background::Terminate()
-{
-	mTextureId.Terminate();
+	mTextureId = KWSE::LoadTexture("Bird/background.png");
+	mOffset.x = (float)KWSE::GetSpriteWidth(mTextureId);
 }
 
 void Background::Update(float deltaTime)
 {
-	auto velocity = Math::Vector2{ -100.0f, 0.0f };
+	auto velocity = KWSE::Math::Vector2{ -100.0f, 0.0f };
 	mPosition += velocity * deltaTime;
 	if (mPosition.x <= -mOffset.x)
 		mPosition.x += mOffset.x;
@@ -21,6 +17,6 @@ void Background::Update(float deltaTime)
 
 void Background::Render()
 {
-	SpriteRenderer::Get()->Draw(mTextureId, mPosition, 0.0f,Pivot::TopLeft);
-	SpriteRenderer::Get()->Draw(mTextureId, mPosition + mOffset, 0.0f, Pivot::TopLeft);
+	KWSE::DrawSprite(mTextureId, mPosition, 0.0f,KWSE::Graphics::Pivot::TopLeft);
+	KWSE::DrawSprite(mTextureId, mPosition + mOffset, 0.0f, KWSE::Graphics::Pivot::TopLeft);
 }

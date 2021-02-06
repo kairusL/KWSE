@@ -16,7 +16,28 @@ namespace KWSE::Math
 			std::array<float, 16> v;
 		};
 
+
+		constexpr Matrix4(
+			float _11 = 1.0f, float _12 = 0.0f, float _13 = 0.0f, float _14 = 0.0f,
+			float _21 = 0.0f, float _22 = 1.0f, float _23 = 0.0f, float _24 = 0.0f,
+			float _31 = 0.0f, float _32 = 0.0f, float _33 = 1.0f, float _34 = 0.0f,
+			float _41 = 0.0f, float _42 = 0.0f, float _43 = 0.0f, float _44 = 1.0f)
+			: _11(_11), _12(_12), _13(_13), _14(_14)
+			, _21(_21), _22(_22), _23(_23), _24(_24)
+			, _31(_31), _32(_32), _33(_33), _34(_34)
+			, _41(_41), _42(_42), _43(_43), _44(_44)
+		{}
+
 		const static Matrix4 Identity;
+		
+		constexpr Matrix4 operator+(Matrix4 rhs) const
+		{
+			return Matrix4(
+				_11 + rhs._11, _12 + rhs._12, _13 + rhs._13, _14 + rhs._14,
+				_21 + rhs._21, _22 + rhs._22, _23 + rhs._23, _24 + rhs._24,
+				_31 + rhs._31, _32 + rhs._32, _33 + rhs._33, _34 + rhs._34,
+				_41 + rhs._41, _42 + rhs._42, _43 + rhs._43, _44 + rhs._44);
+		}
 
 		constexpr Matrix4 operator*(float s) const
 		{
@@ -106,6 +127,7 @@ namespace KWSE::Math
 		}
 
 		static Matrix4 RotationAxis(const Vector3& axis, float radian);
+		static Matrix4 RotationQuaternion(const Quaternion& q);
 
 		static Matrix4 Scaling(float scale)
 		{
@@ -117,6 +139,8 @@ namespace KWSE::Math
 				0.0f , 0.0f , 0.0f , 1.0f
 			};
 		}
+		static  Matrix4 Scaling(Vector3 s)
+		{ return Matrix4(s.x, 0.0f, 0.0f, 0.0f, 0.0f, s.y, 0.0f, 0.0f, 0.0f, 0.0f, s.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f); }
 
 	};
 }

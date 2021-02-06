@@ -4,12 +4,11 @@
 
 void Bird::Load()
 {
-	mTextureIds[0].Initialize("../../Assets/Bird/bird1.png");
-	mTextureIds[1].Initialize("../../Assets/Bird/bird2.png");
-	mTextureIds[2].Initialize("../../Assets/Bird/bird3.png");
-	mTextureIds[3].Initialize("../../Assets/Bird/bird2.png");
-	mTextureIds[4].Initialize("../../Assets/Bird/bird_die.png");
-	mfont.Initialize();
+	mTextureIds[0] = LoadTexture("Bird/bird1.png");
+	mTextureIds[1] = LoadTexture("Bird/bird2.png");
+	mTextureIds[2] = LoadTexture("Bird/bird3.png");
+	mTextureIds[3] = LoadTexture("Bird/bird2.png");
+	mTextureIds[4] = LoadTexture("Bird/bird_die.png");
 }
 
 void Bird::Update(float deltaTime, const PipeManager& pm)
@@ -54,12 +53,12 @@ void Bird::Update(float deltaTime, const PipeManager& pm)
 
 void Bird::Render()
 {
-	SpriteRenderer::Get()->Draw(mTextureIds[(int)mAnimationFrame], mPosition);
+	DrawSprite(mTextureIds[(int)mAnimationFrame], mPosition);
 	if (brain)
 	{
 		std::string txt;
 		txt += "fitness: " + std::to_string(fitness);
-		mfont.Draw(txt.c_str(), mPosition.x + 40.0f, mPosition.y - 30.0f, 12.0f, Colors::White);
+		DrawScreenText(txt.c_str(), mPosition.x + 40.0f, mPosition.y - 30.0f, 12.0f, Colors::White);
 	}
 }
 
@@ -69,17 +68,7 @@ void Bird::Flap()
 		mVelocity.y = -500.0f;
 }
 
-void Bird::Terminate()
-{
-	mfont.Terminate();
-	for(auto &mTextureId:mTextureIds)
-	{
-		mTextureId.Terminate();
-	}
-
-}
-
-void Bird::Spawn(const Math::Vector2 & pos)
+void Bird::Spawn(const Vector2 & pos)
 {
 	mPosition = pos;
 	mVelocity = Math::Vector2();

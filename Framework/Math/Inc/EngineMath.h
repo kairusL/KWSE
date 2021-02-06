@@ -6,6 +6,8 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
+// Quaternion
+#include "Quaternion.h"
 //Matrix
 #include "Matrix3.h"
 #include "Matrix4.h"
@@ -15,6 +17,7 @@
 
 #include "2DShapes.h"
 #include "3DShapes.h"
+
 
 namespace
 {
@@ -75,6 +78,12 @@ namespace KWSE::Math
 	//----------------------------------------------------------------------------------------
 	inline Vector2 PerpendicularLH(const Vector2& v) { return Vector2(-v.y, v.x); }
 	inline Vector2 PerpendicularRH(const Vector2& v) { return Vector2(v.y, -v.x); }
+
+
+	inline float Magnitude(const Quaternion& q) { return Sqrt((q.w * q.w)+(q.x * q.x) + (q.y * q.y) + (q.z * q.z) ); }
+	inline Quaternion Normalize(const Quaternion& q) { return q / Magnitude(q); }
+	inline Quaternion Lerp(Quaternion q0, Quaternion q1, float t) { return q0 * (1.0f - t) + (q1 * t); }
+	Quaternion Slerp(Quaternion q0, Quaternion q1, float t);
 
 	//
 	// Dot 
@@ -367,6 +376,9 @@ namespace KWSE::Math
 	//----------------------------------------------------------------------------------------------------
 
 	Vector3 RandomUnitSphere();
+
+
+
 
 	//Inline
 	//Constexpr

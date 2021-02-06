@@ -36,8 +36,8 @@ bool PipeManager::Intersect(const Bird& bird) const
 {
 	for (auto& pipe : mPipes)
 	{
-		if (Math::Intersect(pipe.GetTopRect(), bird.GetBound()) ||
-			Math::Intersect(pipe.GetBottomRect(), bird.GetBound()))
+		if (KWSE::Math::Intersect(pipe.GetTopRect(), bird.GetBound()) ||
+			KWSE::Math::Intersect(pipe.GetBottomRect(), bird.GetBound()))
 		{
 			return true;
 		}
@@ -52,8 +52,8 @@ const Pipe& PipeManager::GetClosestPipe(const Bird& bird) const
 
 	for (auto& pipe : mPipes)
 	{
-		if (!Math::Intersect(pipe.GetTopRect(), bird.GetBound()) &&
-			!Math::Intersect(pipe.GetBottomRect(), bird.GetBound()) &&
+		if (!KWSE::Math::Intersect(pipe.GetTopRect(), bird.GetBound()) &&
+			!KWSE::Math::Intersect(pipe.GetBottomRect(), bird.GetBound()) &&
 			birdLeft < pipe.GetTopRect().right)
 		{
 			return pipe;

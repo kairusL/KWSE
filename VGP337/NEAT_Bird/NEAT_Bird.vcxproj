@@ -20,13 +20,13 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{EA92BF7B-F2FD-426D-85BA-1D8267E3660C}</ProjectGuid>
+    <ProjectGuid>{771AFD24-ED6F-4C8E-A718-B0D4E6DB543E}</ProjectGuid>
     <SccProjectName>SAK</SccProjectName>
     <SccAuxPath>SAK</SccAuxPath>
     <SccLocalPath>SAK</SccLocalPath>
     <SccProvider>SAK</SccProvider>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>NEATBird</RootNamespace>
+    <RootNamespace>NeatBird</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -151,6 +151,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Engine\KWSE\KWSE.vcxproj">
+      <Project>{466bf4da-1793-4ae1-bf07-3499e184ba80}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\ML\ML.vcxproj">
+      <Project>{1a59deaf-0ff0-494d-8764-c60f7ab513ed}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Bird.cpp" />
     <ClCompile Include="GameState.cpp" />
@@ -164,17 +172,6 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="PipeManager.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="xconfig.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Engine\KWSE\KWSE.vcxproj">
-      <Project>{466bf4da-1793-4ae1-bf07-3499e184ba80}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Framework\ML\ML.vcxproj">
-      <Project>{1a59deaf-0ff0-494d-8764-c60f7ab513ed}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

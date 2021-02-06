@@ -10,8 +10,9 @@ void GameState::Initialize()
 {
 	GraphicsSystem::Get()->SetClearColor(Colors::Black);
 
-	
-	mTexture.Initialize("../../Assets/Images/WaterTurtle.jpg");
+	//mTextureId = TextureManager::Get()->Load("WaterTurtle.jpg");
+	mTextureId = KWSE::LoadTexture("WaterTurtle.jpg");
+	//mTexture.Initialize("../../Assets/Images/WaterTurtle.jpg");
 	mPosition = Vector2(GraphicsSystem::Get()->GetBackBufferWidth() * 0.5f, GraphicsSystem::Get()->GetBackBufferHeight()* 0.5f);
 	mFont.Initialize();
 	
@@ -19,33 +20,36 @@ void GameState::Initialize()
 void GameState::Terminate()
 {
 	mFont.Terminate();
-	mTexture.Terminate();
+	//mTexture.Terminate();
 }
-void GameState::Update(float deltaTime)
+void GameState::UpdateXRender(float deltaTime)
 {
 	auto inputSystem = InputSystem::Get();
 
-	const float moveSpeed = 10.0f;
-	const float turnSpeed = 10.0f * Constants::DegToRad;
+	const float moveSpeed = 150.0f;
+	const float turnSpeed = 150.0f * Constants::DegToRad;
 	if (inputSystem->IsKeyDown(KeyCode::W))
 		mPosition.y-=(moveSpeed * deltaTime);
 	if (inputSystem->IsKeyDown(KeyCode::S))
-		mPosition.y += (-moveSpeed * deltaTime);
+		mPosition.y += (moveSpeed * deltaTime);
 	if (inputSystem->IsKeyDown(KeyCode::D))
 		mPosition.x += (moveSpeed * deltaTime);
 	if (inputSystem->IsKeyDown(KeyCode::A))
-		mPosition.x -= (-moveSpeed * deltaTime);
-	
+		mPosition.x -= (moveSpeed * deltaTime);
+	KWSE::DrawSprite(mTextureId, mPosition);
+	KWSE::DrawScreenText("okay bye", 10.0f, 10.0f, 20.0f, Colors::DarkCyan);
 
 	
 }
-void GameState::Render()
-{
-	//SpriteRenderer::Get()->BeginRender();
-	SpriteRenderer::Get()->Draw(mTexture,mPosition);
-	mFont.Draw("okay bye", 10.0f, 10.0f, 20.0f, Colors::DarkCyan);
-	//SpriteRenderer::Get()->EndRender();
-}
+//void GameState::Render()
+//{
+//	//SpriteRenderer::Get()->BeginRender();
+//	//SpriteRenderer::Get()->Draw(*TextureManager::Get()->GetTexture(mTextureId),mPosition);
+//	KWSE::DrawSprite(mTextureId,mPosition);
+//	KWSE::DrawScreenText("okay bye", 10.0f, 10.0f, 20.0f, Colors::DarkCyan);
+//	//mFont.Draw("okay bye", 10.0f, 10.0f, 20.0f, Colors::DarkCyan);
+//	//SpriteRenderer::Get()->EndRender();
+//}
 
 
 

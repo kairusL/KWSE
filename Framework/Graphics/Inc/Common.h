@@ -28,5 +28,11 @@ inline void SafeRelease(T*& ptr)
 		ptr->Release();
 		ptr = nullptr;
 	}
+}
 
+template <class T>
+inline void SafeDelete(T*& ptr)
+{
+	delete ptr;
+	ptr = nullptr;
 }

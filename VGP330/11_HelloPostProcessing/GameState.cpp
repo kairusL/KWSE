@@ -32,8 +32,8 @@ void GameState::Initialize()
 
 
 	const wchar_t* shaderFileNames = L"../../Assets/Shaders/DarkStandard.fx";
-	const wchar_t* shaderFileNames1 = L"../../Assets/Shaders/PostProcessOilPainting.fx";
-	//const wchar_t* shaderFileNames1 = L"../../Assets/Shaders/PostProcess.fx";
+	//const wchar_t* shaderFileNames1 = L"../../Assets/Shaders/PostProcessOilPainting.fx";
+	const wchar_t* shaderFileNames1 = L"../../Assets/Shaders/PostProcess.fx";
 	const wchar_t* shaderFileNames2 = L"../../Assets/Shaders/DoLightTexturing.fx";
 
 	mPostProcessVertexShader.Initialize(shaderFileNames1,VertexPX::Format);

@@ -14,6 +14,7 @@ namespace KWSE
 		virtual void Render() {}
 		virtual void DebugUI() {}
 
+		virtual void UpdateXRender(float deltaTime) {}
 	};
 
 }

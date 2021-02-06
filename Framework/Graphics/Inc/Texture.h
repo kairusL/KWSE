@@ -24,6 +24,7 @@ namespace KWSE::Graphics
 		// put a default move constructor here tells the compiler the program do want to use it.
 		Texture( Texture&&) = default; 
 
+
 		virtual void Initialize(const std::filesystem::path& fileName);
 		virtual void Initialize(uint32_t width, uint32_t height, Format format = Format::RGBA_U8);
 		virtual void Terminate();

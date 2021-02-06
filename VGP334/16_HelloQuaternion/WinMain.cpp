@@ -5,13 +5,9 @@
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
 {
 
-	KWSE::AppConfig config;
-	config.appName = L"Neat BIRD";
-	config.windowHeight = 853;
-	config.windowWidth = 480;
 	KWSE::MainApp().AddState<GameState>("GameState");
 
-	KWSE::MainApp().Run(config);
+	KWSE::MainApp().Run({ L"Hello Quaternion" });
 
 	return 0;
 }

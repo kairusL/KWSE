@@ -17,7 +17,7 @@ namespace KWSE::Graphics
 		void Terminate();
 
 		float GetStringWidth(const wchar_t* str, float size) const;
-		void Draw(const char* str, float x, float y, float size, const Color& color);
+		void Draw(const wchar_t* str, float x, float y, float size, const Color& color);
 
 	private:
 		inline uint32_t ToColor(const Color& color)

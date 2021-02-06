@@ -1,21 +1,18 @@
 #pragma once
-#include<KWSE/Inc/KWSE.h>
 
-using namespace KWSE;
-using namespace KWSE::Graphics;
-using namespace KWSE::Input;
-using namespace KWSE::ML;
+#include<KWSE/Inc/KWSE.h>
 using namespace KWSE::Math;
+using namespace KWSE::Graphics;
 class Background
 {
 public:
 	void Load();
-	void Terminate();
+
 	void Update(float deltaTime);
 	void Render();
 
 private:
-	Texture mTextureId;
-	Math::Vector2 mPosition;
-	Math::Vector2 mOffset;
+	TextureId mTextureId;
+	Vector2 mPosition;
+	Vector2 mOffset;
 };

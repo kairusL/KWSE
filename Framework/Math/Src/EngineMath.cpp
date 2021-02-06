@@ -17,6 +17,10 @@ const Vector3 Vector3::XAxis{ 1.0f, 0.0f, 0.0f };
 const Vector3 Vector3::YAxis{ 0.0f, 1.0f, 0.0f };
 const Vector3 Vector3::ZAxis{ 0.0f, 0.0f, 1.0f };
 
+//Quaternion
+const Quaternion Quaternion::Zero = Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
+const Quaternion Quaternion::Identity = Quaternion(1.0f,0.0f, 0.0f, 0.0f);
+
 //Matrix
 const Matrix3 Matrix3::Identity
 {
@@ -31,6 +35,79 @@ const Matrix4 Matrix4::Identity
 	0.0f, 0.0f, 1.0f, 0.0f,
 	0.0f, 0.0f, 0.0f, 1.0f,
 };
+
+//Quaternion
+Quaternion Quaternion::RotationAxis(const Vector3& axis, float rad) 
+{
+	const float c = cos(rad * 0.5f);
+	const float s = sin(rad * 0.5f);
+	const Math::Vector3 a = Math::Normalize(axis);
+	return Quaternion(c,a.x * s, a.y * s, a.z * s);
+}
+Quaternion Quaternion::RotationMatrix(const Matrix4& matrix) 
+{
+	Matrix4 m = Transpose(matrix);
+	float qw, qx, qy, qz;
+
+	float tr = m._11 + m._22 + m._33;
+
+	if (tr > 0)
+	{
+		float w = sqrt(tr + 1.0f) * 2.0f;
+		qw = 0.25f * w;
+		qx = (m._32 - m._23) / w;
+		qy = (m._13 - m._31) / w;
+		qz = (m._21 - m._12) / w;
+	}
+	else if ((m._11 > m._22) & (m._11 > m._33))
+	{
+		float w = sqrt(1.0f + m._11 - m._22 - m._33) * 2.0f;
+		qw = (m._32 - m._23) / w;
+		qx = 0.25f * w;
+		qy = (m._12 + m._21) / w;
+		qz = (m._13 + m._31) / w;
+	}
+	else if (m._22 > m._33)
+	{
+		float w = sqrt(1.0f + m._22 - m._11 - m._33) * 2.0f;
+		qw = (m._13 - m._31) / w;
+		qx = (m._12 + m._21) / w;
+		qy = 0.25f * w;
+		qz = (m._23 + m._32) / w;
+	}
+	else
+	{
+		float w = sqrt(1.0f + m._33 - m._11 - m._22) * 2.0f;
+		qw = (m._21 - m._12) / w;
+		qx = (m._13 + m._31) / w;
+		qy = (m._23 + m._32) / w;
+		qz = 0.25f * w;
+	}
+	return Normalize(Quaternion(qw,qx, qy, qz));
+}
+Quaternion Quaternion::RotationLook(const Vector3& direction, const Vector3& up) 
+{
+	Vector3 z = Normalize(direction);
+	Vector3 x = Normalize(Cross(up, z));
+	Vector3 y = Normalize(Cross(z, x));
+	Matrix4 mat
+	(
+		x.x, x.y, x.z, 0.0f,
+		y.x, y.y, y.z, 0.0f,
+		z.x, z.y, z.z, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	);
+
+	return RotationMatrix(mat);
+	// http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
+}
+Quaternion Quaternion::RotationFromTo(const Vector3& from, const Vector3& to)
+{
+	Vector3 a = Cross(from, to);
+	float w = sqrt(Magnitude(from) * Magnitude(from)
+		* Magnitude(to) * Magnitude(to)) + Dot(from, to);
+	return Normalize(Quaternion(w,a.x, a.y, a.z));
+}
 
 // RotationAxis  
 Matrix4 Matrix4::RotationAxis(const Vector3& axis, float radian)
@@ -65,7 +142,35 @@ Matrix4 Matrix4::RotationAxis(const Vector3& axis, float radian)
 
 	
 }
+Matrix4 Matrix4::RotationQuaternion(const Quaternion& q)
+{
+	return Matrix4
+	(
 
+
+		1.0f - (2.0f * q.y * q.y) - (2.0f * q.z * q.z),
+		(2.0f * q.x * q.y) + (2.0f * q.z * q.w),
+		(2.0f * q.x * q.z) - (2.0f * q.y * q.w),
+		0.0f,
+
+		(2.0f * q.x * q.y) - (2.0f * q.z * q.w),
+		1.0f - (2.0f * q.x * q.x) - (2.0f * q.z * q.z),
+		(2.0f * q.y * q.z) + (2.0f * q.x * q.w),
+		0.0f,
+
+		(2.0f * q.x * q.z) + (2.0f * q.y * q.w),
+		(2.0f * q.y * q.z) - (2.0f * q.x * q.w),
+		1.0f - (2.0f * q.x * q.x) - (2.0f * q.y * q.y),
+		0.0f,
+
+		0.0f,
+		0.0f,
+		0.0f,
+		1.0f
+
+
+	);
+}
 KWSE::Math::Vector3 KWSE::Math::GetBarycentric(const Vector2 & a, const Vector2 & b, const Vector2 & c, const Vector2 & point)
 {
 	KWSE::Math::Vector3 lambda;
@@ -387,6 +492,42 @@ bool KWSE::Math::Intersect(const Vector3 & point, const AABB & aabb)
 	if (abs(test.y) > aabb.extend.y) return false;
 	if (abs(test.z) > aabb.extend.z) return false;
 	return true;
+}
+
+Quaternion KWSE::Math::Slerp(Quaternion q0, Quaternion q1, float t)
+{
+	// Find the dot product
+	float dot = (q0.w * q1.w)+ (q0.x * q1.x) + (q0.y * q1.y) + (q0.z * q1.z) ;
+
+	// Determine the direction of the rotation.
+	if (dot < 0.0f)
+	{
+		dot = -dot;
+		q1.w = -q1.w;
+		q1.x = -q1.x;
+		q1.y = -q1.y;
+		q1.z = -q1.z;
+
+	}
+	else if (dot > 0.999f)
+	{
+		return Normalize(Lerp(q0, q1, t));
+	}
+
+	float theta = acosf(dot);
+	float sintheta = sinf(theta);
+	float scale0 = sinf(theta * (1.0f - t)) / sintheta;
+	float scale1 = sinf(theta * t) / sintheta;
+
+	// Perform the slerp
+	return Quaternion
+	(
+		(q0.w * scale0) + (q1.w * scale1),
+		(q0.x * scale0) + (q1.x * scale1),
+		(q0.y * scale0) + (q1.y * scale1),
+		(q0.z * scale0) + (q1.z * scale1)
+		
+	);
 }
 
 int KWSE::Math::Random()

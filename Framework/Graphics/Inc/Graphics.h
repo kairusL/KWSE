@@ -2,12 +2,15 @@
 
 #include "Common.h"
 
+#include "Animation.h"
+#include "AnimationBuilder.h"
 #include "BlendState.h"
 #include "Camera.h"
 #include "ConstantBuffer.h"
 #include "DebugUI.h"
 #include "DepthStencilState.h"
 #include "Font.h"
+#include "FontManager.h"
 #include "GraphicsSystem.h"
 #include "LightTypes.h"
 #include "Material.h"
@@ -24,6 +27,7 @@
 #include "SimpleDraw.h"
 #include "Skybox.h"
 #include "Texture.h"
+#include "TextureManager.h"
 #include "VertexShader.h"
 #include "VertexTypes.h"
 

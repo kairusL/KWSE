@@ -18,6 +18,7 @@ Texture::~Texture()
 	ASSERT(mShaderResourceView == nullptr, "Texture -- Terminate must be called before destruction.");
 }
 
+
 void Texture::Initialize(const std::filesystem::path& fileName)
 {
 	auto device = GraphicsSystem::Get()->GetDevice();
