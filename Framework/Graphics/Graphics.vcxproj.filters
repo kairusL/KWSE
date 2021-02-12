@@ -28,6 +28,9 @@
     <Filter Include="Inc\Animation">
       <UniqueIdentifier>{e302f03e-7d4c-4914-b0b3-d5707cb4f7cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Inc\Model">
+      <UniqueIdentifier>{d56a1f65-ff67-4359-bb4b-75625ad4bb01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Inc\Common.h">
@@ -58,9 +61,6 @@
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="Inc\MeshTypes.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
-    <ClInclude Include="Inc\ModelLoader.h">
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="Inc\PixelShader.h">
@@ -128,6 +128,15 @@
     </ClInclude>
     <ClInclude Include="Inc\AnimationBuilder.h">
       <Filter>Inc\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\ModelLoader.h">
+      <Filter>Inc\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Model.h">
+      <Filter>Inc\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\MeshIO.h">
+      <Filter>Inc\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -204,6 +213,12 @@
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="Src\AnimationBuilder.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Model.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\MeshIO.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>

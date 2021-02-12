@@ -133,6 +133,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{CF65292B
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModelImporter", "Tools\ModelImporter\ModelImporter.vcxproj", "{040E3E99-CF78-4A66-8FCA-50CA5B1A3B61}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "18_HelloModel", "VGP334\18_HelloModel\18_HelloModel.vcxproj", "{EF591C56-5BC6-4C5C-8B52-122A04A1FE82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -469,6 +471,14 @@ Global
 		{040E3E99-CF78-4A66-8FCA-50CA5B1A3B61}.Release|x64.Build.0 = Release|x64
 		{040E3E99-CF78-4A66-8FCA-50CA5B1A3B61}.Release|x86.ActiveCfg = Release|Win32
 		{040E3E99-CF78-4A66-8FCA-50CA5B1A3B61}.Release|x86.Build.0 = Release|Win32
+		{EF591C56-5BC6-4C5C-8B52-122A04A1FE82}.Debug|x64.ActiveCfg = Debug|x64
+		{EF591C56-5BC6-4C5C-8B52-122A04A1FE82}.Debug|x64.Build.0 = Debug|x64
+		{EF591C56-5BC6-4C5C-8B52-122A04A1FE82}.Debug|x86.ActiveCfg = Debug|Win32
+		{EF591C56-5BC6-4C5C-8B52-122A04A1FE82}.Debug|x86.Build.0 = Debug|Win32
+		{EF591C56-5BC6-4C5C-8B52-122A04A1FE82}.Release|x64.ActiveCfg = Release|x64
+		{EF591C56-5BC6-4C5C-8B52-122A04A1FE82}.Release|x64.Build.0 = Release|x64
+		{EF591C56-5BC6-4C5C-8B52-122A04A1FE82}.Release|x86.ActiveCfg = Release|Win32
+		{EF591C56-5BC6-4C5C-8B52-122A04A1FE82}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -516,14 +526,15 @@ Global
 		{6FC4C555-B35F-4214-8BC9-12EC0081CEE3} = {90D50E27-6D95-450A-8B1D-AEC7197B7F0C}
 		{3E839718-C044-4555-8CB1-7B4239D5A66F} = {90D50E27-6D95-450A-8B1D-AEC7197B7F0C}
 		{040E3E99-CF78-4A66-8FCA-50CA5B1A3B61} = {CF65292B-DEB9-41A2-A5CC-A431CE230B90}
+		{EF591C56-5BC6-4C5C-8B52-122A04A1FE82} = {90D50E27-6D95-450A-8B1D-AEC7197B7F0C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C041DC44-92D1-453E-BCFA-5B9E9DF9D604}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 42
+		SccNumberOfProjects = 43
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://dev.azure.com/KairusL
+		SccTeamFoundationServer = https://dev.azure.com/kairusl
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Framework\\Core\\Core.vcxproj
 		SccProjectTopLevelParentUniqueName1 = KWSE.sln
@@ -689,5 +700,9 @@ Global
 		SccProjectTopLevelParentUniqueName41 = KWSE.sln
 		SccProjectName41 = Tools/ModelImporter
 		SccLocalPath41 = Tools\\ModelImporter
+		SccProjectUniqueName42 = VGP334\\18_HelloModel\\18_HelloModel.vcxproj
+		SccProjectTopLevelParentUniqueName42 = KWSE.sln
+		SccProjectName42 = VGP334/18_HelloModel
+		SccLocalPath42 = VGP334\\18_HelloModel
 	EndGlobalSection
 EndGlobal

@@ -1,4 +1,6 @@
 #include"Precompiled.h"
+#include"MeshIO.h"
+#include"Model.h"
 #include"ModelLoader.h"
 
 using namespace KWSE;
@@ -195,4 +197,30 @@ void KWSE::Graphics::ModelLoader::LoadObj(std::filesystem::path fileName, float 
 	//Initialize mesh
 	mesh.vertices = std::move(vertices);
 	mesh.indices = std::move(indices);
+}
+
+void KWSE::Graphics::ModelLoader::LoadModel(std::filesystem::path fileName, Model & model)
+{
+	FILE* file = nullptr;
+	fopen_s(&file, fileName.u8string().c_str(), "r");
+	ASSERT(file, "ModelLoader - Failed to open model %s.", fileName.u8string().c_str());
+
+	char buffer[256];
+	int meshDataCount = 0;
+	int materialIndex = 0;
+	int result = fscanf_s(file, "%s", buffer, (int)std::size(buffer));
+	fscanf_s(file, "%d", &meshDataCount);
+
+	model.materialData.reserve(meshDataCount);
+
+	for (size_t i = 0; i < meshDataCount; ++i)
+	{
+		auto& meshData = model.meshData.emplace_back(std::make_unique<Model::MeshData>());
+		fscanf_s(file, "%s", buffer, (int)std::size(buffer));
+		fscanf_s(file, "%d", &materialIndex);
+		
+		MeshIO::Read(file, meshData->mesh);
+	}
+
+	fclose(file);
 }

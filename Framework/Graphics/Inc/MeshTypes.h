@@ -17,4 +17,5 @@ namespace KWSE::Graphics
 	using MeshPN = MeshBase<VertexPN>;
 	using MeshPNX = MeshBase<VertexPNX>;
 	using Mesh = MeshBase<Vertex>;
+	using SkinnedMesh = MeshBase<BoneVertex>;
 }
