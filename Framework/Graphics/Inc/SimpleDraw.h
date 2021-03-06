@@ -41,7 +41,7 @@ namespace KWSE::Graphics::SimpleDraw
 	void AddGroundPlane(float size, const Color & color);
 	void AddCylinder(const Math::Vector3 & base, const Math::Vector3 & direction, float radius, const Color & color);
 	void AddCone(const Math::Vector3 & base, const Math::Vector3 & direction, float radius, const Color & color);
-
+	void AddBone(const Math::Matrix4& transform);
 
 // Function to actually render all the geometry.
 	void Render(const Camera& camera);

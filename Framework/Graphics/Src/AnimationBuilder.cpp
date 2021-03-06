@@ -17,7 +17,7 @@ AnimationBuilder & KWSE::Graphics::AnimationBuilder::AdvanceTime(float time)
 	return *this;
 }
 
-AnimationBuilder & KWSE::Graphics::AnimationBuilder::AddPosition(const Math::Vector3 & position)
+AnimationBuilder & KWSE::Graphics::AnimationBuilder::AddPositionKey(const Math::Vector3 & position)
 {
 	ASSERT(mTemp.mPositionKeys.empty() || mTemp.mPositionKeys.back().time < mTime, "PositionKey is Empty");
 	mTemp.mPositionKeys.push_back({ position,mTime });
@@ -35,6 +35,27 @@ AnimationBuilder & KWSE::Graphics::AnimationBuilder::AddScaleKey(const Math::Vec
 {
 	ASSERT(mTemp.mScaleKeys.empty() || mTemp.mScaleKeys.back().time < mTime, "ScaleKeys is Empty");
 	mTemp.mScaleKeys.push_back({ scale,mTime });
+	return *this;
+}
+
+AnimationBuilder & KWSE::Graphics::AnimationBuilder::AddPositionKey(const Math::Vector3 & position, float time)
+{
+	ASSERT(mTemp.mPositionKeys.empty() || mTemp.mPositionKeys.back().time < time, "PositionKey is Empty");
+	mTemp.mPositionKeys.push_back({ position,time });
+	return *this;
+}
+
+AnimationBuilder & KWSE::Graphics::AnimationBuilder::AddRotationKey(const Math::Quaternion & rotation, float time)
+{
+	ASSERT(mTemp.mRotationKeys.empty() || mTemp.mRotationKeys.back().time < time, "RositionKeys is Empty");
+	mTemp.mRotationKeys.push_back({ rotation,time });
+	return *this;
+}
+
+AnimationBuilder & KWSE::Graphics::AnimationBuilder::AddScaleKey(const Math::Vector3 & scale, float time)
+{
+	ASSERT(mTemp.mScaleKeys.empty() || mTemp.mScaleKeys.back().time < time, "ScaleKeys is Empty");
+	mTemp.mScaleKeys.push_back({ scale,time });
 	return *this;
 }
 

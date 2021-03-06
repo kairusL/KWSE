@@ -10,5 +10,7 @@ namespace KWSE::Graphics
 		static void LoadObjPX(std::filesystem::path fileName, float scale, MeshPX& mesh); // position and texture coordinate
 		static void LoadObj(std::filesystem::path fileName, float scale, Mesh& mesh); // position and texture coordinate
 		static void LoadModel(std::filesystem::path fileName, Model& model); // position and texture coordinate
+		static void LoadMaterial(std::filesystem::path fileName, Model & model);
+		static void LoadSkeleton(std::filesystem::path fileName, Model & model); // position and texture coordinate
 	};
 }

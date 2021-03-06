@@ -42,6 +42,8 @@ void KWSE::Graphics::MeshIO::Write(FILE * file, const SkinnedMesh & mesh)
 			mesh.indices[i+1],
 			mesh.indices[i+2]);
 	}
+	// fprintf_s(file, &mesh.vertices[0], verticesCount * sizeof(mesh.vertices));
+
 }
 
 void KWSE::Graphics::MeshIO::Read(FILE * file, SkinnedMesh & mesh)
@@ -92,5 +94,37 @@ void KWSE::Graphics::MeshIO::Read(FILE * file, SkinnedMesh & mesh)
 		mesh.indices.push_back(i1);
 		mesh.indices.push_back(i2);
 		mesh.indices.push_back(i3);
+	}
+}
+
+void KWSE::Graphics::MeshIO::WriteBinary(FILE * file, const SkinnedMesh & mesh)
+{
+	const uint32_t verticesCount = static_cast<uint32_t>(mesh.vertices.size());
+	const uint32_t indicesCount = static_cast<uint32_t>(mesh.indices.size());
+
+	fwrite(&verticesCount, sizeof(uint32_t), 1, file);
+	fwrite(&indicesCount, sizeof(uint32_t), 1, file);
+
+	fwrite(&mesh.vertices[0], sizeof(BoneVertex), verticesCount, file);
+	fwrite(&mesh.indices[0], sizeof(uint32_t), indicesCount, file);
+}
+
+void KWSE::Graphics::MeshIO::ReadBinary(FILE * file, SkinnedMesh & mesh)
+{
+	uint32_t verticesCount;
+	uint32_t indicesCount;
+	fread(&verticesCount, sizeof(uint32_t), 1, file);
+	fread(&indicesCount, sizeof(uint32_t), 1, file);
+
+	mesh.vertices.resize(verticesCount);
+	mesh.indices.resize(indicesCount);
+
+	fread(&mesh.vertices[0], sizeof(BoneVertex), verticesCount, file);
+	fread(&mesh.indices[0], sizeof(uint32_t), indicesCount, file);
+
+	for (auto& data : mesh.vertices)
+	{
+		if (data.uv.x < 0.0) data.uv.x = data.uv.x + 1;
+		if (data.uv.y < 0.0) data.uv.y = data.uv.y + 1;
 	}
 }

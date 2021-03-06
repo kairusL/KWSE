@@ -153,6 +153,10 @@ namespace KWSE::Math
 
 	inline float Distance(const Vector2& a, const Vector2& b) { return Sqrt(DistanceSqr(a, b)); }
 	// Cross
+	constexpr Vector3 GetTranslation(const Matrix4& m)
+	{
+		return { m._41, m._42, m._43 };
+	}
 	constexpr Vector3 Cross(const Vector3& u, const Vector3& v)
 	{
 		return  Vector3((u.y*v.z - u.z*v.y),
@@ -180,13 +184,6 @@ namespace KWSE::Math
 	{
 		return { m._31, m._32, m._33 };
 	}
-
-	// GetTranslation
-	constexpr Vector3 GetTranslation(const Matrix4& m)
-	{
-		return { m._41, m._42, m._43 };
-	}
-
 	// Lerp
 	constexpr float Lerp(float a, float b, float t)
 	{

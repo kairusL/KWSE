@@ -5,7 +5,10 @@ using namespace KWSE::Graphics;
 using namespace KWSE::Input;
 using namespace KWSE::Math;
 
-
+namespace 
+{
+	bool showSkeleton = false;
+}
 void GameState::Initialize()
 {
 
@@ -16,11 +19,13 @@ void GameState::Initialize()
 	mTerrainTexrures.Initialize("../../Assets/Models/Mountain/file_.jpg");
 
 	// Model
-	model.Initialize(L"../../Assets/Models/Model/boss.model");
+	model.Initialize(L"../../Assets/Models/Model/Dizon2/dizon.model");
 	// Sci_fi_fighter
 	//ModelLoader::LoadObj(L"../../Assets/Models/sci_fi_fighter/sci_fi_fighter.obj", 20.0f, mSciFiMesh);
 	//mSciFiMeshBuffer.Initialize(mSciFiMesh);
-	mSci_fi_Texrures.Initialize("../../Assets/Models/sci_fi_fighter/sci_fi_fighter_diffuse.jpg");
+	//mSci_fi_Texrures.Initialize("../../Assets/Models/sci_fi_fighter/sci_fi_fighter_diffuse.jpg");
+	//modelTexrure[0].Initialize("../../Assets/Models/Model/Dizon/dizon_normal.png");
+	//modelTexrure[1].Initialize("../../Assets/Models/Model/Dizon/dizon_diffuse.png");
 	//2.15
 
 	//Plane
@@ -192,7 +197,9 @@ void GameState::Terminate()
 	mPlane_Texrures.Terminate();
 	mMeshPlaneBuffer.Terminate();
 
-	mSci_fi_Texrures.Terminate();
+	modelTexrure[1].Terminate();
+	modelTexrure[0].Terminate();
+	//mSci_fi_Texrures.Terminate();
 	//mSciFiMeshBuffer.Terminate();
 	model.Terminate();
 
@@ -394,6 +401,7 @@ void  GameState::DebugUI()
 	{
 		ImGui::Image(mDepthRebderTarget.GetRawData(), { 200.0f,200.0f });
 	}
+	ImGui::Checkbox("Skeleton", &showSkeleton);
 	ImGui::End();
 
 	//ImGui::ShowDemoWindow();
@@ -419,7 +427,7 @@ void GameState::RenderDepthMap()
 	mDepthMapVertexShader.Bind();
 	mDepthMapPixelShader.Bind();
 
-	mSci_fi_Texrures.BindPS(0);
+	//mSci_fi_Texrures.BindPS(0);
 	mSampler.BindVS(0);
 	mSciFiMeshBuffer.Render();
 
@@ -501,68 +509,43 @@ void GameState::RenderScene()
 	data.wvp[0] = Transpose(matWorld*(matView)*matProj);
 	data.wvp[1] = Transpose(matWorld*(matViewLight)*matProjLight);
 	mTransformBuffer.Update(data);
-	mSci_fi_Texrures.BindPS(0);	
+	//modelTexrure[0].BindVS(3);//normal
+	//modelTexrure[1].BindPS(0);//diffuse
+	//mSci_fi_Texrures.BindPS(0);	
 	mDepthRebderTarget.BindPS(4);
-	for (const auto& mesh : model.meshData)
+	std::vector<Matrix4> boneMatrices(model.skeleton->bones.size());
+	if (showSkeleton)
 	{
-		mesh->meshBuffer.Render();
+		DrawSkeleton(*model.skeleton, CalculateBoneMatrices(*model.skeleton, matWorld));
+		SimpleDraw::Render(*mActiveCamera);
+	}
+	if (!showSkeleton)
+	{
+		for (const auto& mesh : model.meshData)
+		{
+			auto& material = model.materialData[mesh->materialIndex];
+			material.diffuseMap->BindPS(0);
+			material.normalMap->BindVS(3);
+			mesh->meshBuffer.Render();
+		}
+
 	}
 	//mSciFiMeshBuffer.Render();
 	//Texture::UnbindPS(0);
 	//Texture::UnbindPS(4);
 
 	// Terrain
-	matWorld =Matrix4::Translation({ mTerrainPosition.x,mTerrainPosition.y,mTerrainPosition.z });
-	data.world = Transpose(matWorld);
-	data.wvp[0] = Transpose(matWorld*(matView)*matProj);
-	data.wvp[1] = Transpose(matWorld*(matViewLight)*matProjLight);
-	mTransformBuffer.Update(data);
-	mTerrainTexrures.BindPS(0);
-	mTerrainMeshBuffer.Render();
-
-	//Plane
-	//matWorld = Transpose(Matrix4::Identity);
+	//matWorld =Matrix4::Translation({ mTerrainPosition.x,mTerrainPosition.y,mTerrainPosition.z });
 	//data.world = Transpose(matWorld);
-	//data.wvp[0] = Transpose((matView)*matProj);
+	//data.wvp[0] = Transpose(matWorld*(matView)*matProj);
 	//data.wvp[1] = Transpose(matWorld*(matViewLight)*matProjLight);
 	//mTransformBuffer.Update(data);
-	//mPlane_Texrures.BindPS(0);
-	//
-	//mMeshPlaneBuffer.Render();
+	//mTerrainTexrures.BindPS(0);
+	//mTerrainMeshBuffer.Render();
+
 
 	Texture::UnbindPS(4);
 
-
-
-
-
-
-
-
-
-	//mCloudPixelShader.Bind();
-	//mCloudVertexShader.Bind();
-	//mLightBuffer.BindVS(1);
-	//mLightBuffer.BindPS(1);
-	//mMaterialBuffer.BindVS(2);
-	//mMaterialBuffer.BindPS(2);
-	//matWorld = Matrix4::Scaling(1.0f)*(KWSE::Math::Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y) * Matrix4::RotationZ(mRotation.z));
-	//Matrix4::Translation({ 0.0f, 0.0f, -8.0f }) *Matrix4::Scaling(1.0f)*(KWSE::Math::Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y) * Matrix4::RotationZ(mRotation.z));
-
-
-	
-	//mBlendState.Set();
-	//BlendState::ClearState();
-
-
-
-
-
-	//SimpleDraw::AddLine(Vector3::Zero, Vector3::XAxis, Colors::Red);
-	//SimpleDraw::AddLine(Vector3::Zero, Vector3::YAxis, Colors::Green);
-	//SimpleDraw::AddLine(Vector3::Zero, Vector3::ZAxis, Colors::Blue);
-	//
-	//SimpleDraw::Render(*mActiveCamera);
 
 	mRenderTarger.EndRender();
 
@@ -644,19 +627,19 @@ void GameState::SetAnimation()
 {
 	mAnimation = AnimationBuilder()
 		.SetTime(0.0f)
-		.AddPosition({ 1.0f,1.1f,1.0f })
+		.AddPositionKey({ 1.0f,1.1f,1.0f })
 		//.AddRotationKey({ Math::Quaternion::Identity })
 		//.AddScaleKey({ 1.0f,1.0f,1.0f })
 		.AdvanceTime(2.0f)
-		.AddPosition({ 3.0f,3.0f,3.0f })
+		.AddPositionKey({ 3.0f,3.0f,3.0f })
 		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(10.0f,10.0f,10.0f))})
 		//.AddScaleKey({ 3.0f,3.0f,3.0f })
 		.AdvanceTime(2.0f)
-		.AddPosition({ -7.0f,7.1f,1.0f })
+		.AddPositionKey({ -7.0f,7.1f,1.0f })
 		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(-15.0f,15.0f,15.0f)) })
 		//.AddScaleKey({ 1.0f,1.0f,1.0f })
 		.AdvanceTime(3.0f)
-		.AddPosition({ 10.0f,10.1f,10.0f })
+		.AddPositionKey({ 10.0f,10.1f,10.0f })
 		.AdvanceTime(2.0f)
 		.SetLooping(true)
 		.Get();

@@ -1,7 +1,9 @@
 #include"Precompiled.h"
+#include"MaterialIO.h"
 #include"MeshIO.h"
 #include"Model.h"
 #include"ModelLoader.h"
+#include "SkeletonIO.h"
 
 using namespace KWSE;
 using namespace KWSE::Graphics;
@@ -221,6 +223,40 @@ void KWSE::Graphics::ModelLoader::LoadModel(std::filesystem::path fileName, Mode
 		
 		MeshIO::Read(file, meshData->mesh);
 	}
+
+	fclose(file);
+}
+void ModelLoader::LoadMaterial(std::filesystem::path fileName, Model & model)
+{
+	fileName.replace_extension("material");
+
+	FILE* file = nullptr;
+	fopen_s(&file, fileName.u8string().c_str(), "r");
+	ASSERT(file, "ModelLoader - Failed to open model material %s.", fileName.u8string().c_str());
+
+
+		char strBuff[255];
+		int materialCount = 0;
+		fscanf_s(file, "%s", strBuff, (int)std::size(strBuff));
+		fscanf_s(file, "%d", &materialCount);
+
+		model.materialData.resize(materialCount);
+
+		for (int i = 0; i < materialCount; ++i)
+			MaterialIO::Read(file, model.materialData[i]);
+	
+
+	fclose(file);
+}
+
+void KWSE::Graphics::ModelLoader::LoadSkeleton(std::filesystem::path fileName, Model& model)
+{
+	fileName.replace_extension("skeleton");
+
+	FILE* file = nullptr;
+	fopen_s(&file, fileName.u8string().c_str(), "r");
+	model.skeleton = std::make_unique<Skeleton>();
+	SkeletonIO::Read(file, *model.skeleton);
 
 	fclose(file);
 }

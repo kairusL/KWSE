@@ -7,7 +7,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
 
 	KWSE::MainApp().AddState<GameState>("GameState");
 
-	KWSE::MainApp().Run({ L"HelloAmyBig" });
+	KWSE::MainApp().Run({ L"HelloModel" });
 
 	return 0;
 }

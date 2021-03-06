@@ -90,7 +90,7 @@ private:
 
 	//Model
 	KWSE::Graphics::Model model;
-
+	KWSE::Graphics::Texture modelTexrure[2];
 	//SciFi
 	KWSE::Graphics::Mesh mSciFiMesh;
 	KWSE::Graphics::Texture mSci_fi_Texrures;

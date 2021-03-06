@@ -1,7 +1,9 @@
 #pragma once
+#include "AnimationClip.h"
 #include "Material.h"
 #include "MeshBuffer.h"
 #include "MeshTypes.h"
+#include "Skeleton.h"
 #include "Texture.h"
 
 namespace KWSE::Graphics
@@ -30,6 +32,8 @@ namespace KWSE::Graphics
 		};
 		std::vector<std::unique_ptr<MeshData>> meshData;
 		std::vector<MaterialData> materialData;
+		std::unique_ptr<Skeleton> skeleton; // not all model has skeleton, so use unique.
+		std::vector<std::unique_ptr<AnimationClip>> animSet;
 	};
 
 }

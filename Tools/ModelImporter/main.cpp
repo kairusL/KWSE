@@ -8,6 +8,9 @@
 using namespace KWSE;
 using namespace KWSE::Graphics;
 using namespace KWSE::Math;
+
+using BoneIndexLookup = std::map<std::string, int>;// Used to lookup bone index by name
+
 struct Arguments
 {
 	const char* inputFileName = nullptr;
@@ -55,6 +58,16 @@ void PrintUsage()
 	);
 }
 
+inline Color ToColor(const aiColor3D& c)
+{
+	return {
+		static_cast<float>(c.r),
+		static_cast<float>(c.g),
+		static_cast<float>(c.b),
+		1.0f
+	};
+}
+
 inline Vector2 ConvertToV2(const aiVector3D& v)
 {
 	return
@@ -73,8 +86,199 @@ inline Vector3 ConvertToV3(const aiVector3D& v)
 		static_cast<float>(v.z)
 	};
 }
+inline Quaternion ConvertToQuaternion(const aiQuaternion& q)
+{
+	return
+	{
+		static_cast<float>(q.x),
+		static_cast<float>(q.y),
+		static_cast<float>(q.z),
+		static_cast<float>(q.w)
+	};
+}
+inline Matrix4 ToMatrix4(const aiMatrix4x4& m)
+{
+	// Take the transpose from assimp matrix
+	return
+	{
+		static_cast<float>(m.a1),
+		static_cast<float>(m.b1),
+		static_cast<float>(m.c1),
+		static_cast<float>(m.d1),
+
+		static_cast<float>(m.a2),
+		static_cast<float>(m.b2),
+		static_cast<float>(m.c2),
+		static_cast<float>(m.d2),
+
+		static_cast<float>(m.a3),
+		static_cast<float>(m.b3),
+		static_cast<float>(m.c3),
+		static_cast<float>(m.d3),
+
+		static_cast<float>(m.a4),
+		static_cast<float>(m.b4),
+		static_cast<float>(m.c4),
+		static_cast<float>(m.d4),
+	};
+}
 
 
+void ExportEmbeddedTexture(const aiTexture* texture, const Arguments& args, const std::filesystem::path& fileName)
+{
+	printf("Extracting embedded texture %s\n", fileName.u8string().c_str());
+
+	std::string fullFileName = args.outputFileName;
+	fullFileName = fullFileName.substr(0, fullFileName.rfind('/') + 1);
+	fullFileName += fileName.filename().u8string().c_str();
+
+	FILE* file = nullptr;
+	auto err = fopen_s(&file, fullFileName.c_str(), "wb");
+	if (err != 0 || file == nullptr)
+	{
+		printf("Error: failed to open file %s for saving.\n", fullFileName.c_str());
+		return;
+	}
+
+	size_t written = fwrite(texture->pcData, 1, texture->mWidth, file);
+	ASSERT(written == texture->mWidth, "Error: Failed to extract embedded texture!");
+	fclose(file);
+}
+
+std::string FindTexture(const aiScene* scene, const aiMaterial* aiMaterial, aiTextureType textureType, const Arguments& args, const char* suffix)
+{
+	std::filesystem::path textureName;
+
+	const uint32_t textureCount = aiMaterial->GetTextureCount(textureType);
+	if (textureCount > 0)
+	{
+		aiString texturePath;
+		if (aiMaterial->GetTexture(textureType, 0, &texturePath) == aiReturn_SUCCESS)
+		{
+			// If texture path starts with *, then the texture is embedded.
+			// https://github.com/assimp/assimp/wiki/Embedded-Textures-References
+			if (texturePath.C_Str()[0] == '*')
+			{
+				std::string fileName = args.inputFileName;
+				fileName.erase(fileName.length() - 4); // remove ".fbx" extension
+				fileName += suffix;
+				fileName += texturePath.C_Str()[1];
+
+				ASSERT(scene->HasTextures(), "Error: No embedded texture found!");
+
+				int textureIndex = atoi(texturePath.C_Str() + 1);
+				ASSERT(textureIndex < (int)scene->mNumTextures, "Error: Invalid texture index!");
+
+				const aiTexture* embeddedTexture = scene->mTextures[textureIndex];
+				ASSERT(embeddedTexture->mHeight == 0, "Error: Uncompressed texture found!");
+
+				if (embeddedTexture->CheckFormat("jpg"))
+					fileName += ".jpg";
+				else if (embeddedTexture->CheckFormat("png"))
+					fileName += ".png";
+				else
+					ASSERT(embeddedTexture->mHeight == 0, "Error: Unrecogized texture format!");
+
+				ExportEmbeddedTexture(embeddedTexture, args, fileName);
+
+				printf("Adding texture %s\n", fileName.c_str());
+				textureName = fileName;
+			}
+			// For FBX files, embedded textures is now accessed using GetEmbeddedTexture
+			// https://github.com/assimp/assimp/issues/1830
+			else if (auto embeddedTexture = scene->GetEmbeddedTexture(texturePath.C_Str()); embeddedTexture)
+			{
+				std::filesystem::path embeddedFilePath = texturePath.C_Str();
+				std::string fileName = args.inputFileName;
+				fileName.erase(fileName.length() - 4); // remove ".fbx" extension
+				fileName += suffix;
+				fileName += embeddedFilePath.extension().u8string();
+
+				ExportEmbeddedTexture(embeddedTexture, args, fileName);
+
+				printf("Adding texture %s\n", fileName.c_str());
+				textureName = fileName;
+			}
+			else
+			{
+				std::filesystem::path filePath = texturePath.C_Str();
+				std::string fileName = filePath.filename().u8string();
+				printf("Adding texture %s\n", fileName.c_str());
+				textureName = fileName;
+			}
+		}
+	}
+
+	return textureName.filename().u8string().c_str();
+}
+
+// Check if aiBone exists in skeleton, if so just return the index.
+// Otherwise, add it to the skeleton. The aiBone must have a name!
+int TryAddBone(const aiBone* aiBone, Skeleton& skeleton, BoneIndexLookup& boneIndexLookup)
+{
+	std::string name = aiBone->mName.C_Str();
+	ASSERT(!name.empty(), "Error: aiBone has no name!");
+
+	auto iter = boneIndexLookup.find(name);
+	if (iter != boneIndexLookup.end())
+		return iter->second;
+
+	// Add a new bone in the skeleton for this
+	auto& newBone = skeleton.bones.emplace_back(std::make_unique<Bone>());
+	newBone->name = std::move(name);
+	newBone->index = static_cast<int>(skeleton.bones.size()) - 1;
+	newBone->offsetTransform = ToMatrix4(aiBone->mOffsetMatrix);
+
+	// Cache the bone index
+	boneIndexLookup.emplace(newBone->name, newBone->index);
+	return newBone->index;
+}
+
+// Recursively walk the aiScene tree and add/link bones to our skeleton as we find them.
+Bone* BuildSkeleton(const aiNode& sceneNode, Bone* parent, Skeleton& skeleton, BoneIndexLookup& boneIndexLookup)
+{
+	Bone* bone = nullptr;
+
+	std::string boneName = sceneNode.mName.C_Str();
+	auto iter = boneIndexLookup.find(boneName);
+	if (iter != boneIndexLookup.end())
+	{
+		// Bone already added to skeleton
+		bone = skeleton.bones[iter->second].get();
+	}
+	else
+	{
+		// Add a new bone in the skeleton for this (possible need to generate a name for it)
+		bone = skeleton.bones.emplace_back(std::make_unique<Bone>()).get();
+		bone->index = static_cast<int>(skeleton.bones.size()) - 1;
+		bone->offsetTransform = Matrix4::Identity;
+		if (boneName.empty())
+			bone->name = "NoName" + std::to_string(bone->index);
+		else
+			bone->name = std::move(boneName);
+
+		// Cache the bone index
+		boneIndexLookup.emplace(bone->name, bone->index);
+	}
+
+	// Link to your parent
+	bone->parent = parent;
+	if (bone->parent)
+	{
+	bone->parentIndex = parent->index;
+	}
+	bone->toParentTransform = ToMatrix4(sceneNode.mTransformation);
+
+	// Recurse through your children
+	bone->children.reserve(sceneNode.mNumChildren);
+	for (uint32_t i = 0; i < sceneNode.mNumChildren; ++i)
+	{
+		Bone* child = BuildSkeleton(*sceneNode.mChildren[i], bone, skeleton, boneIndexLookup);
+		bone->children.push_back(child);
+		bone->childrenIndices.push_back(child->index);
+	}
+	return bone;
+}
 void SaveModel(const Arguments& args, const Model& model)
 {
 	if (model.meshData.empty())
@@ -85,7 +289,7 @@ void SaveModel(const Arguments& args, const Model& model)
 
 	FILE* file = nullptr;
 	auto err = fopen_s(&file, args.outputFileName, "w");
-	if (err !=0 || file ==nullptr)
+	if (err != 0 || file == nullptr)
 	{
 		printf("Error: failed to open file %s for saving. \n", args.outputFileName);
 		return;
@@ -100,8 +304,65 @@ void SaveModel(const Arguments& args, const Model& model)
 
 	fclose(file);
 }
+
+void SaveMaterial(const Arguments& args, const Model& model)
+{
+	if (model.materialData.empty())
+	{
+		return;
+	}
+	std::filesystem::path path = args.outputFileName;
+	path.replace_extension("material");
+
+	printf("Saving material: %s...\n", path.u8string().c_str());
+
+	FILE* file = nullptr;
+	auto err = fopen_s(&file, path.u8string().c_str(), "w");
+	if (err != 0 || file == nullptr)
+	{
+		printf("Error: failed to open file %s for saving. \n", path.u8string().c_str());
+		return;
+	}
+
+	const uint32_t materialCount = static_cast<uint32_t>(model.materialData.size());
+	fprintf_s(file, "MaterialCount: %d\n", materialCount);
+	for (const auto& materialData : model.materialData)
+	{
+		MaterialIO::Write(file, materialData);
+		//Note: you cannot write an empty string, so if the material name is empty, you can write "none".
+		// Just make sure the loading code checks for that.
+	}
+
+
+	fclose(file);
+}
+
+void SaveSkeleton(const Arguments& args, const Model& model)
+{
+	if (!model.skeleton)
+	{
+		return;
+	}
+	std::filesystem::path path = args.outputFileName;
+	path.replace_extension("skeleton");
+
+	printf("Saving skeleton: %s...\n", path.u8string().c_str());
+
+	FILE* file = nullptr;
+	auto err = fopen_s(&file, path.u8string().c_str(), "w");
+	if (err != 0 || file == nullptr)
+	{
+		printf("Error: failed to open file %s for saving. \n", path.u8string().c_str());
+		return;
+	}
+
+	SkeletonIO::Write(file, *(model.skeleton));
+
+
+	fclose(file);
+}
 // Game.exe -o model.txt
- 
+
 // argc=3
 // argv[0] = "Game.exe"
 // argv[1] = "-o"
@@ -128,7 +389,8 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	Graphics::Model model;
+	Model model;
+	BoneIndexLookup boneIndexLookup;
 
 	//Look for mesh data
 	if (scene->HasMeshes())
@@ -142,12 +404,12 @@ int main(int argc, char* argv[])
 			const auto aiMesh = scene->mMeshes[meshIndex];
 			const uint32_t numVertices = aiMesh->mNumVertices;
 			const uint32_t numFaces = aiMesh->mNumFaces;
-			const uint32_t numIndices = numFaces*3;
+			const uint32_t numIndices = numFaces * 3;
 
 			auto& meshData = model.meshData.emplace_back(std::make_unique<Graphics::Model::MeshData>());
-		
+
 			printf("Reading material index...\n");
-			
+
 			meshData->materialIndex = aiMesh->mMaterialIndex;
 
 			printf("Reading vertives ...\n");
@@ -168,8 +430,10 @@ int main(int argc, char* argv[])
 				vertex.normal = ConvertToV3(normals[i]);
 				vertex.tangent = ConvertToV3(tangents[i]);
 				//vertex.uv = texCoords ? Vector2{ texCoords[i].x, texCoords[i].y } : Vector2::Zero;
-				vertex.uv = texCoords ? ConvertToV2( texCoords[i] ) : Vector2::Zero;
+				vertex.uv = texCoords ? ConvertToV2(texCoords[i]) : Vector2::Zero;
 			}
+			// BoneVertex 
+			// [pos:xyz][normal:xyz][tang:xyz][ux][bI][bW]
 
 			printf("Reading indices ...\n");
 
@@ -183,10 +447,165 @@ int main(int argc, char* argv[])
 				mesh.indices.push_back(aiFace.mIndices[1]);
 				mesh.indices.push_back(aiFace.mIndices[2]);
 			}
+
+			// check mesh if has bones. bones has skeleton.
+			if (aiMesh->HasBones())
+			{
+				// check has skeleton yet or not ? if not create one.
+				if (!model.skeleton)
+				{
+					model.skeleton = std::make_unique<Skeleton>();
+				}
+				printf("Reading bone weights...\n");
+
+				// Track how many weights have we added to each vertex
+				std::vector<int> numWeightsAdded(mesh.vertices.size(), 0);
+				for (uint32_t meshBoneIndex = 0; meshBoneIndex < aiMesh->mNumBones; ++meshBoneIndex)
+				{
+					const auto aiBone = aiMesh->mBones[meshBoneIndex];
+					// try is this bone 've added before to our skeleton?
+					const int boneIndex = TryAddBone(aiBone, *model.skeleton, boneIndexLookup);
+
+					for (uint32_t weightIndex = 0; weightIndex < aiBone->mNumWeights; ++weightIndex)
+					{
+						const auto& vertexWeight = aiBone->mWeights[weightIndex];
+						auto& vertex = mesh.vertices[vertexWeight.mVertexId];
+						auto& added = numWeightsAdded[vertexWeight.mVertexId];
+
+						// BoneVertex can hold at most up to 4 weights
+						if (added < 4)
+						{
+							vertex.boneIndices[added] = boneIndex;
+							vertex.boneWeights[added] = vertexWeight.mWeight;
+							++added;
+
+						}
+
+					}
+				}
+			}
+		}
+	}
+	// Look for material data
+	if (scene->HasMaterials())
+	{
+		printf("Reading material data...\n");
+
+		const uint32_t numMaterials = scene->mNumMaterials; // how many materials it has.
+		model.materialData.resize(numMaterials);
+
+		for (uint32_t materialIndex = 0; materialIndex < numMaterials; ++materialIndex)
+		{
+			const auto aiMaterial = scene->mMaterials[materialIndex];
+			aiColor3D ambientColor, diffuseColor, specularColor;
+			ai_real specularPower = 1.0f;
+
+			aiMaterial->Get(AI_MATKEY_COLOR_AMBIENT, ambientColor);
+			aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, ambientColor);
+			aiMaterial->Get(AI_MATKEY_COLOR_SPECULAR, ambientColor);
+			aiMaterial->Get(AI_MATKEY_SHININESS, specularPower);
+
+			auto& materialData = model.materialData[materialIndex];
+			materialData.material.ambient = ToColor(ambientColor);
+			materialData.material.diffuse = ToColor(diffuseColor);
+			materialData.material.specular = ToColor(specularColor);
+
+			materialData.material.power = specularPower;
+			std::string suffix;
+			suffix = "_diffuse";
+			suffix += "_" + std::to_string(materialIndex);
+			materialData.diffuseMapName = FindTexture(scene, aiMaterial, aiTextureType_DIFFUSE, args, suffix.c_str());
+			suffix = "_specular";
+			suffix += "_" + std::to_string(materialIndex);
+			materialData.specularMapName = FindTexture(scene, aiMaterial, aiTextureType_SHININESS, args, suffix.c_str());
+			suffix = "_normal";
+			suffix += "_" + std::to_string(materialIndex);
+			materialData.normalMapName = FindTexture(scene, aiMaterial, aiTextureType_NORMALS, args, suffix.c_str());
 		}
 	}
 
+	//Check if we found any skeleton information
+	if (model.skeleton)//(!boneIndexLookup.empty())
+	{
+		//Find bones to construct a skeleton
+		printf("Building skeleton...\n");
+		BuildSkeleton(*scene->mRootNode, nullptr, *(model.skeleton), boneIndexLookup);
+
+		for (auto& bone : model.skeleton->bones)
+		{
+			bone->offsetTransform._41 *= args.scale;
+			bone->offsetTransform._42 *= args.scale;
+			bone->offsetTransform._43 *= args.scale;
+			bone->toParentTransform._41 *= args.scale;
+			bone->toParentTransform._42 *= args.scale;
+			bone->toParentTransform._43 *= args.scale;
+		}
+
+	}
+	//Look for animation data
+	if (scene->HasAnimations())
+	{
+		printf("Reading animations...\n");
+
+		for (uint32_t animIndex = 0; animIndex < scene->mNumAnimations; ++animIndex)
+		{
+			const auto aiAnimation = scene->mAnimations[animIndex];
+			auto& animClip = model.animSet.emplace_back(std::make_unique<AnimationClip>());
+
+			if (aiAnimation->mName.length > 0)
+				animClip->name = aiAnimation->mName.C_Str();
+			else
+				animClip->name = "Anim" + std::to_string(animIndex);
+
+			animClip->duration = static_cast<float>(aiAnimation->mDuration);
+			animClip->ticksPerSecond = static_cast<float>(aiAnimation->mTicksPerSecond);
+
+			printf("Reading bone animations for %s ...\n", animClip->name.c_str());
+
+			// Reserve space so we have one animation slot per bone, note that not
+			// all bones will have animations so some slot will stay empty. However,
+			// keeping them the same size means we can use bone index directly to look
+			// up animations.
+			animClip->boneAnimations.resize(model.skeleton->bones.size());
+			for (uint32_t boneAnimIndex = 0; boneAnimIndex < aiAnimation->mNumChannels; ++boneAnimIndex)
+			{
+				const aiNodeAnim* aiBoneAnim = aiAnimation->mChannels[boneAnimIndex];
+				const int slotIndex = boneIndexLookup[aiBoneAnim->mNodeName.C_Str()];
+				auto& boneAnim = animClip->boneAnimations[slotIndex];
+				boneAnim = std::make_unique<Animation>();
+
+				AnimationBuilder builder;
+				for (uint32_t keyIndex = 0; keyIndex < aiBoneAnim->mNumPositionKeys; ++keyIndex)
+				{
+					auto& key = aiBoneAnim->mPositionKeys[keyIndex];
+					builder.AddPositionKey(ConvertToV3(key.mValue) * args.scale, static_cast<float>(key.mTime));
+				}
+				for (uint32_t keyIndex = 0; keyIndex < aiBoneAnim->mNumRotationKeys; ++keyIndex)
+				{
+					auto& key = aiBoneAnim->mRotationKeys[keyIndex];
+					builder.AddRotationKey(ConvertToQuaternion(key.mValue), static_cast<float>(key.mTime));
+				}
+				for (uint32_t keyIndex = 0; keyIndex < aiBoneAnim->mNumScalingKeys; ++keyIndex)
+				{
+					auto& key = aiBoneAnim->mScalingKeys[keyIndex];
+					builder.AddScaleKey(ConvertToV3(key.mValue), static_cast<float>(key.mTime));
+				}
+
+				*boneAnim = builder.Get();
+			}
+		}
+	}
+
+	// Save mesh data
 	SaveModel(args, model);
+
+	// Save material data
+	SaveMaterial(args, model);
+
+	//save bone data into a .skeleton file
+	SaveSkeleton(args, model);
+
+	//save animation data into a .anim file
 
 	printf("All done!\n");
 

@@ -480,6 +480,17 @@ void KWSE::Graphics::SimpleDraw::AddCone(const Math::Vector3 & base, const Math:
 	}
 
 }
+void KWSE::Graphics::SimpleDraw::AddBone(const Math::Matrix4 & transform)
+{
+	Math::Vector3 r = Math::GetRight(transform);
+	Math::Vector3 u = Math::GetUp(transform);
+	Math::Vector3 l = Math::GetLook(transform);
+	Math::Vector3 p = Math::GetTranslation(transform);
+	AddSphere(p, 0.025f, Colors::BlueViolet, 5, 6);
+	AddLine(p, p + r*0.1f, Colors::Red);
+	AddLine(p, p + u*0.1f, Colors::Green);
+	AddLine(p, p + l*0.1f, Colors::Blue);
+}
 void KWSE::Graphics::SimpleDraw::StaticInitialize(uint32_t maxVertexCount)
 {
 	sInstance = std::make_unique<SimpleDrawImpl>();
