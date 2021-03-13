@@ -90,10 +90,10 @@ inline Quaternion ConvertToQuaternion(const aiQuaternion& q)
 {
 	return
 	{
+		static_cast<float>(q.w), 
 		static_cast<float>(q.x),
 		static_cast<float>(q.y),
-		static_cast<float>(q.z),
-		static_cast<float>(q.w)
+		static_cast<float>(q.z)
 	};
 }
 inline Matrix4 ToMatrix4(const aiMatrix4x4& m)
@@ -361,6 +361,32 @@ void SaveSkeleton(const Arguments& args, const Model& model)
 
 	fclose(file);
 }
+
+void SaveAnimation(const Arguments& args, const Model& model)
+{
+	if (model.animSet.empty())
+		return;
+
+	std::filesystem::path path = args.outputFileName;
+	path.replace_extension("anim");
+
+	printf("Saving animation: %s...\n", path.u8string().c_str());
+
+	FILE* file = nullptr;
+	auto err = fopen_s(&file, path.u8string().c_str(),"w");
+	if (err != 0 || file == nullptr)
+	{
+		printf("Error: failed to open file %s for saving.\n", path.u8string().c_str());
+		return;
+	}
+
+
+		fprintf_s(file, "%d\n", static_cast<int>(model.animSet.size()));
+		for (const auto& animationClip : model.animSet)
+			AnimationIO::Write(file, *animationClip);
+
+	fclose(file);
+}
 // Game.exe -o model.txt
 
 // argc=3
@@ -542,7 +568,7 @@ int main(int argc, char* argv[])
 		}
 
 	}
-	//Look for animation data
+	// Look for animation data
 	if (scene->HasAnimations())
 	{
 		printf("Reading animations...\n");
@@ -607,6 +633,7 @@ int main(int argc, char* argv[])
 
 	//save animation data into a .anim file
 
+	SaveAnimation(args, model);
 	printf("All done!\n");
 
 	return 0;

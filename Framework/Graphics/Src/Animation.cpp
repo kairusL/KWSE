@@ -7,13 +7,12 @@ using namespace KWSE::Graphics;
 
 Vector3 Animation::GetPosition(float time) const
 {
-	if (mPositionKeys.empty())
-		return Vector3::Zero;
+	//if (mPositionKeys.empty())
+	//	return Vector3::Zero;
 
 	if (mLooping && (time > mPositionKeys.back().time))
 	{
-
-		time -= (static_cast<int>(time / mTotalDuration)*mTotalDuration)- mPositionKeys.front().time;
+		time -= (static_cast<int>(time / mTotalDuration)*mTotalDuration);// -mPositionKeys.front().time;
 	}
 	if (mPositionKeys.back().time >time)
 	{
@@ -21,8 +20,8 @@ Vector3 Animation::GetPosition(float time) const
 		{
 			if (time < mPositionKeys[i].time)
 			{
-				int startFrame = i - 1;
 				int endFrame = i;
+				int startFrame = i - 1;
 				float duration = mPositionKeys[endFrame].time - mPositionKeys[startFrame].time;
 				float percentage = (time - mPositionKeys[startFrame].time) / duration;
 				return Lerp(mPositionKeys[startFrame].key, mPositionKeys[endFrame].key, percentage);
@@ -35,11 +34,10 @@ Vector3 Animation::GetPosition(float time) const
 Quaternion Animation::GetRotation(float time) const
 {
 
-	if (mRotationKeys.empty())
-		return Quaternion::Identity;
+	//if (mRotationKeys.empty())
+	//	return Quaternion::Identity;
 	if (mLooping&&(time > mRotationKeys.back().time))
 	{
-
 		time -= (static_cast<int>(time / mTotalDuration)*mTotalDuration); //-mRotationKeys.front().time;
 	}
 
@@ -72,7 +70,7 @@ Vector3 Animation::GetScale(float time) const
 		return Vector3::One;
 	if (mLooping&& (time > mScaleKeys.back().time))
 	{
-		time -= (static_cast<int>(time / mTotalDuration)*mTotalDuration) - mScaleKeys.front().time;
+		time -= (static_cast<int>(time / mTotalDuration)*mTotalDuration);// -mScaleKeys.front().time;
 	}
 	if (mScaleKeys.back().time > time)
 	{

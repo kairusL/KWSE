@@ -12,5 +12,6 @@ namespace KWSE::Graphics
 		static void LoadModel(std::filesystem::path fileName, Model& model); // position and texture coordinate
 		static void LoadMaterial(std::filesystem::path fileName, Model & model);
 		static void LoadSkeleton(std::filesystem::path fileName, Model & model); // position and texture coordinate
+		static void LoadAnimation(std::filesystem::path fileName, Model & model); // 
 	};
 }

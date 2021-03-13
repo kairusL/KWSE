@@ -12,14 +12,14 @@ namespace
 void GameState::Initialize()
 {
 
-	GraphicsSystem::Get()->SetClearColor(Colors::DarkGray);
+	GraphicsSystem::Get()->SetClearColor(Colors::WhiteSmoke);
 	// Terrain
 	ModelLoader::LoadObj(L"../../Assets/Models/Mountain/terrain.obj", 500.0f, mTerrainMesh);
 	mTerrainMeshBuffer.Initialize(mTerrainMesh);
 	mTerrainTexrures.Initialize("../../Assets/Models/Mountain/file_.jpg");
 
 	// Model
-	model.Initialize(L"../../Assets/Models/Model/Dizon2/dizon.model");
+	model.Initialize(L"../../Assets/Models/Model/Taunt/Taunt.model");
 	// Sci_fi_fighter
 	//ModelLoader::LoadObj(L"../../Assets/Models/sci_fi_fighter/sci_fi_fighter.obj", 20.0f, mSciFiMesh);
 	//mSciFiMeshBuffer.Initialize(mSciFiMesh);
@@ -37,11 +37,10 @@ void GameState::Initialize()
 
 	//srifi animation
 	SetAnimation();
-
 	mSriFiPosition = { 1.0f,1.1f,1.0f };
 	mTerrainPosition = {0.0f,-5.0f,0.0f};
-	mDefaultCamera.SetPosition({ 1.492f, 32.04f, 46.69f });
-	mDefaultCamera.SetDirection({ -0.019f,-0.659f,-0.751f });
+	mDefaultCamera.SetPosition({ 2.30f, 19.14f, -20.74f });
+	mDefaultCamera.SetDirection({ 0.036f,-0.17f, 0.983f });
 	mDefaultCamera.SetNearPlane(0.001f);
 	//mDefaultCamera.SetFarPlane(100.0f);
 
@@ -124,7 +123,8 @@ void GameState::Initialize()
 
 
 	//mSkybox.Initialize("../../Assets/Images/Space_Skybox.jpg");
-	mSkybox.Initialize("../../Assets/Images/Skybox_04.jpg");
+	//mSkybox.Initialize("../../Assets/Images/Skybox_04.jpg");
+	mSkybox.Initialize("../../Assets/Images/SWhite.jpg");
 
 	mSampler.Initialize(Sampler::Filter::Anisotropic, Sampler::AddressMode::Clamp);
 	mBlendState.Initialize(KWSE::Graphics::BlendState::Mode::Additive);
@@ -499,7 +499,7 @@ void GameState::RenderScene()
 	const auto pos = mAnimation.GetPosition(mAnimationTimer);
 	const auto rot = mAnimation.GetRotation(mAnimationTimer);
 	const auto scale = mAnimation.GetScale(mAnimationTimer);
-	matWorld= Matrix4::Translation({ 1.0f,1.1f,1.0f }) *Matrix4::Scaling(10.0f)*(KWSE::Math::Matrix4::RotationX(mRotation.x*5.0f) * Matrix4::RotationY(mRotation.y) *Matrix4::RotationZ(mRotation.z));//* Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y);
+	matWorld= Matrix4::Scaling(10.0f)*(KWSE::Math::Matrix4::RotationX(mRotation.x*5.0f) * Matrix4::RotationY(mRotation.y) *Matrix4::RotationZ(mRotation.z)*Matrix4::Translation({ 1.0f,1.1f,1.0f }) );//* Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y);
 	//matWorld = Matrix4::Scaling(scale)* Matrix4::RotationQuaternion(rot) * Matrix4::Translation(pos);
 		//KWSE::Math::Matrix4::RotationX(mRotation.x) 
 		//* Matrix4::RotationY(mRotation.y) 
@@ -516,7 +516,13 @@ void GameState::RenderScene()
 	std::vector<Matrix4> boneMatrices(model.skeleton->bones.size());
 	if (showSkeleton)
 	{
-		DrawSkeleton(*model.skeleton, CalculateBoneMatrices(*model.skeleton, matWorld));
+		for (auto& animationClip : model.animSet)
+		{
+			KWSE::Graphics::DrawSkeleton(
+				(*model.skeleton),
+				KWSE::Graphics::CalculateBoneMatrices((*model.skeleton), matWorld, *animationClip, mAnimationTimer),Skeleton::DrawType::cone);
+		}
+		//DrawSkeleton(*model.skeleton, CalculateBoneMatrices(*model.skeleton, matWorld));
 		SimpleDraw::Render(*mActiveCamera);
 	}
 	if (!showSkeleton)

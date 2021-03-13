@@ -49,6 +49,10 @@ void KWSE::Graphics::Model::Initialize(const std::filesystem::path & fileName)
 		for (auto& childIndex : bone->childrenIndices)
 			bone->children.push_back(skeleton->bones[childIndex].get());
 	}
+
+
+	ModelLoader::LoadAnimation(fileName,*this);
+	
 }
 
 void KWSE::Graphics::Model::Terminate()

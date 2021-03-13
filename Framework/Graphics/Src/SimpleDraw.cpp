@@ -35,6 +35,8 @@ namespace
 		void AddScreenArc(const Math::Vector2& center, float radius, float fromAngle, float toAngle, const Color& color);
 		void AddScreenDiamond(const Math::Vector2& center, float size, const Color& color);
 
+		//void AddCone(const Math::Vector3& base, const Math::Vector3& direction, float radius, const Color& color, bool fill);
+
 
 		void Render(const Camera& camera);
 
@@ -313,8 +315,43 @@ namespace
 			mFillVertices[mFillVertexCount++] = VertexPC{ v1,color };
 			mFillVertices[mFillVertexCount++] = VertexPC{ v2,color };
 		}
-
 	}
+
+	//void SimpleDrawImpl::AddCone(const Math::Vector3& base, const Math::Vector3& direction, float radius, const Color& color, bool fill)
+	//{
+	//	constexpr int sectors = 8;
+	//	auto side = Math::Normalize(Math::Cross(base, direction)) * radius;
+	//	auto angle = 0.0f;
+	//	auto angleStep = Math::Constants::TwoPi / sectors;
+	//
+	//	if (fill)
+	//	{
+	//		for (int i = 0; i < sectors; ++i)
+	//		{
+	//			auto matRot0 = Math::Matrix4::RotationAxis(direction, angle);
+	//			auto matRot1 = Math::Matrix4::RotationAxis(direction, angle + angleStep);
+	//			auto v0 = Math::TransformNormal(side, matRot0);
+	//			auto v1 = Math::TransformNormal(side, matRot1);
+	//			sInstance->AddFace(base + v0, base + v1, base + direction, color);
+	//			sInstance->AddFace(base + v0, base, base + v1, color);
+	//			angle += angleStep;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		for (int i = 0; i < sectors; ++i)
+	//		{
+	//			auto matRot0 = Math::Matrix4::RotationAxis(direction, angle);
+	//			auto matRot1 = Math::Matrix4::RotationAxis(direction, angle + angleStep);
+	//			auto v0 = Math::TransformNormal(side, matRot0);
+	//			auto v1 = Math::TransformNormal(side, matRot1);
+	//			sInstance->AddLine(base + v0, base + direction, color);
+	//			sInstance->AddLine(base + v0, base + v1, color);
+	//			angle += angleStep;
+	//		}
+	//	}
+	//}
+
 	void SimpleDrawImpl::Render(const Camera& camera)
 	{
 		// Pass data to mesh buffer and draw 
@@ -699,3 +736,5 @@ void SimpleDraw::AddAABB(float minX, float minY, float minZ, float maxX, float m
 {
 	AddAABB(Math::Vector3(minX, minY, minZ), Math::Vector3(maxX, maxY, maxZ), color);
 }
+
+

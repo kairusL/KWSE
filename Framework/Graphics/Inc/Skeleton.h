@@ -1,5 +1,6 @@
 #pragma once
 #include"Bone.h"
+#include "AnimationClip.h"
 namespace KWSE::Graphics
 {
 
@@ -10,14 +11,20 @@ namespace KWSE::Graphics
 	//entry[ 0]
 	struct Skeleton 
 	{
+		enum  DrawType
+		{
+			line,
+			cone
+		};
 		Bone* root = nullptr;
 
 		// All the bones in here , so "Bone* root = nullptr;" is weak pointer
 		std::vector<std::unique_ptr<Bone>> bones;
 	};
 	
-	void DrawSkeleton(const Skeleton& skeleton, const std::vector<Math::Matrix4>& boneMatrices);
+	void DrawSkeleton(const Skeleton& skeleton, const std::vector<Math::Matrix4>& boneMatrices,Skeleton::DrawType drawType);
 	std::vector<KWSE::Math::Matrix4> CalculateBoneMatrices(const Skeleton & skeleton, Math::Matrix4 worldMatrix);
+	std::vector<KWSE::Math::Matrix4> CalculateBoneMatrices(const Skeleton & skeleton, KWSE::Math::Matrix4 worldMatrix, const AnimationClip & animationClip, float animationTime);
 	//skeleton -> relationship between each bone.
 	//boneMatrices -> array of matrix
 	//[a b c 0]  (a b c) = right vector (X axis)

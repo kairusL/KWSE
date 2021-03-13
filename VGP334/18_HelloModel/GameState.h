@@ -48,7 +48,8 @@ private:
 	};
 	struct OilSetting
 	{
-		float screenSizeScale=2.0f;
+		//float screenSizeScale=2.0f;
+		float screenSizeScale=0.0f;
 		float paintRadius=3.0f;
 		float minSigma =1.0f;
 		float sizeWeight=0.0f;
@@ -170,6 +171,7 @@ private:
 
 	KWSE::Graphics::MeshPX mScreenMesh;
 	KWSE::Graphics::MeshBuffer mScreenMeshBuffer;
+
 
 	float mLightCameraDistance = 100.0f;
 	bool mAnimationLoop = false;

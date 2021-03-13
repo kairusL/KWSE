@@ -4,6 +4,7 @@
 #include"Model.h"
 #include"ModelLoader.h"
 #include "SkeletonIO.h"
+#include "AnimationIO.h"	
 
 using namespace KWSE;
 using namespace KWSE::Graphics;
@@ -257,6 +258,25 @@ void KWSE::Graphics::ModelLoader::LoadSkeleton(std::filesystem::path fileName, M
 	fopen_s(&file, fileName.u8string().c_str(), "r");
 	model.skeleton = std::make_unique<Skeleton>();
 	SkeletonIO::Read(file, *model.skeleton);
+
+	fclose(file);
+}
+
+void ModelLoader::LoadAnimation(std::filesystem::path fileName, Model & model)
+{
+	fileName.replace_extension("anim");
+
+	FILE* file = nullptr;
+	fopen_s(&file, fileName.u8string().c_str(),"r");
+	ASSERT(file, "ModelLoader - Failed to open model %s.", fileName.u8string().c_str());
+
+		uint32_t animationCount = 0;
+		fscanf_s(file, "%d ", &animationCount);
+		for (size_t i = 0; i < animationCount; ++i)
+		{
+			auto& animationClip = model.animSet.emplace_back(std::make_unique<AnimationClip>());
+			AnimationIO::Read(file, *animationClip);
+		}
 
 	fclose(file);
 }

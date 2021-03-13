@@ -13,10 +13,14 @@ namespace KWSE::Graphics
 		Math::Quaternion GetRotation(float time)const;
 		Math::Vector3 GetScale(float time) const;
 
+		bool IsPositionKeyEmpty() const { return mPositionKeys.empty(); }
+		bool IsRotationKeyEmpty() const { return mRotationKeys.empty(); }
+		bool IsScaleKeyEmpty() const { return mScaleKeys.empty(); }
+
 
 	private:
 		friend class AnimationBuilder;
-
+		friend class AnimationIO;
 		float AdjustTime(float time,float totalDuration);
 
 		PositionKeys mPositionKeys;
