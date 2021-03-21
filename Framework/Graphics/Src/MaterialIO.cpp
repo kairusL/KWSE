@@ -6,7 +6,7 @@ using namespace KWSE::Graphics;
 
 void MaterialIO::Write(FILE * file, const Model::MaterialData & materialData)
 {
-	fprintf_s(file, "\n%f %f %f %f "
+	fprintf_s(file, "%f %f %f %f "
 		, materialData.material.ambient.x
 		, materialData.material.ambient.y
 		, materialData.material.ambient.z
@@ -44,19 +44,19 @@ void MaterialIO::Write(FILE * file, const Model::MaterialData & materialData)
 
 void MaterialIO::Read(FILE * file, Model::MaterialData & materialData)
 {
-	fscanf_s(file, "%f %f %f %f"
+	fscanf_s(file, "%f %f %f %f "
 		, &materialData.material.ambient.x
 		, &materialData.material.ambient.y
 		, &materialData.material.ambient.z
 		, &materialData.material.ambient.w);
 
-	fscanf_s(file, "%f %f %f %f"
+	fscanf_s(file, "%f %f %f %f "
 		, &materialData.material.diffuse.x
 		, &materialData.material.diffuse.y
 		, &materialData.material.diffuse.z
 		, &materialData.material.diffuse.w);
 
-	fscanf_s(file, "%f %f %f %f"
+	fscanf_s(file, "%f %f %f %f "
 		, &materialData.material.specular.x
 		, &materialData.material.specular.y
 		, &materialData.material.specular.z
@@ -66,19 +66,19 @@ void MaterialIO::Read(FILE * file, Model::MaterialData & materialData)
 
 	char strBuff[255];
 
-	fscanf_s(file, "%s", strBuff, (int)std::size(strBuff));
+	fscanf_s(file, "%s ", strBuff, (int)std::size(strBuff));
 	if (strcmp(strBuff, "none") == 0)
 		materialData.diffuseMapName.clear();
 	else
 		materialData.diffuseMapName = strBuff;
 
-	fscanf_s(file, "%s", strBuff, (int)std::size(strBuff));
+	fscanf_s(file, "%s ", strBuff, (int)std::size(strBuff));
 	if (strcmp(strBuff, "none") == 0)
 		materialData.specularMapName.clear();
 	else
 		materialData.specularMapName = strBuff;
 
-	fscanf_s(file, "%s", strBuff, (int)std::size(strBuff));
+	fscanf_s(file, "%s ", strBuff, (int)std::size(strBuff));
 	if (strcmp(strBuff, "none") == 0)
 		materialData.normalMapName.clear();
 	else

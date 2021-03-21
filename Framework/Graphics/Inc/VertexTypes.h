@@ -126,17 +126,17 @@ namespace KWSE::Graphics
 
 	struct BoneVertex
 	{
-		VERTEX_FORMAT(VE_Position | VE_Normal | VE_Tangent | VE_TexCoord | VE_BlendIndex | VE_BlendWeight);
+		VERTEX_FORMAT(VE_Position | VE_Normal | VE_TexCoord | VE_Tangent | VE_BlendIndex | VE_BlendWeight);
 		constexpr BoneVertex() = default;
 		constexpr BoneVertex(
 			const Math::Vector3 & position,
 			const Math::Vector3 &normal,
-			const Math::Vector3 & tangent,
 			const Math::Vector2 & uv,
+			const Math::Vector3 & tangent,
 			const int boneindices[4],
 			const float boneweights[4]
 		)noexcept
-			: position(position), normal(normal), tangent(tangent), uv(uv)
+			: position(position), normal(normal), uv(uv), tangent(tangent)
 		{
 			for (size_t i = 0; i < 4; ++i)
 			{

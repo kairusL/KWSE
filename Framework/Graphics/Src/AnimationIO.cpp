@@ -16,24 +16,24 @@ void AnimationIO::Write(FILE * file, const KWSE::Graphics::AnimationClip& clip)
 		if (clip.boneAnimations[i])
 		{
 			fprintf_s(file, "%d ", i);
-			fprintf_s(file, "%d ", static_cast<int>(clip.boneAnimations[i].get()->mPositionKeys.size()));
+			fprintf_s(file, "%d \n", static_cast<int>(clip.boneAnimations[i].get()->mPositionKeys.size()));
 			for (const auto & key : clip.boneAnimations[i].get()->mPositionKeys)
 			{
 				fprintf_s(file, "%f ", key.key.x);
 				fprintf_s(file, "%f ", key.key.y);
 				fprintf_s(file, "%f ", key.key.z);
-				fprintf_s(file, "%f ", key.time);
+				fprintf_s(file, "%f \n", key.time);
 			}
-			fprintf_s(file, "%d ", static_cast<int>(clip.boneAnimations[i].get()->mRotationKeys.size()));
+			fprintf_s(file, "%d \n", static_cast<int>(clip.boneAnimations[i].get()->mRotationKeys.size()));
 			for (const auto & key : clip.boneAnimations[i].get()->mRotationKeys)
 			{
 				fprintf_s(file, "%f ", key.key.w);
 				fprintf_s(file, "%f ", key.key.x);
 				fprintf_s(file, "%f ", key.key.y);
 				fprintf_s(file, "%f ", key.key.z);
-				fprintf_s(file, "%f ", key.time);
+				fprintf_s(file, "%f \n", key.time);
 			}
-			fprintf_s(file, "%d ", static_cast<int>(clip.boneAnimations[i].get()->mScaleKeys.size()));
+			fprintf_s(file, "%d \n", static_cast<int>(clip.boneAnimations[i].get()->mScaleKeys.size()));
 			for (const auto & key : clip.boneAnimations[i].get()->mScaleKeys)
 			{
 				fprintf_s(file, "%f ", key.key.x);
@@ -53,54 +53,64 @@ void AnimationIO::Read(FILE * file, KWSE::Graphics::AnimationClip& clip)
 	fscanf_s(file, "%f ", &clip.duration);
 	fscanf_s(file, "%f ", &clip.ticksPerSecond);
 	int boneAnimationSize = 0;
-	fscanf_s(file, "%d ", &boneAnimationSize);
+	fscanf_s(file, "%d \n", &boneAnimationSize);
 	for (int i = 0; i < boneAnimationSize; i++)
 	{
+		int index;
+		fscanf_s(file, "%d ", &index);
+		if (i != index)
+		{
+			// If the data is not for the slot we are currently on, add nullptrs
+			// until we reach the correct slot.
+			while (i < index)
+			{
+				clip.boneAnimations.emplace_back(nullptr);
+				++i;
+			}
+		}
+
 		auto& boneAnimation = clip.boneAnimations.emplace_back(std::make_unique<Animation>());
 
 		AnimationBuilder builder;
-		int index;
-		fscanf_s(file, "%d ", &index);
-		if (index == i)
+
+		int positionKeyCount = 0;
+		fscanf_s(file, "%d \n", &positionKeyCount);
+		for (int j = 0; j < positionKeyCount; j++)
 		{
-			int positionKeyCount = 0;
-			fscanf_s(file, "%d ", &positionKeyCount);
-			for (int j = 0; j < positionKeyCount; j++)
-			{
-				float x, y, z, time;
-				fscanf_s(file, "%f ", &x);
-				fscanf_s(file, "%f ", &y);
-				fscanf_s(file, "%f ", &z);
-				fscanf_s(file, "%f ", &time);
-				time /= clip.ticksPerSecond;
-				builder.AddPositionKey({ x,y,z }, time);
-			}
-			int rotationKeyCount = 0;
-			fscanf_s(file, "%d ", &rotationKeyCount);
-			for (int j = 0; j < rotationKeyCount; j++)
-			{
-				float w, x, y, z, time;
-				fscanf_s(file, "%f ", &w);
-				fscanf_s(file, "%f ", &x);
-				fscanf_s(file, "%f ", &y);
-				fscanf_s(file, "%f ", &z);
-				fscanf_s(file, "%f ", &time);
-				time /= clip.ticksPerSecond;
-				builder.AddRotationKey({ w, x, y, z }, time);
-			}
-			int scaleKeyCount = 0;
-			fscanf_s(file, "%d ", &scaleKeyCount);
-			for (int j = 0; j < scaleKeyCount; j++)
-			{
-				float x, y, z, time;
-				fscanf_s(file, "%f ", &x);
-				fscanf_s(file, "%f ", &y);
-				fscanf_s(file, "%f ", &z);
-				fscanf_s(file, "%f ", &time);
-				time /= clip.ticksPerSecond;
-				builder.AddScaleKey({ x,y,z }, time);
-			}
+			float x, y, z, time;
+			fscanf_s(file, "%f ", &x);
+			fscanf_s(file, "%f ", &y);
+			fscanf_s(file, "%f ", &z);
+			fscanf_s(file, "%f \n", &time);
+			time /= clip.ticksPerSecond;
+			builder.AddPositionKey({ x,y,z }, time);
 		}
+		int rotationKeyCount = 0;
+		fscanf_s(file, "%d \n", &rotationKeyCount);
+		for (int j = 0; j < rotationKeyCount; j++)
+		{
+			float w, x, y, z, time;
+			fscanf_s(file, "%f ", &w);
+			fscanf_s(file, "%f ", &x);
+			fscanf_s(file, "%f ", &y);
+			fscanf_s(file, "%f ", &z);
+			fscanf_s(file, "%f \n", &time);
+			time /= clip.ticksPerSecond;
+			builder.AddRotationKey({ w, x, y, z }, time);
+		}
+		int scaleKeyCount = 0;
+		fscanf_s(file, "%d \n", &scaleKeyCount);
+		for (int j = 0; j < scaleKeyCount; j++)
+		{
+			float x, y, z, time;
+			fscanf_s(file, "%f ", &x);
+			fscanf_s(file, "%f ", &y);
+			fscanf_s(file, "%f ", &z);
+			fscanf_s(file, "%f \n", &time);
+			time /= clip.ticksPerSecond;
+			builder.AddScaleKey({ x,y,z }, time);
+		}
+
 		builder.SetLooping(true);
 		*boneAnimation = builder.Get();
 	}

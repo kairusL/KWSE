@@ -71,24 +71,59 @@ namespace
 			ApplyBoneMatrices(child, boneMatrices);
 	}
 
-	void ApplyBoneMatrices(Bone * bone, const AnimationClip& clip, std::vector<Math::Matrix4>& boneMatrices, float animationTime)
+	void ApplyBoneMatrices(Bone * bone, const AnimationClip& clip, std::vector<KWSE::Math::Matrix4>& boneMatrices, float animationTime)
 	{
 		boneMatrices[bone->index] = Math::Matrix4::Identity;
 		if (bone->parent)
 		{
-			Animation& boneAnim = *clip.boneAnimations[bone->index];
-			if (!boneAnim.IsScaleKeyEmpty())
-				boneMatrices[bone->index] = Math::Matrix4::Scaling(boneAnim.GetScale(animationTime));
-			if (!boneAnim.IsRotationKeyEmpty())
-				boneMatrices[bone->index] = boneMatrices[bone->index] * Math::Matrix4::RotationQuaternion(boneAnim.GetRotation(animationTime));
-			if (!boneAnim.IsPositionKeyEmpty())
-				boneMatrices[bone->index] = boneMatrices[bone->index] * Math::Matrix4::Translation(boneAnim.GetPosition(animationTime));
-			boneMatrices[bone->index] = boneMatrices[bone->index] * boneMatrices[bone->parentIndex];
+			auto& boneAnim = clip.boneAnimations[bone->index];
+			if (boneAnim)
+			{
+				Math::Vector3 scale = boneAnim->IsPositionKeyEmpty() ? Math::Vector3::One : boneAnim->GetScale(animationTime);
+				Math::Quaternion rot = boneAnim->IsRotationKeyEmpty() ? Math::Quaternion::Identity : boneAnim->GetRotation(animationTime);
+				Math::Vector3 pos = boneAnim->IsPositionKeyEmpty() ? Math::Vector3::Zero : boneAnim->GetPosition(animationTime);
+				auto boneTransform = Math::Matrix4::Scaling(scale)*Math::Matrix4::RotationQuaternion(rot)*Math::Matrix4::Translation(pos);
+				boneMatrices[bone->index] = boneTransform * boneMatrices[bone->parentIndex];
+			}
+			else
+			{
+				boneMatrices[bone->index] = bone->toParentTransform * boneMatrices[bone->parentIndex];
+			}
+		}
+		else
+		{
+			boneMatrices[bone->index] = bone->toParentTransform;
 		}
 
 		for (const auto& child : bone->children)
 			ApplyBoneMatrices(child, clip, boneMatrices, animationTime);
 	}
+	//void ApplyBoneMatrices(Bone * bone, const AnimationClip& clip, std::vector<KWSE::Math::Matrix4>& boneMatrices, float animationTime)
+	//{
+	//	boneMatrices[bone->index] = Math::Matrix4::Identity;
+	//	if (bone->parent)
+	//	{
+	//		auto& boneAnim = clip.boneAnimations[bone->index];
+	//		if (boneAnim)
+	//		{
+	//			Math::Vector3 scale = boneAnim->IsPositionKeyEmpty() ? Math::Vector3::One : boneAnim->GetScale(animationTime);
+	//			Math::Quaternion rot = boneAnim->IsRotationKeyEmpty() ? Math::Quaternion::Identity : boneAnim->GetRotation(animationTime);
+	//			Math::Vector3 pos = boneAnim->IsPositionKeyEmpty() ? Math::Vector3::Zero : boneAnim->GetPosition(animationTime);
+	//			auto boneTransform = Math::Matrix4::Scaling(scale)*Math::Matrix4::RotationQuaternion(rot)*Math::Matrix4::Translation(pos);
+	//			boneMatrices[bone->index] = boneTransform * boneMatrices[bone->parentIndex];
+	//		}
+	//		//else
+	//		//{
+	//		//	boneMatrices[bone->index] = bone->toParentTransform * boneMatrices[bone->parentIndex];
+	//		//}
+	//	}
+	//	//else
+	//	//{
+	//	//	boneMatrices[bone->index] = bone->toParentTransform;
+	//	//}
+	//	for (const auto& child : bone->children)
+	//		ApplyBoneMatrices(child, clip, boneMatrices, animationTime);
+	//}
 }
 
 void KWSE::Graphics::DrawSkeleton(const Skeleton & skeleton, const std::vector<Math::Matrix4>& boneMatrices, Skeleton::DrawType drawType)
@@ -123,6 +158,26 @@ std::vector<Math::Matrix4> KWSE::Graphics::CalculateBoneMatrices(const Skeleton 
 		matrix = matrix * Math::Inverse(skeleton.root->toParentTransform) * worldMatrix;
 
 	return boneMatrices;
+}
+
+std::vector<KWSE::Math::Matrix4> KWSE::Graphics::CalculateSkinningMatrices(const Skeleton & skeleton)
+{
+	std::vector<KWSE::Math::Matrix4> skinningMatrices;
+	skinningMatrices.resize(skeleton.bones.size());
+
+	ApplyBoneMatrices(skeleton.root, skinningMatrices);
+
+	return skinningMatrices;
+}
+
+std::vector<KWSE::Math::Matrix4> KWSE::Graphics::CalculateSkinningMatrices(const Skeleton & skeleton, const AnimationClip & animationClip, float animationTime)
+{
+	std::vector<KWSE::Math::Matrix4> skinningMatrices;
+	skinningMatrices.resize(skeleton.bones.size());
+
+	ApplyBoneMatrices(skeleton.root, animationClip, skinningMatrices, animationTime);
+
+	return skinningMatrices;
 }
 
 //namespace

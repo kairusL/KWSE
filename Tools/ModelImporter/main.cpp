@@ -555,7 +555,13 @@ int main(int argc, char* argv[])
 	{
 		//Find bones to construct a skeleton
 		printf("Building skeleton...\n");
+
 		BuildSkeleton(*scene->mRootNode, nullptr, *(model.skeleton), boneIndexLookup);
+
+		std::string boneName = scene->mRootNode->mName.C_Str();
+		auto iter = boneIndexLookup.find(boneName);
+		if (!model.skeleton->root)
+			model.skeleton->root = model.skeleton->bones[iter->second].get();;
 
 		for (auto& bone : model.skeleton->bones)
 		{

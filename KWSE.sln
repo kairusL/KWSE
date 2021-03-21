@@ -58,6 +58,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{B20E
 		Assets\Shaders\PostProcessOilPainting.fx = Assets\Shaders\PostProcessOilPainting.fx
 		Assets\Shaders\PostProcessOilPainting_S.fx = Assets\Shaders\PostProcessOilPainting_S.fx
 		Assets\Shaders\SimpleDraw.fx = Assets\Shaders\SimpleDraw.fx
+		Assets\Shaders\Skinning.fx = Assets\Shaders\Skinning.fx
 		Assets\Shaders\Skybox.fx = Assets\Shaders\Skybox.fx
 		Assets\Shaders\Standard.fx = Assets\Shaders\Standard.fx
 	EndProjectSection

@@ -19,7 +19,9 @@ void GameState::Initialize()
 	mTerrainTexrures.Initialize("../../Assets/Models/Mountain/file_.jpg");
 
 	// Model
-	model.Initialize(L"../../Assets/Models/Model/Taunt/Taunt.model");
+	//model.Initialize(L"../../Assets/Models/Model/Taunt1/Taunt.model");
+	model.Initialize(L"../../Assets/Models/Model/Jump/Jump.model");
+	mTransBoneBuffer.Initialize();
 	// Sci_fi_fighter
 	//ModelLoader::LoadObj(L"../../Assets/Models/sci_fi_fighter/sci_fi_fighter.obj", 20.0f, mSciFiMesh);
 	//mSciFiMeshBuffer.Initialize(mSciFiMesh);
@@ -74,7 +76,8 @@ void GameState::Initialize()
 	mBlurSettingsBuffer.Initialize();
 
 
-	const wchar_t* shaderFileNames = L"../../Assets/Shaders/Standard.fx";
+	//const wchar_t* shaderFileNames = L"../../Assets/Shaders/Standard.fx";
+	const wchar_t* shaderFileNames = L"../../Assets/Shaders/Skinning.fx";
 	const wchar_t* shaderFileNames1 = L"../../Assets/Shaders/GaussianBlur.fx";
 	const wchar_t* shaderFileNames2 = L"../../Assets/Shaders/DoLightTexturing.fx";
 	const wchar_t* shaderFileNames3 = L"../../Assets/Shaders/DoTexturing.fx";
@@ -85,7 +88,8 @@ void GameState::Initialize()
 
 
 	mPixelShader.Initialize(shaderFileNames);
-	mVertexShader.Initialize(shaderFileNames, Vertex::Format);
+	mVertexShader.Initialize(shaderFileNames, BoneVertex::Format);
+	//mVertexShader.Initialize(shaderFileNames, Vertex::Format);
 
 	mCloudPixelShader.Initialize(shaderFileNames2);
 	mCloudVertexShader.Initialize(shaderFileNames2, VertexPNX::Format);
@@ -201,6 +205,7 @@ void GameState::Terminate()
 	modelTexrure[0].Terminate();
 	//mSci_fi_Texrures.Terminate();
 	//mSciFiMeshBuffer.Terminate();
+	mTransBoneBuffer.Terminate();
 	model.Terminate();
 
 	mTerrainTexrures.Terminate();
@@ -461,6 +466,9 @@ void GameState::RenderScene()
 	data.viewPosition = mActiveCamera->GetPosition();
 
 	mSkybox.Render(*mActiveCamera);
+	
+	mSetting.Skinning = 1;
+
 
 	mSettingBuffer.Update(mSetting);
 	mSettingBuffer.BindVS(3);
@@ -499,7 +507,11 @@ void GameState::RenderScene()
 	const auto pos = mAnimation.GetPosition(mAnimationTimer);
 	const auto rot = mAnimation.GetRotation(mAnimationTimer);
 	const auto scale = mAnimation.GetScale(mAnimationTimer);
-	matWorld= Matrix4::Scaling(10.0f)*(KWSE::Math::Matrix4::RotationX(mRotation.x*5.0f) * Matrix4::RotationY(mRotation.y) *Matrix4::RotationZ(mRotation.z)*Matrix4::Translation({ 1.0f,1.1f,1.0f }) );//* Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y);
+	matWorld= Matrix4::Scaling(10.0f)*
+		(KWSE::Math::Matrix4::RotationX(mRotation.x*5.0f) * 
+			Matrix4::RotationY(mRotation.y) 
+			*Matrix4::RotationZ(mRotation.z)
+			*Matrix4::Translation({ 1.0f,1.1f,1.0f }) );//* Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y);
 	//matWorld = Matrix4::Scaling(scale)* Matrix4::RotationQuaternion(rot) * Matrix4::Translation(pos);
 		//KWSE::Math::Matrix4::RotationX(mRotation.x) 
 		//* Matrix4::RotationY(mRotation.y) 
@@ -514,27 +526,56 @@ void GameState::RenderScene()
 	//mSci_fi_Texrures.BindPS(0);	
 	mDepthRebderTarget.BindPS(4);
 	std::vector<Matrix4> boneMatrices(model.skeleton->bones.size());
+	//if (showSkeleton)
+	//{
+	//	DrawSkeleton(*model.skeleton, CalculateBoneMatrices(*model.skeleton, matWorld), Skeleton::DrawType::cone);
+	//	SimpleDraw::Render(*mActiveCamera);
+	//}
+	//if (!showSkeleton)
+	//{
+	//	for (const auto& mesh : model.meshData)
+	//	{
+	//		auto& material = model.materialData[mesh->materialIndex];
+	//		material.diffuseMap->BindPS(0);
+	//		material.normalMap->BindVS(3);
+	//		mesh->meshBuffer.Render();
+	//	}
+	//
+	//}
 	if (showSkeleton)
 	{
-		for (auto& animationClip : model.animSet)
-		{
-			KWSE::Graphics::DrawSkeleton(
-				(*model.skeleton),
-				KWSE::Graphics::CalculateBoneMatrices((*model.skeleton), matWorld, *animationClip, mAnimationTimer),Skeleton::DrawType::cone);
-		}
-		//DrawSkeleton(*model.skeleton, CalculateBoneMatrices(*model.skeleton, matWorld));
+		auto& animationClip = model.animSet[0];
+		KWSE::Graphics::DrawSkeleton(
+				*model.skeleton,
+				KWSE::Graphics::CalculateBoneMatrices(*model.skeleton, matWorld, *animationClip, mAnimationTimer),
+				Skeleton::DrawType::cone);
 		SimpleDraw::Render(*mActiveCamera);
 	}
-	if (!showSkeleton)
+	else
 	{
+		
+		auto& animationClip = model.animSet[0];
+			//toLocalTransform = KWSE::Graphics::CalculateSkinningMatrices(*(model.skeleton), *animationClip, mAnimationTimer);
+		std::vector<Matrix4> toLocalTransform = 
+			KWSE::Graphics::CalculateBoneMatrices(*model.skeleton, Math::Matrix4::Identity, 
+													*animationClip, mAnimationTimer);
+		
+		BoneTransformData boneData;
+		// Apply offset transform to align the model to bone space
+		auto& bones = model.skeleton.get()->bones;
+		for (auto& bone : bones)
+			boneData.boneTransforms[bone->index] = KWSE::Math::Transpose(bone->offsetTransform * toLocalTransform[bone->index]);
+		
 		for (const auto& mesh : model.meshData)
 		{
 			auto& material = model.materialData[mesh->materialIndex];
 			material.diffuseMap->BindPS(0);
-			material.normalMap->BindVS(3);
+			material.normalMap->BindPS(3);
 			mesh->meshBuffer.Render();
 		}
-
+		mTransBoneBuffer.Update(boneData);
+		mTransBoneBuffer.BindVS(4);
+	
 	}
 	//mSciFiMeshBuffer.Render();
 	//Texture::UnbindPS(0);

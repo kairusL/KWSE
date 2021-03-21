@@ -45,6 +45,12 @@ private:
 		float normalWeight = 0.0f;
 		float specularWeight = 0.0f;
 		float depthBias= 0.000029f;
+		int Skinning;
+		KWSE::Math::Vector3 padding;
+	};
+	struct BoneTransformData
+	{
+		KWSE::Math::Matrix4 boneTransforms[256];
 	};
 	struct OilSetting
 	{
@@ -56,7 +62,7 @@ private:
 	};
 	//ID3D11Buffer* mConstantBuffer = nullptr;
 
-	
+	using TransBoneBuffer = KWSE::Graphics::TypedConstantBuffer<BoneTransformData>;
 	using TransformBuffer = KWSE::Graphics::TypedConstantBuffer<TransformData>;
 	using TransformCloudBuffer = KWSE::Graphics::TypedConstantBuffer<TransformDataTextureWithLight>;
 	using TransformTextureBuffer = KWSE::Graphics::TypedConstantBuffer<TransformDataTexture>;
@@ -91,6 +97,7 @@ private:
 
 	//Model
 	KWSE::Graphics::Model model;
+	KWSE::Graphics::Animation anima;
 	KWSE::Graphics::Texture modelTexrure[2];
 	//SciFi
 	KWSE::Graphics::Mesh mSciFiMesh;
@@ -148,9 +155,11 @@ private:
 	//float mRotationX= 0.f;
 	//float mRotation = 0.f;
 
+	TransBoneBuffer mTransBoneBuffer;
 
 	TransformCloudBuffer mTransformCloudBuffer;
 	KWSE::Graphics::TypedConstantBuffer<KWSE::Math::Vector4> mBlurSettingsBuffer;
+
 
 	LightBuffer  mLightBuffer;
 	MaterialBuffer mMaterialBuffer;
@@ -175,5 +184,7 @@ private:
 
 	float mLightCameraDistance = 100.0f;
 	bool mAnimationLoop = false;
+
+
 };
 
