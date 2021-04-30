@@ -139,3 +139,22 @@ Math::Matrix4 KWSE::Graphics::Camera::GetProjectionMatrix() const
 		0.0f,0.0f,-zn * q,0.0f
 	};
 }
+
+Math::Ray KWSE::Graphics::Camera::ScreenPointToRay(int screenX, int screenY, uint32_t screenWidth, uint32_t screenHeight) const
+{
+	const float aspect = (float)screenWidth / (float)screenHeight;
+	const float halfWidth = screenWidth * 0.5f;
+	const float halfHeight = screenHeight * 0.5f;
+	const float tanFOV = tanf(mFov * 0.5f);
+	const float dx = tanFOV * ((float)screenX / halfWidth - 1.0f) * aspect;
+	const float dy = tanFOV * (1.0f - (float)screenY / halfHeight);
+
+	Math::Ray ray;
+	ray.org = Math::Vector3::Zero;
+	ray.dir = Normalize(Math::Vector3(dx, dy, 1.0f));
+
+	Math::Matrix4 invMatView = Inverse(GetViewMatrix());
+	ray.org = TransformCoord(ray.org, invMatView);
+	ray.dir = TransformNormal(ray.dir, invMatView);
+	return ray;
+}

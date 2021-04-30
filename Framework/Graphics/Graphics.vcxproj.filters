@@ -156,6 +156,12 @@
     <ClInclude Include="Inc\AnimationIO.h">
       <Filter>Inc\Animation</Filter>
     </ClInclude>
+    <ClInclude Include="Inc\ArcBall.h">
+      <Filter>Inc\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Animator.h">
+      <Filter>Inc\Animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Precompiled.cpp">
@@ -249,6 +255,12 @@
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="Src\AnimationIO.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ArcBall.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Animator.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>

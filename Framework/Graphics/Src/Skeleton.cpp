@@ -170,6 +170,32 @@ std::vector<KWSE::Math::Matrix4> KWSE::Graphics::CalculateSkinningMatrices(const
 	return skinningMatrices;
 }
 
+std::vector<KWSE::Math::Matrix4> KWSE::Graphics::CalculateBoneMatrices(const Skeleton & skeleton)
+{
+	std::vector<Math::Matrix4> boneMatrices;
+	boneMatrices.resize(skeleton.bones.size());
+
+	ApplyBoneMatrices(skeleton.root, boneMatrices);
+
+	for (auto& matrix : boneMatrices)
+		matrix = matrix * Math::Inverse(skeleton.root->toParentTransform);
+
+	return boneMatrices;
+}
+
+std::vector<KWSE::Math::Matrix4> KWSE::Graphics::CalculateBoneMatrices(const Skeleton & skeleton, const AnimationClip & animationClip, float animationTime)
+{
+	std::vector<Math::Matrix4> boneMatrices;
+	boneMatrices.resize(skeleton.bones.size());
+
+	ApplyBoneMatrices(skeleton.root, animationClip, boneMatrices, animationTime);
+
+	for (auto& matrix : boneMatrices)
+		matrix = matrix * Math::Inverse(skeleton.root->toParentTransform);
+
+	return boneMatrices;
+}
+
 std::vector<KWSE::Math::Matrix4> KWSE::Graphics::CalculateSkinningMatrices(const Skeleton & skeleton, const AnimationClip & animationClip, float animationTime)
 {
 	std::vector<KWSE::Math::Matrix4> skinningMatrices;

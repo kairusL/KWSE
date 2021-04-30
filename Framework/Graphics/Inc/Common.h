@@ -4,6 +4,7 @@
 
 #include <Core/Inc/Core.h>
 #include <Math/Inc/EngineMath.h>
+#include <Input/Inc/Input.h>
 
 // DirectX headers
 #include <d3d11_1.h>

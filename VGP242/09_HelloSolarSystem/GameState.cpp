@@ -105,7 +105,7 @@ void GameState::Initialize()
 	mRasterizerStateWireframe.Initialize(RasterizerState::CullMode::Back, RasterizerState::FillMode::Wireframe);
 
 
-	mShipPosition={0.0f,0.0f,0.0f};
+	mShipPosition={0.0f,30.0f,-163.0f};
 	mShipDirection = { 1.0f,0.0f,0.0f };
 
 	//Snap camera to target position be defaule
@@ -181,7 +181,7 @@ void GameState::Update(float deltaTime)
 	const Math::Matrix4 pitchRotation = Math::Matrix4::RotationAxis(right, mShipElevation);
 	mShipDirection = Math::TransformNormal(mShipDirection, pitchRotation);
 	
-	const float shipMoveSpeed = 1.0f;
+	const float shipMoveSpeed = 0.5f;
 	if (inputSystem->IsKeyDown(KeyCode::W))
 		mShipPosition += mShipDirection * shipMoveSpeed;
 	if (inputSystem->IsKeyDown(KeyCode::S))

@@ -28,7 +28,10 @@ namespace KWSE::Graphics
 	std::vector<KWSE::Math::Matrix4> CalculateSkinningMatrices(const Skeleton & skeleton);
 	std::vector<KWSE::Math::Matrix4> CalculateSkinningMatrices(const Skeleton & skeleton, const AnimationClip & animationClip, float animationTime);
 	
-	
+
+	std::vector<KWSE::Math::Matrix4> CalculateBoneMatrices(const Skeleton & skeleton);
+	std::vector<KWSE::Math::Matrix4> CalculateBoneMatrices(const Skeleton & skeleton, const AnimationClip& animationClip, float animationTime);
+
 	//skeleton -> relationship between each bone.
 	//boneMatrices -> array of matrix
 	//[a b c 0]  (a b c) = right vector (X axis)

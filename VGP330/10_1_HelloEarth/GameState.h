@@ -19,7 +19,6 @@ private:
 	void RenderBrightness();
 	void ApplyBlur();
 	void PostProcess();
-	void SetAnimation();
 
 	struct TransformData
 	{
@@ -44,25 +43,18 @@ private:
 		float displacementWeight = 0.001f;
 		float normalWeight = 0.0f;
 		float specularWeight = 0.0f;
-		float depthBias= 0.000029f;
-		int Skinning;
-		KWSE::Math::Vector3 padding;
-	};
-	struct BoneTransformData
-	{
-		KWSE::Math::Matrix4 boneTransforms[256];
+		float depthBias = 0.000029f;
 	};
 	struct OilSetting
 	{
-		//float screenSizeScale=2.0f;
-		float screenSizeScale=0.0f;
-		float paintRadius=3.0f;
-		float minSigma =1.0f;
-		float sizeWeight=0.0f;
+		float screenSizeScale = 2.0f;
+		float paintRadius = 3.0f;
+		float minSigma = 1.0f;
+		float sizeWeight = 0.0f;
 	};
 	//ID3D11Buffer* mConstantBuffer = nullptr;
 
-	using TransBoneBuffer = KWSE::Graphics::TypedConstantBuffer<BoneTransformData>;
+
 	using TransformBuffer = KWSE::Graphics::TypedConstantBuffer<TransformData>;
 	using TransformCloudBuffer = KWSE::Graphics::TypedConstantBuffer<TransformDataTextureWithLight>;
 	using TransformTextureBuffer = KWSE::Graphics::TypedConstantBuffer<TransformDataTexture>;
@@ -90,15 +82,14 @@ private:
 	KWSE::Graphics::RenderTarget mBloomRenderTarget;  // <- only the "bright" pixels
 	KWSE::Graphics::RenderTarget mBlurRenderTarget;     // <- amplify the brightness
 
-	//Terrain
-	KWSE::Graphics::Mesh mTerrainMesh;
-	KWSE::Graphics::Texture mTerrainTexrures;
-	KWSE::Graphics::MeshBuffer mTerrainMeshBuffer;
+	KWSE::Graphics::ArcBall mArcBall;
 
-	//Model
-	KWSE::Graphics::Model model;
-	KWSE::Graphics::Animation anima;
-	KWSE::Graphics::Texture modelTexrure[2];
+	////Terrain
+	//KWSE::Graphics::Mesh mTerrainMesh;
+	//KWSE::Graphics::Texture mTerrainTexrures;
+	//KWSE::Graphics::MeshBuffer mTerrainMeshBuffer;
+
+
 	//SciFi
 	KWSE::Graphics::Mesh mSciFiMesh;
 	KWSE::Graphics::Texture mSci_fi_Texrures;
@@ -109,10 +100,10 @@ private:
 	float mShipElevation = 0.0f;
 	float mShipTilt = 0.0f;
 
-	//Plane
+	//Earth
 	KWSE::Graphics::Mesh mMesh;
-	KWSE::Graphics::MeshBuffer mMeshPlaneBuffer;
-	KWSE::Graphics::Texture mPlane_Texrures;
+	KWSE::Graphics::MeshBuffer mMeshBuffer;
+	KWSE::Graphics::Texture mTexture[5];
 
 	//TransformData
 	TransformBuffer mTransformBuffer;
@@ -155,11 +146,9 @@ private:
 	//float mRotationX= 0.f;
 	//float mRotation = 0.f;
 
-	TransBoneBuffer mTransBoneBuffer;
 
 	TransformCloudBuffer mTransformCloudBuffer;
 	KWSE::Graphics::TypedConstantBuffer<KWSE::Math::Vector4> mBlurSettingsBuffer;
-
 
 	LightBuffer  mLightBuffer;
 	MaterialBuffer mMaterialBuffer;
@@ -170,10 +159,6 @@ private:
 	KWSE::Graphics::Sampler mSampler;
 	KWSE::Graphics::BlendState mBlendState;
 
-	KWSE::Graphics::Animator mAnimator;
-	KWSE::Graphics::Animation mAnimation;
-	float mAnimationTimer = 0.0f;
-
 	float mFPS = 0.0f;
 
 	int mBlurIterations = 10;
@@ -182,10 +167,6 @@ private:
 	KWSE::Graphics::MeshPX mScreenMesh;
 	KWSE::Graphics::MeshBuffer mScreenMeshBuffer;
 
-
 	float mLightCameraDistance = 100.0f;
-	bool mAnimationLoop = false;
-
-
 };
 

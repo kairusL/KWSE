@@ -487,6 +487,22 @@ bool KWSE::Math::Intersect(const Ray & ray, const AABB & aabb, float & distEntry
 	return true;
 }
 
+bool KWSE::Math::Intersect(const Ray& ray, const Sphere& sphere, float& distance)
+{
+	// https://viclw17.github.io/2018/07/16/raytracing-ray-sphere-intersection/
+	Vector3 oc = ray.org - sphere.center;
+	float a = Dot(ray.dir, ray.dir);
+	float b = 2.0f * Dot(oc, ray.dir);
+	float c = Dot(oc, oc) - sphere.radius * sphere.radius;
+	float discriminant = b * b - 4 * a * c;
+
+	if (discriminant < 0)
+		distance = -1.0f;
+	else
+		distance = (-b - sqrt(discriminant)) / (2.0f * a);
+
+	return (discriminant > 0);
+}
 bool KWSE::Math::Intersect(const Vector3 & point, const AABB & aabb)
 {
 	const Vector3 test = point - aabb.center;

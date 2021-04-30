@@ -40,6 +40,8 @@ namespace KWSE::Math
 		Ray() : org(0.0f, 0.0f, 0.0f), dir(0.0f, 0.0f, 1.0f) {}
 		Ray(float x, float y, float z, float dx, float dy, float dz) : org(x, y, z), dir(dx, dy, dz) {}
 		Ray(const Vector3& org, const Vector3& dir) : org(org), dir(dir) {}
+
+		Vector3 GetPoint(float distance) { return org + (dir * distance); }
 	};
 
 	//----------------------------------------------------------------------------------------------------

@@ -72,6 +72,7 @@ namespace KWSE::Math
 	bool Intersect(const Ray& ray, const Vector3& a, const Vector3& b, const Vector3& c, float& distance);
 	bool Intersect(const Ray& ray, const Plane& plane, float& distance);
 	bool Intersect(const Ray& ray, const AABB& aabb, float& distEntry, float& distExit);
+	bool Intersect(const Ray& ray, const Sphere& sphere, float& distance);
 	//bool Intersect(const Ray& ray, const OBB& obb, float& distEntry, float& distExit);
 	bool Intersect(const Vector3& point, const AABB& aabb);
 	//bool Intersect(const Vector3& point, const OBB& obb);

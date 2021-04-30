@@ -155,6 +155,8 @@
     <ClInclude Include="Inc\AnimationBuilder.h" />
     <ClInclude Include="Inc\AnimationClip.h" />
     <ClInclude Include="Inc\AnimationIO.h" />
+    <ClInclude Include="Inc\Animator.h" />
+    <ClInclude Include="Inc\ArcBall.h" />
     <ClInclude Include="Inc\BlendState.h" />
     <ClInclude Include="Inc\Bone.h" />
     <ClInclude Include="Inc\Camera.h" />
@@ -197,6 +199,8 @@
     <ClCompile Include="Src\Animation.cpp" />
     <ClCompile Include="Src\AnimationBuilder.cpp" />
     <ClCompile Include="Src\AnimationIO.cpp" />
+    <ClCompile Include="Src\Animator.cpp" />
+    <ClCompile Include="Src\ArcBall.cpp" />
     <ClCompile Include="Src\BlendState.cpp" />
     <ClCompile Include="Src\Camera.cpp" />
     <ClCompile Include="Src\ConstantBuffer.cpp" />
@@ -243,6 +247,9 @@
     </ProjectReference>
     <ProjectReference Include="..\Core\Core.vcxproj">
       <Project>{71886c49-dc83-4aa6-ae34-601e516430bf}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Input\Input.vcxproj">
+      <Project>{361b75bc-c619-4025-af24-18c01b197ab8}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Math\Math.vcxproj">
       <Project>{557e132e-411d-4464-b981-7f2d9e5b8454}</Project>
