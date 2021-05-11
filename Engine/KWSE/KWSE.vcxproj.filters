@@ -7,6 +7,33 @@
     <Filter Include="Src">
       <UniqueIdentifier>{e808df33-e885-4b74-8555-2706b1a7e64a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Inc\App">
+      <UniqueIdentifier>{b42b6cbe-4c3d-44ad-ae81-bb5180db176a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\App">
+      <UniqueIdentifier>{29781f75-24fb-48fe-b79a-63d72065bb66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inc\Utilis">
+      <UniqueIdentifier>{f5dc4af4-194c-44dc-99fd-58ebd52ee078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Utilis">
+      <UniqueIdentifier>{ef7b6a27-0a40-4923-940f-c30fc415c229}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inc\World">
+      <UniqueIdentifier>{6eaa656e-d121-4d04-af74-a20fd40ed85d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\World">
+      <UniqueIdentifier>{49898cf3-87b2-4b8e-b985-440de1461bdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Components">
+      <UniqueIdentifier>{8c55514a-72be-4060-9ad2-8df4428ca5bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inc\Components">
+      <UniqueIdentifier>{69770924-c492-4aa2-8b25-f82cfb7025b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Pch">
+      <UniqueIdentifier>{e3e9baf0-f8a0-49d0-90b4-f174c2a3656a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Inc\Common.h">
@@ -15,25 +42,61 @@
     <ClInclude Include="Inc\KWSE.h">
       <Filter>Inc</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Precompiled.h">
-      <Filter>Src</Filter>
-    </ClInclude>
     <ClInclude Include="Inc\App.h">
-      <Filter>Inc</Filter>
+      <Filter>Inc\App</Filter>
     </ClInclude>
     <ClInclude Include="Inc\AppState.h">
-      <Filter>Inc</Filter>
+      <Filter>Inc\App</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\GUIUtili.h">
+      <Filter>Inc\Utilis</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Component.h">
+      <Filter>Inc\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\GameObject.h">
+      <Filter>Inc\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\GameObjectIO.h">
+      <Filter>Inc\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\TransformComponent.h">
+      <Filter>Inc\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\ComponentTypes.h">
+      <Filter>Inc\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\ColliderComponent.h">
+      <Filter>Inc\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Precompiled.h">
+      <Filter>Src\Pch</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Src\Precompiled.cpp">
+    <ClCompile Include="Src\KWSE.cpp">
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="Src\App.cpp">
-      <Filter>Src</Filter>
+      <Filter>Src\App</Filter>
     </ClCompile>
-    <ClCompile Include="Src\KWSE.cpp">
-      <Filter>Src</Filter>
+    <ClCompile Include="Src\GUIUtili.cpp">
+      <Filter>Src\Utilis</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject.cpp">
+      <Filter>Src\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObjectIO.cpp">
+      <Filter>Src\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\TransformComponent.cpp">
+      <Filter>Src\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ColliderComponent.cpp">
+      <Filter>Src\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Precompiled.cpp">
+      <Filter>Src\Pch</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

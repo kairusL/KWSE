@@ -51,6 +51,14 @@ private:
 		float paintRadius=3.0f;
 		float minSigma =1.0f;
 		float sizeWeight=0.0f;
+
+	};
+	struct ActiveSetting
+	{
+		float oilActive   =0.0f;
+		float heatActive  =0.0f;
+		float mosaicActive=0.0f;
+		float padding;
 	};
 	//ID3D11Buffer* mConstantBuffer = nullptr;
 
@@ -63,6 +71,7 @@ private:
 	using MaterialBuffer = KWSE::Graphics::TypedConstantBuffer<KWSE::Graphics::Material>;
 	using SettingBuffer = KWSE::Graphics::TypedConstantBuffer<Setting>;
 	using OilSettingBuffer = KWSE::Graphics::TypedConstantBuffer<OilSetting>;
+	using ActiveSettingBuffer = KWSE::Graphics::TypedConstantBuffer<ActiveSetting>;
 
 
 	KWSE::Graphics::DirectionalLight mDirectionLight;
@@ -136,6 +145,8 @@ private:
 
 	OilSettingBuffer mOilSettingBuffer;
 	OilSetting mOilSetting;
+	ActiveSettingBuffer mActiveSettingBuffer;
+	ActiveSetting mActiveSetting;
 
 	KWSE::Math::Vector3 mRotation;
 	KWSE::Math::Vector3 mSriFiPosition;
@@ -157,6 +168,14 @@ private:
 	KWSE::Graphics::Sampler mSampler;
 	KWSE::Graphics::BlendState mBlendState;
 
+	//water && refection
+	KWSE::Graphics::Mesh mWaterMesh;
+	KWSE::Graphics::MeshBuffer mWaterMeshBuffer;
+	KWSE::Graphics::Texture mBottomTexture;
+	KWSE::Graphics::Texture mReflectionTexture;
+	KWSE::Graphics::Texture mWaterNormalTexture;
+
+
 	float mFPS = 0.0f;
 
 	int mBlurIterations = 10;
@@ -166,5 +185,9 @@ private:
 	KWSE::Graphics::MeshBuffer mScreenMeshBuffer;
 
 	float mLightCameraDistance = 100.0f;
+
+	// ParticleEmitter
+	KWSE::Graphics::ParticleEmitter mParticleEmitters[3];
+	bool particleActive=false;
 };
 

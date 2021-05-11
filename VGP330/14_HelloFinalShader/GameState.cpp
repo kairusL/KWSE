@@ -18,9 +18,35 @@ void GameState::Initialize()
 
 	// Sci_fi_fighter
 	ModelLoader::LoadObj(L"../../Assets/Models/sci_fi_fighter/sci_fi_fighter.obj", 20.0f, mSciFiMesh);
+	//ModelLoader::LoadObj(L"../../Assets/Models/AirBallon/airBalloon.obj", 0.1f, mSciFiMesh);
 	mSciFiMeshBuffer.Initialize(mSciFiMesh);
 	mSci_fi_Texrures.Initialize("../../Assets/Models/sci_fi_fighter/sci_fi_fighter_diffuse.jpg");
+	//mSci_fi_Texrures.Initialize("../../Assets/Models/AirBallon/top.jpg");
+	//mSci_fi_Texrures.Initialize("../../Assets/Models/AirBallon/ghh.png");
 	//2.15
+
+		// ParticleEmitter
+	mParticleEmitters[0].Initialize();
+	mParticleEmitters[0].SetStartColor(Colors::LightCyan);
+	mParticleEmitters[0].SetEndColor(Colors::DarkCyan);
+	mParticleEmitters[0].SetStartSize(1.0f);
+	mParticleEmitters[0].SetEndSize(0.0f);
+
+	mParticleEmitters[1].Initialize();
+	mParticleEmitters[1].SetStartColor(Colors::LightCyan);
+	mParticleEmitters[1].SetEndColor(Colors::DarkCyan);
+	mParticleEmitters[1].SetStartSize(1.0f);
+	mParticleEmitters[1].SetEndSize(0.0f);
+
+	mParticleEmitters[2].Initialize();
+	mParticleEmitters[2].SetStartColor(Colors::LightCyan);
+	mParticleEmitters[2].SetEndColor(Colors::DarkCyan);
+	mParticleEmitters[2].SetStartSize(1.0f);
+	mParticleEmitters[2].SetEndSize(0.0f);
+
+
+	//water &&reflection
+	//mWaterMesh = MeshBuilder::CreatePlane(5, 5, 5.0f);
 
 	//Plane
 	mMesh = MeshBuilder::CreatePlane(10, 10, 5.0f);
@@ -29,9 +55,9 @@ void GameState::Initialize()
 
 	mTransformBuffer.Initialize();
 
-	mSriFiPosition = { 1.0f,1.1f,1.0f };
+	mSriFiPosition = { 15.0f,1.1f,1.0f };
 	mTerrainPosition = {0.0f,-5.0f,0.0f};
-	mDefaultCamera.SetPosition({ 1.492f, 32.04f, 46.69f });
+	mDefaultCamera.SetPosition({ mSriFiPosition.x, mSriFiPosition.y+30.0f, mSriFiPosition.z+46.69f });
 	mDefaultCamera.SetDirection({ -0.019f,-0.659f,-0.751f });
 	mDefaultCamera.SetNearPlane(0.001f);
 	//mDefaultCamera.SetFarPlane(100.0f);
@@ -88,6 +114,7 @@ void GameState::Initialize()
 	mOilPaintingVertexShader.Initialize(L"../../Assets/Shaders/PostProcessOilPainting_S.fx", VertexPX::Format);
 	mOilPaintingPixelShader.Initialize(L"../../Assets/Shaders/PostProcessOilPainting_S.fx");
 	mOilSettingBuffer.Initialize();
+	mActiveSettingBuffer.Initialize();
 
 	constexpr uint32_t depthMapSize = 4096;
 	mDepthRebderTarget.Initialize(depthMapSize, depthMapSize,Texture::Format::RGBA_F32);
@@ -115,7 +142,7 @@ void GameState::Initialize()
 
 
 	//mSkybox.Initialize("../../Assets/Images/Space_Skybox.jpg");
-	mSkybox.Initialize("../../Assets/Images/Skybox_04.jpg");
+	mSkybox.Initialize("../../Assets/Images/Skybox_04.png");
 
 	mSampler.Initialize(Sampler::Filter::Anisotropic, Sampler::AddressMode::Clamp);
 	mBlendState.Initialize(KWSE::Graphics::BlendState::Mode::Additive);
@@ -138,6 +165,9 @@ void GameState::Initialize()
 	mScreenMesh.indices.push_back(3);
 
 	mScreenMeshBuffer.Initialize(mScreenMesh);
+
+
+
 }
 
 void GameState::Terminate()
@@ -149,6 +179,7 @@ void GameState::Terminate()
 	mSampler.Terminate();
 
 	mSkybox.Terminate();
+	mActiveSettingBuffer.Terminate();
 	mOilSettingBuffer.Terminate();
 	mOilPaintingPixelShader.Terminate();
 	mOilPaintingVertexShader.Terminate();
@@ -188,6 +219,12 @@ void GameState::Terminate()
 	mPlane_Texrures.Terminate();
 	mMeshPlaneBuffer.Terminate();
 
+
+	mParticleEmitters[2].Terminate();
+	mParticleEmitters[1].Terminate();
+	mParticleEmitters[0].Terminate();
+
+
 	mSci_fi_Texrures.Terminate();
 	mSciFiMeshBuffer.Terminate();
 
@@ -198,20 +235,7 @@ void GameState::Update(float deltaTime)
 {
 	auto inputSystem = InputSystem::Get();
 
-	//SciFi
-	mShipTilt *= 0.95f;
 
-	const float shipTurnSpeed = .33f;
-	mShipRotation += inputSystem->GetMouseMoveX() * shipTurnSpeed * deltaTime;
-	mShipElevation += inputSystem->GetMouseMoveY() * shipTurnSpeed * deltaTime;
-
-	mShipDirection = Vector3::ZAxis;
-	auto yawRotation = Math::Matrix4::RotationY(mShipRotation);
-	mShipDirection = Math::TransformNormal(mShipDirection, yawRotation);
-
-	const Math::Vector3 right = Math::Normalize(Cross(Math::Vector3::YAxis, mShipDirection));
-	const Math::Matrix4 pitchRotation = Math::Matrix4::RotationAxis(right, mShipElevation);
-	mShipDirection = Math::TransformNormal(mShipDirection, pitchRotation);
 
 	// Camera
 	const float moveSpeed = 10.0f;
@@ -244,8 +268,29 @@ void GameState::Update(float deltaTime)
 		mRotation.y -= deltaTime;
 	if (inputSystem->IsKeyDown(KeyCode::UP))
 		mRotation.x += deltaTime;
+		mActiveCamera->Pitch(mRotation.x*deltaTime*0.03f);
 	if (inputSystem->IsKeyDown(KeyCode::DOWN))
 		mRotation.x -= deltaTime;
+		mActiveCamera->Pitch(mRotation.x*deltaTime*0.03f);
+
+	if (inputSystem->IsKeyDown(KeyCode::NUMPAD8))
+	{
+		mSriFiPosition.y += deltaTime*20.5f;
+		mActiveCamera->Walk(-moveSpeed * deltaTime);
+	}
+	if (inputSystem->IsKeyDown(KeyCode::NUMPAD5))
+	{
+		mSriFiPosition.y -= deltaTime * 20.5f;
+	}
+	if (inputSystem->IsKeyDown(KeyCode::NUMPAD4))
+	{
+		mSriFiPosition.z -= deltaTime * 30.5f;
+		particleActive = true;
+	}
+	if (inputSystem->IsKeyDown(KeyCode::NUMPAD6))
+	{
+		mSriFiPosition.x += deltaTime * 10.5f;
+	}
 	//mRotation += deltaTime;
 
 	//Synchronize the light camera to the directional light (cannot look straight up or down)
@@ -253,6 +298,26 @@ void GameState::Update(float deltaTime)
 	KWSE::Math::Vector3 newCamaraPosition = -mLightCamera.GetDirection()*mLightCameraDistance;
 	mLightCamera.SetPosition(newCamaraPosition);
 
+	//SciFi
+	mShipTilt *= 0.95f;
+
+	const float shipTurnSpeed = .33f;
+	mShipRotation += inputSystem->GetMouseMoveX() * shipTurnSpeed * deltaTime;
+	mShipElevation += inputSystem->GetMouseMoveY() * shipTurnSpeed * deltaTime;
+
+
+	// ParticleEmitter
+	mParticleEmitters[0].Start(30.0f);
+	mParticleEmitters[0].Update(deltaTime);
+	mParticleEmitters[0].SetPosition(mSriFiPosition - (Vector3{ -4.0f,0.0f,0.0f }));
+	
+	mParticleEmitters[1].Start(30.0f);
+	mParticleEmitters[1].Update(deltaTime);
+	mParticleEmitters[1].SetPosition(mSriFiPosition - (Vector3{ 4.0f, 0.0f, 0.0f }));
+	
+	mParticleEmitters[2].Start(30.0f);
+	mParticleEmitters[2].Update(deltaTime);
+	mParticleEmitters[2].SetPosition(mSriFiPosition - (Vector3{ 0.0f, 0.0f, -5.0f }));
 	mFPS = 1.0f / deltaTime;
 }
 void GameState::Render()
@@ -357,6 +422,26 @@ void  GameState::DebugUI()
 			mSetting.specularWeight = specular ? 1.0f : 0.0f;
 		}
 		ImGui::DragFloat("Depth Bias", &mSetting.depthBias, 0.000001f,0.0f,1.0f,"%.7f");
+	}
+	if (ImGui::CollapsingHeader("PostP"))
+	{
+		bool oilactive = mActiveSetting.oilActive == 1.0f;
+		if (ImGui::Checkbox("Oil", &oilactive))
+		{
+			mActiveSetting.oilActive = oilactive ? 1.0f : 0.0f;
+		}
+
+		bool heatactive = mActiveSetting.heatActive == 1.0f;
+		if (ImGui::Checkbox("Heat", &heatactive))
+		{
+			mActiveSetting.heatActive = heatactive ? 1.0f : 0.0f;
+		}
+
+		bool mosaicactive = mActiveSetting.mosaicActive == 1.0f;
+		if (ImGui::Checkbox("Mosaica", &mosaicactive))
+		{
+			mActiveSetting.mosaicActive = mosaicactive ? 1.0f : 0.0f;
+		}
 	}
 	if (ImGui::CollapsingHeader("OilSetting"))
 	{
@@ -479,7 +564,6 @@ void GameState::RenderScene()
 	mSciFiMeshBuffer.Render();
 	//Texture::UnbindPS(0);
 	//Texture::UnbindPS(4);
-
 	// Terrain
 	matWorld =Matrix4::Translation({ mTerrainPosition.x,mTerrainPosition.y,mTerrainPosition.z });
 	data.world = Transpose(matWorld);
@@ -501,14 +585,14 @@ void GameState::RenderScene()
 
 	Texture::UnbindPS(4);
 
+	if (particleActive)
+	{
+		mParticleEmitters[0].Render(*mActiveCamera);
+		mParticleEmitters[1].Render(*mActiveCamera);
+		mParticleEmitters[2].Render(*mActiveCamera);
 
 
-
-
-
-
-
-
+	}
 	//mCloudPixelShader.Bind();
 	//mCloudVertexShader.Bind();
 	//mLightBuffer.BindVS(1);
@@ -597,7 +681,8 @@ void GameState::PostProcess()
 
 	mOilSettingBuffer.Update(mOilSetting);
 	mOilSettingBuffer.BindPS(0);
-
+	mActiveSettingBuffer.Update(mActiveSetting);
+	mActiveSettingBuffer.BindPS(1);
 
 	mSampler.BindVS(0);
 

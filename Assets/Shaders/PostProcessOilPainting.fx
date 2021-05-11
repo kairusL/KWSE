@@ -1,6 +1,7 @@
 // Description: Post Processing shader.
 // Renfrence : https://danielilett.com/2019-05-18-tut1-6-smo-painting/
- 
+// Renfrence : https://programmersought.com/article/63044668179/
+
 Texture2D textureMap : register(t0);
 SamplerState textureSampler : register(s0);
 
@@ -17,7 +18,7 @@ struct VS_INPUT
 {
 	float3 position : POSITION;
 	float2 texCoord : TEXCOORD;
-	
+
 };
 
 struct VS_OUTPUT
@@ -40,19 +41,23 @@ float4 PS(VS_OUTPUT input) : SV_Target
 	float4 screenColor = textureMap.Sample(textureSampler, input.texCoord);
 	float rt_w = 1080.0;
 	float rt_h = 720.0;
-	float2 size = sizeWeight !=0.0f ? (screenSizeScale / float2(rt_h, rt_w)) : (screenSizeScale / float2(rt_w, rt_h));
+	float2 size = sizeWeight != 0.0f ? (screenSizeScale / float2(rt_h, rt_w)) : (screenSizeScale / float2(rt_w, rt_h));
 	float radius = paintRadius;
-
 	float2 uv = input.texCoord.xy;
-	float n = (radius+1.0f )*(radius+1.0f);
-	float3 m0 = float3(0.0f, 0.0f, 0.0f);
-	float3 m1 = float3(0.0f, 0.0f, 0.0f);
-	float3 m2 = float3(0.0f, 0.0f, 0.0f);
-	float3 m3 = float3(0.0f, 0.0f, 0.0f);
-	float3 squrColor0 = float3(0.0f, 0.0f, 0.0f);
-	float3 squrColor1 = float3(0.0f, 0.0f, 0.0f);
-	float3 squrColor2 = float3(0.0f, 0.0f, 0.0f);
-	float3 squrColor3 = float3(0.0f, 0.0f, 0.0f);
+	// samples->calculating mean value -> the number of samples going to take later.
+	//float n = (((radius - 1) / 2) +1.0f )*(((radius - 1) / 2) +1.0f);
+	float n = (radius + 1.0f)*(radius + 1.0f);
+	// mean values
+	float3 m[4];
+	m[0] = float3(0.0f, 0.0f, 0.0f);
+	m[1] = float3(0.0f, 0.0f, 0.0f);
+	m[2] = float3(0.0f, 0.0f, 0.0f);
+	m[3] = float3(0.0f, 0.0f, 0.0f);
+	float3 squrColor[4];
+	squrColor[0] = float3(0.0f, 0.0f, 0.0f);
+	squrColor[1] = float3(0.0f, 0.0f, 0.0f);
+	squrColor[2] = float3(0.0f, 0.0f, 0.0f);
+	squrColor[3] = float3(0.0f, 0.0f, 0.0f);
 	float3 color = screenColor.rgb;
 
 
@@ -61,10 +66,8 @@ float4 PS(VS_OUTPUT input) : SV_Target
 		for (int k = (int)-radius; k <= 0; ++k)
 		{
 			color = (float3)textureMap.Sample(textureSampler, uv + float2(k, j)*size).rgb;
-			m0 += color;
-			squrColor0.r += color.r * color.r  ;
-			squrColor0.g += (color.g * color.g);
-			squrColor0.b += (color.b * color.b);
+			m[0] += color;
+			squrColor[0] += color * color;
 		}
 	}
 	for (int j = (int)-radius; j <= 0; ++j)
@@ -72,72 +75,48 @@ float4 PS(VS_OUTPUT input) : SV_Target
 		for (int k = 0; k <= (int)radius; ++k)
 		{
 			color = (float3)textureMap.Sample(textureSampler, uv + float2(k, j)*size).rgb;
-			m1 += color;
-			squrColor1.r += color.r * color.r;
-			squrColor1.g += (color.g * color.g);
-			squrColor1.b += (color.b * color.b);
+			m[1] += color;
+			squrColor[1] += color * color;
 		}
 	}
 
 	for (int j = 0; j <= (int)radius; ++j)
 	{
-		for (int k	 = 0; k <= (int)radius; ++k)
+		for (int k = 0; k <= (int)radius; ++k)
 		{
-			color = (float3)textureMap.Sample(textureSampler, uv +float2(k,j)*size).rgb;
-			m2 += color;
-			squrColor2.r += color.r * color.r;
-			squrColor2.g += (color.g * color.g) ;
-			squrColor2.b += (color.b * color.b) ;
+			color = (float3)textureMap.Sample(textureSampler, uv + float2(k,j)*size).rgb;
+			m[2] += color;
+			squrColor[2] += color * color;
 		}
 	}
-	for (int j =0; j <= (int)radius; ++j)
+	for (int j = 0; j <= (int)radius; ++j)
 	{
 		for (int k = (int)-radius; k <= 0; ++k)
 		{
 			color = (float3)textureMap.Sample(textureSampler, uv + float2(k, j)*size).rgb;
-			m3 += color;
-			squrColor3.r += color.r * color.r;
-			squrColor3.g += (color.g * color.g);
-			squrColor3.b += (color.b * color.b);
+			m[3] += color;
+			squrColor[3] += color * color;
 		}
 	}
-	
-	
+
+
 	float4 finalColor = float4(color,0.0f);
+
+	// use sigma to sum up colour values then get the mean values
 	float min_sigma2 = minSigma;
-	m0 /= n;
-	squrColor0 = abs(squrColor0 / n - m0 * m0); // getting middle color
-	float sigma2 = (squrColor0.r + squrColor0.g + squrColor0.b);
-	if (sigma2 < min_sigma2)
+	for (int i = 0; i < 4; ++i)
 	{
-		min_sigma2 = sigma2;
-		finalColor = float4(m0, 1.0f);
+		m[i] /= n;
+		//mean of the squares minus- the square of the means
+		squrColor[i] = abs(squrColor[i] / n - m[i] * m[i]);
+		float sigma2 = (squrColor[i].r + squrColor[i].g + squrColor[i].b);
+		if (sigma2 < min_sigma2)
+		{
+			min_sigma2 = sigma2;
+			finalColor = float4(m[i], 1.0f);
+		}
 	}
-	m1 /= n;
-	squrColor1 =  abs(squrColor1 / n - m1 * m1);
-	sigma2 = (squrColor1.r + squrColor1.g + squrColor1.b);
-	if (sigma2 < min_sigma2)
-	{
-		min_sigma2 = sigma2;
-		finalColor = float4(m1, 1.0f);
-	}
-	m2 /= n;
-	squrColor2 = abs(squrColor2 / n - m2 * m2);
-	sigma2 = (squrColor2.r + squrColor2.g + squrColor2.b);
-	if (sigma2 < min_sigma2)
-	{
-		min_sigma2 = sigma2;
-		finalColor = float4(m2, 1.0f);
-	}
-	m3 /= n;
-	squrColor3 = abs(squrColor3 / n - m3 * m3);
-	sigma2 = (squrColor3.r + squrColor3.g + squrColor3.b);
-	if (sigma2 < min_sigma2)
-	{
-		min_sigma2 = sigma2;
-		finalColor = float4(m3, 1.0f);
-	}
-	
+
 	return finalColor;
 }
 

@@ -14,7 +14,7 @@ public:
 
 	void DebugUI() override;
 
-	void UpdateXRender(float deltaTime) override;
+	void GUI(float deltaTime) override;
 	//void Render() override;
 private:
 
@@ -23,5 +23,8 @@ private:
 	Texture mTexture;
 	Font mFont;
 	//const auto &mInputSystem = InputSystem::Get();
+
+	// ParticleEmitter
+	KWSE::Graphics::ParticleEmitter mParticleEmitter;
 	
 };

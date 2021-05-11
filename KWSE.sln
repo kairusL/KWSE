@@ -44,6 +44,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{B20E9147-8412-44B7-9A18-AAA03187C134}"
 	ProjectSection(SolutionItems) = preProject
 		Assets\Shaders\Bloom.fx = Assets\Shaders\Bloom.fx
+		Assets\Shaders\BloomPostProcess.fx = Assets\Shaders\BloomPostProcess.fx
 		Assets\Shaders\DarkStandard.fx = Assets\Shaders\DarkStandard.fx
 		Assets\Shaders\DepthMap.fx = Assets\Shaders\DepthMap.fx
 		Assets\Shaders\DoGouraudShading.fx = Assets\Shaders\DoGouraudShading.fx
@@ -57,10 +58,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{B20E
 		Assets\Shaders\PostProcess.fx = Assets\Shaders\PostProcess.fx
 		Assets\Shaders\PostProcessOilPainting.fx = Assets\Shaders\PostProcessOilPainting.fx
 		Assets\Shaders\PostProcessOilPainting_S.fx = Assets\Shaders\PostProcessOilPainting_S.fx
+		Assets\Shaders\Refraction.fx = Assets\Shaders\Refraction.fx
 		Assets\Shaders\SimpleDraw.fx = Assets\Shaders\SimpleDraw.fx
 		Assets\Shaders\Skinning.fx = Assets\Shaders\Skinning.fx
 		Assets\Shaders\Skybox.fx = Assets\Shaders\Skybox.fx
 		Assets\Shaders\Standard.fx = Assets\Shaders\Standard.fx
+		Assets\Shaders\Water.fx = Assets\Shaders\Water.fx
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "05_HelloCube", "VGP242\05_HelloCube\05_HelloCube.vcxproj", "{01309542-FDDB-4B2F-AB82-85DD73CFEA2E}"

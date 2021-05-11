@@ -11,7 +11,7 @@ KWSE::App& KWSE::MainApp()
 	return sApp;
 }
 
-TextureId KWSE::LoadTexture(const char* filePath)
+/*TextureId KWSE::LoadTexture(const char* filePath)
 {
 	return TextureManager::Get()->Load(filePath);
 }
@@ -41,4 +41,4 @@ uint32_t KWSE::GetSpriteHeight(TextureId textureId)
 {
 	Texture* texture = TextureManager::Get()->GetTexture(textureId);
 	return texture ? texture->GetHeight() : 0u;
-}
+}*/

@@ -74,15 +74,15 @@ void GameState::Initialize()
 	// SelfRotation
 	mSelfRotationSpeed.resize(10);
 	mSelfRotationSpeed[0] = 1.f;
-	mSelfRotationSpeed[1] = 0.1f;
-	mSelfRotationSpeed[2] = 0.2f;
-	mSelfRotationSpeed[3] = 0.3f;
-	mSelfRotationSpeed[4] = 0.1f;
-	mSelfRotationSpeed[5] = 0.8f;
-	mSelfRotationSpeed[6] = 0.6f;
-	mSelfRotationSpeed[7] = 0.5f;
-	mSelfRotationSpeed[8] = 0.4f;
-	mSelfRotationSpeed[9] = 0.6f;
+	mSelfRotationSpeed[1] = 0.012f;
+	mSelfRotationSpeed[2] = 0.013f;
+	mSelfRotationSpeed[3] = 0.014f;
+	mSelfRotationSpeed[4] = 0.015f;
+	mSelfRotationSpeed[5] = 0.016f;
+	mSelfRotationSpeed[6] = 0.017f;
+	mSelfRotationSpeed[7] = 0.018f;
+	mSelfRotationSpeed[8] = 0.019f;
+	mSelfRotationSpeed[9] = 0.019f;
 	
 	// Planets size
 	mSize.resize(10);
@@ -169,7 +169,7 @@ void GameState::Update(float deltaTime)
 
 	mShipTilt *= 0.95f;
 
-	const float shipTurnSpeed = .33f;
+	const float shipTurnSpeed = .083f;
 	mShipRotation += inputSystem->GetMouseMoveX() * shipTurnSpeed * deltaTime;
 	mShipElevation += inputSystem->GetMouseMoveY() * shipTurnSpeed * deltaTime;
 	

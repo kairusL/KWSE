@@ -1,8 +1,11 @@
 #pragma once
-
+// Reason for use BlockAllocator
+// Mixing large and small allocations can ca use memory fragnebtation
 namespace KWSE::Core
 {
+	// Constant time allocate/ free  -> no search time
 	// avoid fragmentation
+	// Replaces malloc/free
 	class BlockAllocator
 	{
 public:

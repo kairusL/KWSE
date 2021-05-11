@@ -97,6 +97,9 @@ private:
 	KWSE::Graphics::VertexShader mBloomVertexShader;
 	KWSE::Graphics::PixelShader mBloomPixelShader;
 
+	KWSE::Graphics::VertexShader mPostProcessVertexShader;
+	KWSE::Graphics::PixelShader  mPostProcessPixelShader;
+
 	KWSE::Math::Vector3 mRotation;
 	float mCloudRotation = 0.0f;
 	//float mRotationY= 0.f;

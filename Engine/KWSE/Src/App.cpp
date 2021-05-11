@@ -94,7 +94,7 @@ void App::Run(AppConfig appConfig)
 
 		GraphicsSystem::Get()->BeginRender();
 		SpriteRenderer::Get()->BeginRender();
-		mCurrentState->UpdateXRender(deltaTime);
+		mCurrentState->GUI(deltaTime);
 		SpriteRenderer::Get()->EndRender();
 
 		// Draw stuff here...

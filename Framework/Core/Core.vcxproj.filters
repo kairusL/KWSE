@@ -33,7 +33,7 @@
     <ClInclude Include="Inc\BlockAllocator.h">
       <Filter>Inc</Filter>
     </ClInclude>
-    <ClInclude Include="Inc\TypeAllocator.h">
+    <ClInclude Include="Inc\TypedAllocator.h">
       <Filter>Inc</Filter>
     </ClInclude>
   </ItemGroup>

@@ -168,7 +168,7 @@ void GameState::Update(float deltaTime)
 		mRotation.x -= deltaTime;
 	//mRotation += deltaTime;
 	mFPS = 1.0f / deltaTime;
-	mCloudRotation += deltaTime * 0.1;
+	mCloudRotation += deltaTime * 0.01;
 }
 void GameState::Render()
 {

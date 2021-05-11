@@ -13,8 +13,8 @@ KWSE::Core::BlockAllocator::BlockAllocator(std::size_t blockSize, std::size_t ca
 
 	// Depends on how many block that created
 	// Re- order same block size for the FreeSlots at the begining. 
+	mFreeSlots.clear();
 	mFreeSlots.reserve(capacity);
-
 	// After order the size, added elements.
 	for (size_t i = 0; i < capacity; ++i)
 	{
@@ -49,7 +49,15 @@ void * KWSE::Core::BlockAllocator::Allocate()
 
 void KWSE::Core::BlockAllocator::Free(void * ptr)
 {
+	// Use this pointer address to subtract the begining address of the whole block.
+	// diff geting begining byte of this block.
+	// [0][1][2][3]    ->block size: 16
+	// ^  ^  ^  ^
+	// |  |  |  |
+	// 0 16 32 48
 	ptrdiff_t diff = static_cast<uint8_t*>(ptr) - mData;
+	// if diff is 48 , meant we are trying to free block 3
+	// so returnSlot 3 to the FreeSlot[] for the next use.
 	std::size_t returnSlot = static_cast<std::size_t>(diff) / mBlockSize;
 	mFreeSlots.push_back(returnSlot);
 }

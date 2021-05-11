@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="Inc\2DShapes.h" />
     <ClInclude Include="Inc\3DShapes.h" />
+    <ClInclude Include="Inc\AABB.h" />
     <ClInclude Include="Inc\Common.h" />
     <ClInclude Include="Inc\Constants.h" />
     <ClInclude Include="Inc\EngineMath.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Inc\Matrix4.h" />
     <ClInclude Include="Inc\Quaternion.h" />
     <ClInclude Include="Inc\Random.h" />
+    <ClInclude Include="Inc\Sphere.h" />
     <ClInclude Include="Inc\Vector2.h" />
     <ClInclude Include="Inc\Vector3.h" />
     <ClInclude Include="Inc\Vector4.h" />

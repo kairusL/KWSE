@@ -72,5 +72,33 @@ namespace CoreTest
 			//ptrdiff_t diff = static_cast<uint8_t*>(ptr1) - static_cast<uint8_t*>(ptr2);
 			//Assert::IsTrue(abs(diff) == 0);
 		}
+		TEST_METHOD(FreeTestT)
+		{
+			BlockAllocator blockAllocator(16,4);
+		
+			void* ptr1 = blockAllocator.Allocate();
+			Assert::IsNotNull(ptr1);
+			void* ptr2 = blockAllocator.Allocate();
+			Assert::IsNotNull(ptr2);
+			void* ptr3 = blockAllocator.Allocate();
+			Assert::IsNotNull(ptr3);
+			void* ptr4 = blockAllocator.Allocate();
+			Assert::IsNotNull(ptr4);
+			void* ptr5 = blockAllocator.Allocate();
+			Assert::IsNull(ptr5);
+		
+			blockAllocator.Free(ptr1);
+		
+		
+		
+			ptr5 = blockAllocator.Allocate();
+			Assert::IsNotNull(ptr5);
+		
+			Assert::IsTrue(ptr5 == ptr1);
+		
+		}
+
+
+
 	};
 }

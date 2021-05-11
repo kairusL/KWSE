@@ -1,10 +1,10 @@
 #include "Background.h"
-
+using namespace KWSE::Utilis::GUIUtili;
 void Background::Load()
 {
 
-	mTextureId = KWSE::LoadTexture("Bird/background.png");
-	mOffset.x = (float)KWSE::GetSpriteWidth(mTextureId);
+	mTextureId = LoadTexture("Bird/background.png");
+	mOffset.x = (float)GetSpriteWidth(mTextureId);
 }
 
 void Background::Update(float deltaTime)
@@ -17,6 +17,6 @@ void Background::Update(float deltaTime)
 
 void Background::Render()
 {
-	KWSE::DrawSprite(mTextureId, mPosition, 0.0f,KWSE::Graphics::Pivot::TopLeft);
-	KWSE::DrawSprite(mTextureId, mPosition + mOffset, 0.0f, KWSE::Graphics::Pivot::TopLeft);
+	DrawSprite(mTextureId, mPosition, 0.0f,KWSE::Graphics::Pivot::TopLeft);
+	DrawSprite(mTextureId, mPosition + mOffset, 0.0f, KWSE::Graphics::Pivot::TopLeft);
 }

@@ -67,9 +67,14 @@ void GameState::Initialize()
 	mTexturePixelShader.Initialize(shaderFileNames3);
 	mTextureVertexShader.Initialize(shaderFileNames3, VertexPX::Format);
 
-	mBloomVertexShader.Initialize(L"../../Assets/Shaders/Bloom.fx", VertexPX::Format);
-	mBloomPixelShader.Initialize(L"../../Assets/Shaders/Bloom.fx");
+	mBloomVertexShader.Initialize(L"../../Assets/Shaders/BloomPostProcess.fx", VertexPX::Format);
+	mBloomPixelShader.Initialize(L"../../Assets/Shaders/BloomPostProcess.fx");
 	
+	const wchar_t* shaderFileNames4 = L"../../Assets/Shaders/PostProcess.fx";
+	mPostProcessVertexShader.Initialize(shaderFileNames4, VertexPX::Format);
+	mPostProcessPixelShader.Initialize(shaderFileNames4);
+
+
 	mTransformBuffer.Initialize();
 	mTransformCloudBuffer.Initialize();
 	mLightBuffer.Initialize();
@@ -157,6 +162,10 @@ void GameState::Terminate()
 
 	mTransformCloudBuffer.Terminate();
 	mTransformBuffer.Terminate();
+
+	mPostProcessPixelShader.Terminate();
+	mPostProcessVertexShader.Terminate();
+
 	mSunMeshBuffer.Terminate();
 	mCloudMeshBuffer.Terminate();
 	mMeshBuffer.Terminate();
@@ -289,6 +298,16 @@ void  GameState::DebugUI()
  
 	ImGui::End();
 
+
+	ImGui::Begin("Render Targets", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Text("Base Render");
+	ImGui::Image(mRenderTarger.GetRawData(), { 256,144 });
+	ImGui::Text("Bloom Render");
+	ImGui::Image(mBloomRenderTarget.GetRawData(), { 256,144 });
+	ImGui::Text("Blur Render");
+	ImGui::Image(mBlurRenderTarget.GetRawData(), { 256,144 });
+
+	ImGui::End();
 	//ImGui::ShowDemoWindow();
 
 }
@@ -297,6 +316,7 @@ void  GameState::DebugUI()
 void GameState::RenderScene()
 {
 	mRenderTarger.BeginRender();
+	//mBaseRenderTarget.BeginRender();
 
 	mUseWireframe ? mRasterizerStateWireframe.Set() : mRasterizerStateWireframe.Clear();
 
@@ -403,6 +423,7 @@ void GameState::RenderScene()
 
 
 	SimpleDraw::Render(mCamera);
+	//mBaseRenderTarget.EndRender();
 	mRenderTarger.EndRender();
 
 }
@@ -468,13 +489,17 @@ void GameState::ApplyBlur()
 }
 void GameState::PostProcess()
 {
+
 	mBloomVertexShader.Bind();
 	mBloomPixelShader.Bind();
+	//mPostProcessVertexShader.Bind();
+	//mPostProcessPixelShader.Bind();
 
 	mSampler.BindVS(0);
 
 	mBaseRenderTarget.BindPS(0);
 	mBloomRenderTarget.BindPS(1);
+
 
 	mRenderTarger.BindPS(0);
 	mScreenMeshBuffer.Render();

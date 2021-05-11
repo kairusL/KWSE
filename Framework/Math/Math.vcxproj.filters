@@ -48,6 +48,12 @@
     <ClInclude Include="Inc\2DShapes.h">
       <Filter>Inc</Filter>
     </ClInclude>
+    <ClInclude Include="Inc\AABB.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Sphere.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Precompiled.cpp">

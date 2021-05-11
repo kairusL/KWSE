@@ -19,5 +19,8 @@
     <ClCompile Include="BlockAllocatorTest.cpp">
       <Filter>Test Files</Filter>
     </ClCompile>
+    <ClCompile Include="TypeAllocator.cpp">
+      <Filter>Test Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

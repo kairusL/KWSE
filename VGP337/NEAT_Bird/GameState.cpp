@@ -7,6 +7,7 @@
 using namespace KWSE;
 using namespace KWSE::Graphics;
 using namespace KWSE::Math;
+using namespace KWSE::Utilis::GUIUtili;
 
 namespace
 {
@@ -248,7 +249,7 @@ namespace
 		return true;
 	}
 }
-void GameState::UpdateXRender(float deltaTime)
+void GameState::GUI(float deltaTime)
 {
 	Tick(deltaTime);
 }

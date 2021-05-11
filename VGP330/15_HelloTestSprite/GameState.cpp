@@ -11,7 +11,7 @@ void GameState::Initialize()
 	GraphicsSystem::Get()->SetClearColor(Colors::Black);
 
 	//mTextureId = TextureManager::Get()->Load("WaterTurtle.jpg");
-	mTextureId = KWSE::LoadTexture("WaterTurtle.jpg");
+	mTextureId = KWSE::Utilis::GUIUtili::LoadTexture("WaterTurtle.jpg");
 	//mTexture.Initialize("../../Assets/Images/WaterTurtle.jpg");
 	mPosition = Vector2(GraphicsSystem::Get()->GetBackBufferWidth() * 0.5f, GraphicsSystem::Get()->GetBackBufferHeight()* 0.5f);
 	mFont.Initialize();
@@ -22,7 +22,7 @@ void GameState::Terminate()
 	mFont.Terminate();
 	//mTexture.Terminate();
 }
-void GameState::UpdateXRender(float deltaTime)
+void GameState::GUI(float deltaTime)
 {
 	auto inputSystem = InputSystem::Get();
 
@@ -36,8 +36,8 @@ void GameState::UpdateXRender(float deltaTime)
 		mPosition.x += (moveSpeed * deltaTime);
 	if (inputSystem->IsKeyDown(KeyCode::A))
 		mPosition.x -= (moveSpeed * deltaTime);
-	KWSE::DrawSprite(mTextureId, mPosition);
-	KWSE::DrawScreenText("okay bye", 10.0f, 10.0f, 20.0f, Colors::DarkCyan);
+	KWSE::Utilis::GUIUtili::DrawSprite(mTextureId, mPosition);
+	KWSE::Utilis::GUIUtili::DrawScreenText("okay bye", 10.0f, 10.0f, 20.0f, Colors::DarkCyan);
 
 	
 }

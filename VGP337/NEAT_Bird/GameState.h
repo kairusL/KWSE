@@ -6,7 +6,7 @@
 class GameState : public KWSE::AppState
 {
 public:
-	void UpdateXRender(float deltaTime) override;
+	void GUI(float deltaTime) override;
 
 private:
 

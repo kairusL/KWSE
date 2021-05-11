@@ -1,8 +1,8 @@
 #include "Pipe.h"
-
+using namespace KWSE::Utilis::GUIUtili;
 void Pipe::Load()
 {
-	mTextureId = KWSE::LoadTexture("Bird/pipe.png");
+	mTextureId = LoadTexture("Bird/pipe.png");
 }
 
 void Pipe::Update(float deltaTime)
@@ -15,8 +15,8 @@ void Pipe::Render()
 	auto topRect = GetTopRect();
 	auto bottomRect = GetBottomRect();
 
-	KWSE::DrawSprite(mTextureId, { topRect.left, topRect.bottom },0.0f, Pivot::BottomLeft, Flip::Vertical);
-	KWSE::DrawSprite(mTextureId, { bottomRect.left, bottomRect.top },0.0f, Pivot::TopLeft);
+	DrawSprite(mTextureId, { topRect.left, topRect.bottom },0.0f, Pivot::BottomLeft, Flip::Vertical);
+	DrawSprite(mTextureId, { bottomRect.left, bottomRect.top },0.0f, Pivot::TopLeft);
 }
 
 void Pipe::Spawn(float gapSize)

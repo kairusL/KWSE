@@ -1,6 +1,7 @@
 #include "Bird.h"
 
 #include "PipeManager.h"
+using namespace KWSE::Utilis::GUIUtili;
 
 void Bird::Load()
 {
