@@ -8,7 +8,7 @@ namespace KWSE::Graphics
 
 namespace KWSE::Graphics::SimpleDraw
 {
-	void StaticInitialize(uint32_t maxVertexCount = 10000);
+	void StaticInitialize(uint32_t maxVertexCount = 100000);
 	void StaticTerminate();
 
 	// Functions for world space rendering
@@ -18,7 +18,7 @@ namespace KWSE::Graphics::SimpleDraw
 	void AddAABB(const Math::Vector3& min, const Math::Vector3& max, const Math::Vector4& color);
 	void AddAABB(const Math::Vector3& center, float radius, const Math::Vector4& color);
 	void AddAABB(float minX, float minY, float minZ, float maxX, float maxY, float maxZ, const Math::Vector4& color);
-	void AddAABB(const Math::Vector3 & center, const Math::Vector3 & extend, const Color & color, bool fill);
+	void AddAABB(const Math::Vector3 & center, const Math::Vector3 & extend, const Color & color, bool fill );
 	//void AddOBB(const Math::OBB& obb, const Math::Vector4& color);
 	void AddSphere(const Math::Sphere& sphere, const Math::Vector4& color, uint32_t slices = 8, uint32_t rings = 4);
 	void AddSphere(const Math::Vector3& center, float radius, const Math::Vector4& color, uint32_t slices = 8, uint32_t rings = 4);

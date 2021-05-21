@@ -56,7 +56,7 @@ Quaternion Animation::GetRotation(float time) const
 				int endFrame = i;
 				float duration = mRotationKeys[endFrame].time - mRotationKeys[startFrame].time;
 				float percentage = (time - mRotationKeys[startFrame].time) / duration;
-				return Lerp(mRotationKeys[startFrame].key, mRotationKeys[endFrame].key, percentage);
+				return Slerp(mRotationKeys[startFrame].key, mRotationKeys[endFrame].key, percentage);
 			}
 		}
 	}

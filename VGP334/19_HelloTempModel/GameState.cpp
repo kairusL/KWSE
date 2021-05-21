@@ -22,8 +22,9 @@ void GameState::Initialize()
 	//airballoon model
 	//model.Initialize(L"../../Assets/Models/Model/Airballoon/Airballoon.model");
 	// Model
+	model.Initialize(L"../../Assets/Models/nAirBallon/Air_Balloon.model");
 	//model.Initialize(L"../../Assets/Models/Model/Taunt1/Taunt.model");
-	model.Initialize(L"../../Assets/Models/Model/Vanguard/Jump/Jump.model");
+	//model.Initialize(L"../../Assets/Models/Model/Vanguard/Jump/Jump.model");
 	//model.Initialize(L"../../Assets/Models/Model/Vanguard/SillyDancing/SillyDancing.model");
 	//model.Initialize(L"../../Assets/Models/Model/Vanguard/StandingDodgeBackward/StandingDodgeBackward.model");
 
@@ -287,8 +288,8 @@ void GameState::Update(float deltaTime)
 	//{
 	//	SetAnimation();
 	//}
-	mAnimator.PlayAnimation(animF);
-	mAnimator.Update(deltaTime);
+	//mAnimator.PlayAnimation(animF);
+	//mAnimator.Update(deltaTime);
 	mFPS = 1.0f / deltaTime;
 	mAnimationTimer += deltaTime;
 }
@@ -545,7 +546,10 @@ void GameState::RenderScene()
 	//modelTexrure[1].BindPS(0);//diffuse
 	//mSci_fi_Texrures.BindPS(0);	
 	mDepthRebderTarget.BindPS(4);
-	std::vector<Matrix4> boneMatrices(model.skeleton->bones.size());
+	//if (model.skeleton->bones.size()>=0)
+	//{
+	//	std::vector<Matrix4> boneMatrices(model.skeleton->bones.size());
+	//}
 	//if (showSkeleton)
 	//{
 	//	DrawSkeleton(*model.skeleton, CalculateBoneMatrices(*model.skeleton, matWorld), Skeleton::DrawType::cone);
@@ -582,11 +586,12 @@ void GameState::RenderScene()
 		//	KWSE::Graphics::CalculateBoneMatrices(*model.skeleton, Math::Matrix4::Identity, 
 		//											*animationClip, mAnimationTimer);
 		
-		BoneTransformData boneData;
-		// Apply offset transform to align the model to bone space
-		auto& bones = model.skeleton.get()->bones;
-		for (auto& bone : bones)
-			boneData.boneTransforms[bone->index] = KWSE::Math::Transpose(mAnimator.GetToLocalTransform()[bone->index]);
+		//BoneTransformData boneData;
+		//// Apply offset transform to align the model to bone space
+		//
+		//auto& bones = model.skeleton.get()->bones;
+		//for (auto& bone : bones)
+		//	boneData.boneTransforms[bone->index] = KWSE::Math::Transpose(mAnimator.GetToLocalTransform()[bone->index]);
 		
 		for (const auto& mesh : model.meshData)
 		{
@@ -595,8 +600,8 @@ void GameState::RenderScene()
 			material.normalMap->BindPS(3);
 			mesh->meshBuffer.Render();
 		}
-		mTransBoneBuffer.Update(boneData);
-		mTransBoneBuffer.BindVS(4);
+	//	mTransBoneBuffer.Update(boneData);
+	//	mTransBoneBuffer.BindVS(4);
 	
 	}
 	//mSciFiMeshBuffer.Render();

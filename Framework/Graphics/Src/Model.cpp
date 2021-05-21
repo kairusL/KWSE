@@ -39,18 +39,20 @@ void KWSE::Graphics::Model::Initialize(const std::filesystem::path & fileName)
 			data.normalMap->Initialize(parentPath + "/" + data.normalMapName);
 	}
 
-	ModelLoader::LoadSkeleton(fileName, *this);
-	//Relink all the bones to form the skeleton again...
-	for (auto& bone : skeleton->bones)
+	if (ModelLoader::LoadSkeleton(fileName, *this))
 	{
-		if (bone.get() != skeleton->root)
-			bone->parent = skeleton->bones[bone->parentIndex].get();
-
-		for (auto& childIndex : bone->childrenIndices)
-			bone->children.push_back(skeleton->bones[childIndex].get());
-	}
-
-
+		//Relink all the bones to form the skeleton again...
+		for (auto& bone : skeleton->bones)
+		{
+			if (bone.get() != skeleton->root)
+				bone->parent = skeleton->bones[bone->parentIndex].get();
+		
+			for (auto& childIndex : bone->childrenIndices)
+				bone->children.push_back(skeleton->bones[childIndex].get());
+		}
+	}//ModelLoader::LoadSkeleton(fileName, *this);
+	
+	
 	ModelLoader::LoadAnimation(fileName,*this);
 	
 }

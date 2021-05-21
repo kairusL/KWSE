@@ -60,6 +60,7 @@ float4 PS(VS_OUTPUT input) : SV_Target
 	}
 
 		//tc = (float3)screenColor.rgb;
-	return float4(tc,1);//float4(screenColor.b, screenColor.g, screenColor.r, 1)*;
+	return float4(tc,1);
+	//float4(screenColor.b, screenColor.g, screenColor.r, 1)*;
 }
 

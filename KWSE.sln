@@ -141,6 +141,19 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "18_HelloModel", "VGP334\18_
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "10_1_HelloEarth", "VGP330\10_1_HelloEarth\10_1_HelloEarth.vcxproj", "{135508BC-7573-4E65-8803-B7EFB8C82387}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VGP336", "VGP336", "{FAC7FF80-BF60-4037-9909-EA4FB13E108D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestGame", "VGP336\TestGame\TestGame.vcxproj", "{09D88B7A-550C-4338-BC63-A0C2074A9941}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{113A792F-9DC8-4B69-9277-635A9DD89997}"
+	ProjectSection(SolutionItems) = preProject
+		Assets\Templates\test.json = Assets\Templates\test.json
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "19_HelloTempModel", "VGP334\19_HelloTempModel\19_HelloTempModel.vcxproj", "{FD01DC75-6BC3-495C-9F7C-D09B63DF2CE6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "16_FinalShaderTeam", "VGP330\16_FinalShaderTeam\16_FinalShaderTeam.vcxproj", "{B9DA8153-8D0D-48AA-A033-8459C59CFD29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -493,6 +506,30 @@ Global
 		{135508BC-7573-4E65-8803-B7EFB8C82387}.Release|x64.Build.0 = Release|x64
 		{135508BC-7573-4E65-8803-B7EFB8C82387}.Release|x86.ActiveCfg = Release|Win32
 		{135508BC-7573-4E65-8803-B7EFB8C82387}.Release|x86.Build.0 = Release|Win32
+		{09D88B7A-550C-4338-BC63-A0C2074A9941}.Debug|x64.ActiveCfg = Debug|x64
+		{09D88B7A-550C-4338-BC63-A0C2074A9941}.Debug|x64.Build.0 = Debug|x64
+		{09D88B7A-550C-4338-BC63-A0C2074A9941}.Debug|x86.ActiveCfg = Debug|Win32
+		{09D88B7A-550C-4338-BC63-A0C2074A9941}.Debug|x86.Build.0 = Debug|Win32
+		{09D88B7A-550C-4338-BC63-A0C2074A9941}.Release|x64.ActiveCfg = Release|x64
+		{09D88B7A-550C-4338-BC63-A0C2074A9941}.Release|x64.Build.0 = Release|x64
+		{09D88B7A-550C-4338-BC63-A0C2074A9941}.Release|x86.ActiveCfg = Release|Win32
+		{09D88B7A-550C-4338-BC63-A0C2074A9941}.Release|x86.Build.0 = Release|Win32
+		{FD01DC75-6BC3-495C-9F7C-D09B63DF2CE6}.Debug|x64.ActiveCfg = Debug|x64
+		{FD01DC75-6BC3-495C-9F7C-D09B63DF2CE6}.Debug|x64.Build.0 = Debug|x64
+		{FD01DC75-6BC3-495C-9F7C-D09B63DF2CE6}.Debug|x86.ActiveCfg = Debug|Win32
+		{FD01DC75-6BC3-495C-9F7C-D09B63DF2CE6}.Debug|x86.Build.0 = Debug|Win32
+		{FD01DC75-6BC3-495C-9F7C-D09B63DF2CE6}.Release|x64.ActiveCfg = Release|x64
+		{FD01DC75-6BC3-495C-9F7C-D09B63DF2CE6}.Release|x64.Build.0 = Release|x64
+		{FD01DC75-6BC3-495C-9F7C-D09B63DF2CE6}.Release|x86.ActiveCfg = Release|Win32
+		{FD01DC75-6BC3-495C-9F7C-D09B63DF2CE6}.Release|x86.Build.0 = Release|Win32
+		{B9DA8153-8D0D-48AA-A033-8459C59CFD29}.Debug|x64.ActiveCfg = Debug|x64
+		{B9DA8153-8D0D-48AA-A033-8459C59CFD29}.Debug|x64.Build.0 = Debug|x64
+		{B9DA8153-8D0D-48AA-A033-8459C59CFD29}.Debug|x86.ActiveCfg = Debug|Win32
+		{B9DA8153-8D0D-48AA-A033-8459C59CFD29}.Debug|x86.Build.0 = Debug|Win32
+		{B9DA8153-8D0D-48AA-A033-8459C59CFD29}.Release|x64.ActiveCfg = Release|x64
+		{B9DA8153-8D0D-48AA-A033-8459C59CFD29}.Release|x64.Build.0 = Release|x64
+		{B9DA8153-8D0D-48AA-A033-8459C59CFD29}.Release|x86.ActiveCfg = Release|Win32
+		{B9DA8153-8D0D-48AA-A033-8459C59CFD29}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -542,12 +579,16 @@ Global
 		{040E3E99-CF78-4A66-8FCA-50CA5B1A3B61} = {CF65292B-DEB9-41A2-A5CC-A431CE230B90}
 		{EF591C56-5BC6-4C5C-8B52-122A04A1FE82} = {90D50E27-6D95-450A-8B1D-AEC7197B7F0C}
 		{135508BC-7573-4E65-8803-B7EFB8C82387} = {B23D2D4B-6CFF-4A38-8CA4-3BACFB5BE0FE}
+		{09D88B7A-550C-4338-BC63-A0C2074A9941} = {FAC7FF80-BF60-4037-9909-EA4FB13E108D}
+		{113A792F-9DC8-4B69-9277-635A9DD89997} = {258D5CE8-17EB-42D5-ABA0-0BCC84E66C04}
+		{FD01DC75-6BC3-495C-9F7C-D09B63DF2CE6} = {90D50E27-6D95-450A-8B1D-AEC7197B7F0C}
+		{B9DA8153-8D0D-48AA-A033-8459C59CFD29} = {B23D2D4B-6CFF-4A38-8CA4-3BACFB5BE0FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C041DC44-92D1-453E-BCFA-5B9E9DF9D604}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 44
+		SccNumberOfProjects = 47
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://dev.azure.com/kairusl
 		SccLocalPath0 = .
@@ -723,5 +764,17 @@ Global
 		SccProjectTopLevelParentUniqueName43 = KWSE.sln
 		SccProjectName43 = VGP330/10_1_HelloEarth
 		SccLocalPath43 = VGP330\\10_1_HelloEarth
+		SccProjectUniqueName44 = VGP336\\TestGame\\TestGame.vcxproj
+		SccProjectTopLevelParentUniqueName44 = KWSE.sln
+		SccProjectName44 = VGP336/TestGame
+		SccLocalPath44 = VGP336\\TestGame
+		SccProjectUniqueName45 = VGP334\\19_HelloTempModel\\19_HelloTempModel.vcxproj
+		SccProjectTopLevelParentUniqueName45 = KWSE.sln
+		SccProjectName45 = VGP334/19_HelloTempModel
+		SccLocalPath45 = VGP334\\19_HelloTempModel
+		SccProjectUniqueName46 = VGP330\\16_FinalShaderTeam\\16_FinalShaderTeam.vcxproj
+		SccProjectTopLevelParentUniqueName46 = KWSE.sln
+		SccProjectName46 = VGP330/16_FinalShaderTeam
+		SccLocalPath46 = VGP330\\16_FinalShaderTeam
 	EndGlobalSection
 EndGlobal

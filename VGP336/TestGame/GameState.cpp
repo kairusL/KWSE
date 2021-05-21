@@ -5,33 +5,32 @@ using namespace KWSE::Graphics;
 using namespace KWSE::Input;
 using namespace KWSE::Math;
 
-namespace 
+namespace
 {
 	bool showSkeleton = false;
-	int animF=0;
+	int animF = 0;
 }
 void GameState::Initialize()
 {
 
-	GraphicsSystem::Get()->SetClearColor(Colors::WhiteSmoke);
+	//GraphicsSystem::Get()->SetClearColor(Colors::WhiteSmoke);
 	// Terrain
 	ModelLoader::LoadObj(L"../../Assets/Models/Mountain/terrain.obj", 500.0f, mTerrainMesh);
 	mTerrainMeshBuffer.Initialize(mTerrainMesh);
 	mTerrainTexrures.Initialize("../../Assets/Models/Mountain/file_.jpg");
 
-	//airballoon model
-	//model.Initialize(L"../../Assets/Models/Model/Airballoon/Airballoon.model");
 	// Model
 	//model.Initialize(L"../../Assets/Models/Model/Taunt1/Taunt.model");
-	model.Initialize(L"../../Assets/Models/Model/Vanguard/Jump/Jump.model");
+	//model.Initialize(L"../../Assets/Models/Model/Vanguard/model/vanguard.model");
+	//model.Initialize(L"../../Assets/Models/Model/Vanguard/Jump/Jump.model");
 	//model.Initialize(L"../../Assets/Models/Model/Vanguard/SillyDancing/SillyDancing.model");
 	//model.Initialize(L"../../Assets/Models/Model/Vanguard/StandingDodgeBackward/StandingDodgeBackward.model");
 
 	//Animator
-	mAnimator.Initialize(&model);
-	mAnimator.Play();
-	mAnimator.SetLooping(true);
-	mAnimator.AddClip(L"../../Assets/Models/Model/Vanguard/StandingDodgeBackward/StandingDodgeBackward.anim");
+	//mAnimator.Initialize(&model);
+	//mAnimator.Play();
+	//mAnimator.SetLooping(true);
+	//mAnimator.AddClip(L"../../Assets/Models/Model/Vanguard/StandingDodgeBackward/StandingDodgeBackward.anim");
 
 
 	mTransBoneBuffer.Initialize();
@@ -52,9 +51,10 @@ void GameState::Initialize()
 
 	//srifi animation
 	SetAnimation();
-	mSriFiPosition = { 1.0f,1.1f,1.0f };
-	mTerrainPosition = {0.0f,-5.0f,0.0f};
-	mDefaultCamera.SetPosition({ 2.30f, 19.14f, -20.74f });
+	mSriFiPosition = { 0.0f,0.0f,0.0f };
+	mTerrainPosition = { 0.0f,-5.0f,0.0f };
+	//mDefaultCamera.SetPosition({ 2.30f, 19.14f, -20.74f });
+	mDefaultCamera.SetPosition({ 0.0433705039f,2.54280877f,-8.64591217f });
 	mDefaultCamera.SetDirection({ 0.036f,-0.17f, 0.983f });
 	mDefaultCamera.SetNearPlane(0.001f);
 	//mDefaultCamera.SetFarPlane(100.0f);
@@ -67,7 +67,7 @@ void GameState::Initialize()
 
 	mBaseRenderTarget.Initialize(
 		GraphicsSystem::Get()->GetBackBufferWidth(),
-		GraphicsSystem::Get()->GetBackBufferHeight(),Texture::Format::RGBA_F32
+		GraphicsSystem::Get()->GetBackBufferHeight(), Texture::Format::RGBA_F32
 	);
 	mBloomRenderTarget.Initialize(
 		GraphicsSystem::Get()->GetBackBufferWidth(),
@@ -115,7 +115,7 @@ void GameState::Initialize()
 	mOilSettingBuffer.Initialize();
 
 	constexpr uint32_t depthMapSize = 4096;
-	mDepthRebderTarget.Initialize(depthMapSize, depthMapSize,Texture::Format::RGBA_F32);
+	mDepthRebderTarget.Initialize(depthMapSize, depthMapSize, Texture::Format::RGBA_F32);
 
 	mDepthMapVertexShader.Initialize(L"../../Assets/Shaders/DepthMap.fx", Vertex::Format);
 	mDepthMapPixelShader.Initialize(L"../../Assets/Shaders/DepthMap.fx");
@@ -139,9 +139,9 @@ void GameState::Initialize()
 
 
 
-	//mSkybox.Initialize("../../Assets/Images/Space_Skybox.jpg");
+	mSkybox.Initialize("../../Assets/Images/Space_Skybox.jpg");
 	//mSkybox.Initialize("../../Assets/Images/Skybox_04.jpg");
-	mSkybox.Initialize("../../Assets/Images/SWhite.jpg");
+	//mSkybox.Initialize("../../Assets/Images/SWhite.jpg");
 
 	mSampler.Initialize(Sampler::Filter::Anisotropic, Sampler::AddressMode::Clamp);
 	mBlendState.Initialize(KWSE::Graphics::BlendState::Mode::Additive);
@@ -164,10 +164,16 @@ void GameState::Initialize()
 	mScreenMesh.indices.push_back(3);
 
 	mScreenMeshBuffer.Initialize(mScreenMesh);
+
+	mGameWorld.Initialize(1000);
+	mGameObjectHandle = mGameWorld.CreateGameObject("../../Assets/Templates/test.json", "Kairus");
+	//GameObjectIO::Read(nullptr, mGameObject);
+	//mGameObject.Initialize();
 }
 
 void GameState::Terminate()
 {
+	//mGameObject.Terminate();
 	mScreenMeshBuffer.Terminate();
 	mBlendState.Terminate();
 	mRasterizerStateWireframe.Terminate();
@@ -219,8 +225,8 @@ void GameState::Terminate()
 	//mSci_fi_Texrures.Terminate();
 	//mSciFiMeshBuffer.Terminate();
 	mTransBoneBuffer.Terminate();
-	mAnimator.Terminate();
-	model.Terminate();
+	//mAnimator.Terminate();
+	//model.Terminate();
 
 	mTerrainTexrures.Terminate();
 	mTerrainMeshBuffer.Terminate();
@@ -287,10 +293,22 @@ void GameState::Update(float deltaTime)
 	//{
 	//	SetAnimation();
 	//}
-	mAnimator.PlayAnimation(animF);
-	mAnimator.Update(deltaTime);
+	//mAnimator.PlayAnimation(animF);
+	//mAnimator.Update(deltaTime);
 	mFPS = 1.0f / deltaTime;
 	mAnimationTimer += deltaTime;
+
+	GameObject* gameObject = mGameWorld.GetGameObject(mGameObjectHandle);
+	auto animatorComponent = gameObject->GetComponent<AnimatorComponent>();
+	auto& animator = animatorComponent->GetAnimator();
+
+	if (gameObject)
+	{
+		gameObject->Update(deltaTime);
+
+		//animator.Update(deltaTime);
+	}
+	//mGameObject.Update(deltaTime);
 }
 void GameState::Render()
 {
@@ -305,13 +323,13 @@ void GameState::Render()
 	//
 	//// Apply Gaussian blur to the bloom pixels
 	ApplyBlur();
-	
-	
+
+
 	// Process screen shot before presenting
 	PostProcess();
 
 
-
+	//mGameObject.Render();
 }
 
 
@@ -404,13 +422,13 @@ void  GameState::DebugUI()
 		{
 			mSetting.specularWeight = specular ? 1.0f : 0.0f;
 		}
-		ImGui::DragFloat("Depth Bias", &mSetting.depthBias, 0.000001f,0.0f,1.0f,"%.7f");
+		ImGui::DragFloat("Depth Bias", &mSetting.depthBias, 0.000001f, 0.0f, 1.0f, "%.7f");
 	}
 	if (ImGui::CollapsingHeader("OilSetting"))
 	{
 		ImGui::DragFloat("Screen Size Scale", &mOilSetting.screenSizeScale, 0.1f, 0.0f, 1000.0f);
-		ImGui::DragFloat("Brush Radius", &mOilSetting.paintRadius, 1.0f, 3.0f, 9.0f );
-		ImGui::DragFloat("Intensity", &mOilSetting.minSigma, 0.0f, 0.0f, 1.0f );
+		ImGui::DragFloat("Brush Radius", &mOilSetting.paintRadius, 1.0f, 3.0f, 9.0f);
+		ImGui::DragFloat("Intensity", &mOilSetting.minSigma, 0.0f, 0.0f, 1.0f);
 		bool _sizeWeight = mOilSetting.sizeWeight == 1.0f;
 		if (ImGui::Checkbox("Oil Stretch Width", &_sizeWeight))
 		{
@@ -430,7 +448,17 @@ void  GameState::DebugUI()
 	ImGui::End();
 
 	//ImGui::ShowDemoWindow();
+	GameObject* gameObject = mGameWorld.GetGameObject(mGameObjectHandle);
+	if (gameObject)
+	{
+		gameObject->DebugUI();
+		auto animatorComponent = gameObject->GetComponent<AnimatorComponent>();
+		if (animatorComponent)
+		{
+			auto& animator = animatorComponent->GetAnimator();
 
+		}
+	}
 }
 
 
@@ -446,8 +474,8 @@ void GameState::RenderDepthMap()
 	const auto pos = mAnimation.GetPosition(mAnimationTimer);
 	const auto rot = mAnimation.GetRotation(mAnimationTimer);
 	const auto scale = mAnimation.GetScale(mAnimationTimer);
-	auto matWorld = Matrix4::Scaling(scale)*Matrix4::RotationQuaternion(rot)* Matrix4::Translation(pos); 
-	auto wvp =Transpose(matWorld*matView*matProj);
+	auto matWorld = Matrix4::Scaling(scale)*Matrix4::RotationQuaternion(rot)* Matrix4::Translation(pos);
+	auto wvp = Transpose(matWorld*matView*matProj);
 	mDepthMapBuffer.Update(wvp);
 	mDepthMapVertexShader.Bind();
 	mDepthMapPixelShader.Bind();
@@ -486,7 +514,7 @@ void GameState::RenderScene()
 	data.viewPosition = mActiveCamera->GetPosition();
 
 	mSkybox.Render(*mActiveCamera);
-	
+
 	mSetting.Skinning = 1;
 
 
@@ -508,7 +536,8 @@ void GameState::RenderScene()
 	mMaterialBuffer.BindVS(2);
 	mMaterialBuffer.BindPS(2);
 
-	auto matWorld = Matrix4::Translation({ 0.0f, 0.0f, -8.0f }) *Matrix4::Scaling(1.0f)*(KWSE::Math::Matrix4::RotationX(mRotation.x*5.0f) * Matrix4::RotationY(mRotation.y) *Matrix4::RotationZ(mRotation.z));//* Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y);
+	//auto matWorld = Matrix4::Translation({ 0.0f, 0.0f, -8.0f }) *Matrix4::Scaling(1.0f)*(KWSE::Math::Matrix4::RotationX(mRotation.x*5.0f) * Matrix4::RotationY(mRotation.y) *Matrix4::RotationZ(mRotation.z));//* Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y);
+	auto matWorld = Matrix4::Translation({ 0.0f, 0.0f, 0.0f }) *Matrix4::Scaling(1.0f)*(KWSE::Math::Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y) *Matrix4::RotationZ(mRotation.z));//* Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y);
 	data.world = Transpose(matWorld);
 	data.wvp[0] = Transpose(matWorld*matView*matProj);
 	data.wvp[1] = Transpose(matWorld*matViewLight*matProjLight);
@@ -527,11 +556,11 @@ void GameState::RenderScene()
 	const auto pos = mAnimation.GetPosition(mAnimationTimer);
 	const auto rot = mAnimation.GetRotation(mAnimationTimer);
 	const auto scale = mAnimation.GetScale(mAnimationTimer);
-	matWorld= Matrix4::Scaling(10.0f)*
-		(KWSE::Math::Matrix4::RotationX(mRotation.x*5.0f) * 
-			Matrix4::RotationY(mRotation.y) 
+	matWorld = Matrix4::Scaling(10.0f)*
+		(KWSE::Math::Matrix4::RotationX(mRotation.x*5.0f) *
+			Matrix4::RotationY(mRotation.y)
 			*Matrix4::RotationZ(mRotation.z)
-			*Matrix4::Translation({ 1.0f,1.1f,1.0f }) );//* Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y);
+			*Matrix4::Translation({ 0.0f,0.0f,0.0f }));//* Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y);
 	//matWorld = Matrix4::Scaling(scale)* Matrix4::RotationQuaternion(rot) * Matrix4::Translation(pos);
 		//KWSE::Math::Matrix4::RotationX(mRotation.x) 
 		//* Matrix4::RotationY(mRotation.y) 
@@ -545,59 +574,48 @@ void GameState::RenderScene()
 	//modelTexrure[1].BindPS(0);//diffuse
 	//mSci_fi_Texrures.BindPS(0);	
 	mDepthRebderTarget.BindPS(4);
-	std::vector<Matrix4> boneMatrices(model.skeleton->bones.size());
-	//if (showSkeleton)
-	//{
-	//	DrawSkeleton(*model.skeleton, CalculateBoneMatrices(*model.skeleton, matWorld), Skeleton::DrawType::cone);
-	//	SimpleDraw::Render(*mActiveCamera);
-	//}
-	//if (!showSkeleton)
-	//{
-	//	for (const auto& mesh : model.meshData)
-	//	{
-	//		auto& material = model.materialData[mesh->materialIndex];
-	//		material.diffuseMap->BindPS(0);
-	//		material.normalMap->BindVS(3);
-	//		mesh->meshBuffer.Render();
-	//	}
-	//
-	//}
-	if (showSkeleton)
+
+	//game object.
+	GameObject* gameObject = mGameWorld.GetGameObject(mGameObjectHandle);
+	if (gameObject)
 	{
-		auto& animationClip = model.animSet[0];
-		KWSE::Graphics::DrawSkeleton(
-				*model.skeleton,
-				//KWSE::Graphics::CalculateBoneMatrices(*model.skeleton, matWorld, *animationClip, mAnimationTimer),
-				//Skeleton::DrawType::cone);
-				mAnimator.GetSkeletonTransform(matWorld),
-				Skeleton::DrawType::cone);
-		SimpleDraw::Render(*mActiveCamera);
-	}
-	else
-	{
-		
-		//auto& animationClip = model.animSet[0];
-		//	//toLocalTransform = KWSE::Graphics::CalculateSkinningMatrices(*(model.skeleton), *animationClip, mAnimationTimer);
-		//std::vector<Matrix4> toLocalTransform = 
-		//	KWSE::Graphics::CalculateBoneMatrices(*model.skeleton, Math::Matrix4::Identity, 
-		//											*animationClip, mAnimationTimer);
-		
-		BoneTransformData boneData;
-		// Apply offset transform to align the model to bone space
-		auto& bones = model.skeleton.get()->bones;
-		for (auto& bone : bones)
-			boneData.boneTransforms[bone->index] = KWSE::Math::Transpose(mAnimator.GetToLocalTransform()[bone->index]);
-		
-		for (const auto& mesh : model.meshData)
+		auto modelComponent = gameObject->GetComponent<ModelComponent>();
+		auto animatorComponent = gameObject->GetComponent<AnimatorComponent>();
+
+		auto& game_model = modelComponent->GetModel();
+		auto& animator = animatorComponent->GetAnimator();
+
+		//std::vector<Matrix4> boneMatrices(game_model.skeleton->bones.size());
+		if (showSkeleton)
 		{
-			auto& material = model.materialData[mesh->materialIndex];
-			material.diffuseMap->BindPS(0);
-			material.normalMap->BindPS(3);
-			mesh->meshBuffer.Render();
+			auto& animationClip = game_model.animSet[0];
+			KWSE::Graphics::DrawSkeleton(
+				*game_model.skeleton,
+				animator.GetSkeletonTransform(matWorld),
+				Skeleton::DrawType::cone);
+			SimpleDraw::Render(*mActiveCamera);
 		}
-		mTransBoneBuffer.Update(boneData);
-		mTransBoneBuffer.BindVS(4);
-	
+		else
+		{
+			BoneTransformData boneData;
+			// Apply offset transform to align the model to bone space
+			auto& bones = game_model.skeleton.get()->bones;
+			for (auto& bone : bones)
+				boneData.boneTransforms[bone->index] = KWSE::Math::Transpose(animator.GetToLocalTransform()[bone->index]);
+
+			for (const auto& mesh : game_model.meshData)
+			{
+				auto& material = game_model.materialData[mesh->materialIndex];
+				material.diffuseMap->BindPS(0);
+				material.normalMap->BindPS(3);
+				mesh->meshBuffer.Render();
+			}
+			mTransBoneBuffer.Update(boneData);
+			mTransBoneBuffer.BindVS(4);
+
+		}
+		animator.Play();
+		animator.SetLooping(true);
 	}
 	//mSciFiMeshBuffer.Render();
 	//Texture::UnbindPS(0);
@@ -615,8 +633,9 @@ void GameState::RenderScene()
 
 	Texture::UnbindPS(4);
 
-
+	//SimpleDraw::AddTransform(Matrix4::Identity);
 	mRenderTarger.EndRender();
+	SimpleDraw::AddGroundPlane(10.0f, Colors::DarkGoldenrod);
 
 }
 
@@ -627,7 +646,8 @@ void GameState::RenderBrightness()
 	Matrix4 matView = mActiveCamera->GetViewMatrix();
 	Matrix4 matProj = mActiveCamera->GetProjectionMatrix();
 
-	Matrix4 matWorld = Matrix4::Translation({ 0.0f, 0.0f, -8.0f }) * Matrix4::RotationX(mRotation.x*5.0f) * Matrix4::RotationY(mRotation.y)*Matrix4::RotationZ(mRotation.z);
+	//Matrix4 matWorld = Matrix4::Translation({ 0.0f, 0.0f, -8.0f }) * Matrix4::RotationX(mRotation.x*5.0f) * Matrix4::RotationY(mRotation.y)*Matrix4::RotationZ(mRotation.z);
+	Matrix4 matWorld = Matrix4::Translation({ 0.0f, 0.0f, 0.0f }) * Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y)*Matrix4::RotationZ(mRotation.z);
 
 	mTextureVertexShader.Bind();
 	mTexturePixelShader.Bind();
@@ -696,20 +716,20 @@ void GameState::SetAnimation()
 {
 	mAnimation = AnimationBuilder()
 		.SetTime(0.0f)
-		.AddPositionKey({ 1.0f,1.1f,1.0f })
-		//.AddRotationKey({ Math::Quaternion::Identity })
-		//.AddScaleKey({ 1.0f,1.0f,1.0f })
+		.AddPositionKey({ 0.0f,0.0f,0.0f })
 		.AdvanceTime(2.0f)
-		.AddPositionKey({ 3.0f,3.0f,3.0f })
-		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(10.0f,10.0f,10.0f))})
+		.AddPositionKey({ 0.0f,0.0f,0.0f })
+		.AdvanceTime(2.0f)
+		.AddPositionKey({ 0.0f,0.0f,0.0f })
+		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,0.0f)) })
 		//.AddScaleKey({ 3.0f,3.0f,3.0f })
 		.AdvanceTime(2.0f)
-		.AddPositionKey({ -7.0f,7.1f,1.0f })
-		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(-15.0f,15.0f,15.0f)) })
+		.AddPositionKey({ 0.0f,0.0f,0.0f })
+		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,0.0f)) })
 		//.AddScaleKey({ 1.0f,1.0f,1.0f })
 		.AdvanceTime(3.0f)
-		.AddPositionKey({ 10.0f,10.1f,10.0f })
+		.AddPositionKey({ 0.0f,0.0f,0.0f })
 		.AdvanceTime(2.0f)
-		.SetLooping(true)
+		.SetLooping(false)
 		.Get();
 }

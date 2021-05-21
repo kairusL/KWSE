@@ -17,32 +17,17 @@ void GameState::Initialize()
 
 
 	// Sci_fi_fighter
-	ModelLoader::LoadObj(L"../../Assets/Models/sci_fi_fighter/sci_fi_fighter.obj", 20.0f, mSciFiMesh);
-	//ModelLoader::LoadObj(L"../../Assets/Models/AirBallon/airBalloon.obj", 0.1f, mSciFiMesh);
+	//ModelLoader::LoadObj(L"../../Assets/Models/sci_fi_fighter/sci_fi_fighter.obj", 20.0f, mSciFiMesh);
+	ModelLoader::LoadObj(L"../../Assets/Models/AirBallon/airBalloon.obj", 0.01f, mSciFiMesh);
 	mSciFiMeshBuffer.Initialize(mSciFiMesh);
-	mSci_fi_Texrures.Initialize("../../Assets/Models/sci_fi_fighter/sci_fi_fighter_diffuse.jpg");
-	//mSci_fi_Texrures.Initialize("../../Assets/Models/AirBallon/top.jpg");
+	//mSci_fi_Texrures.Initialize("../../Assets/Models/sci_fi_fighter/sci_fi_fighter_diffuse.jpg");
+	//mSci_fi_Texrures.Initialize("../../Assets/Models/AirBallon/Textures/Shell_diffuse.png");
+	//mSci_fi_Texrures.Initialize("../../Assets/Models/AirBallon/Textures/Rattan_alpha.png");
+	//mSci_fi_Texrures.Initialize("../../Assets/Models/AirBallon/Textures/Rattan_alpha.png");
+	mSci_fi_Texrures.Initialize("../../Assets/Models/AirBallon/top.jpg");
 	//mSci_fi_Texrures.Initialize("../../Assets/Models/AirBallon/ghh.png");
 	//2.15
 
-		// ParticleEmitter
-	mParticleEmitters[0].Initialize();
-	mParticleEmitters[0].SetStartColor(Colors::LightCyan);
-	mParticleEmitters[0].SetEndColor(Colors::DarkCyan);
-	mParticleEmitters[0].SetStartSize(1.0f);
-	mParticleEmitters[0].SetEndSize(0.0f);
-
-	mParticleEmitters[1].Initialize();
-	mParticleEmitters[1].SetStartColor(Colors::LightCyan);
-	mParticleEmitters[1].SetEndColor(Colors::DarkCyan);
-	mParticleEmitters[1].SetStartSize(1.0f);
-	mParticleEmitters[1].SetEndSize(0.0f);
-
-	mParticleEmitters[2].Initialize();
-	mParticleEmitters[2].SetStartColor(Colors::LightCyan);
-	mParticleEmitters[2].SetEndColor(Colors::DarkCyan);
-	mParticleEmitters[2].SetStartSize(1.0f);
-	mParticleEmitters[2].SetEndSize(0.0f);
 
 
 	//water &&reflection
@@ -61,6 +46,9 @@ void GameState::Initialize()
 	mDefaultCamera.SetDirection({ -0.019f,-0.659f,-0.751f });
 	mDefaultCamera.SetNearPlane(0.001f);
 	//mDefaultCamera.SetFarPlane(100.0f);
+	
+
+	SetAnimation();
 
 	mLightCamera.SetNearPlane(0.1f);
 	mLightCamera.SetFarPlane(500.0f);
@@ -105,8 +93,6 @@ void GameState::Initialize()
 	mPixelShader.Initialize(shaderFileNames);
 	mVertexShader.Initialize(shaderFileNames, Vertex::Format);
 
-	mCloudPixelShader.Initialize(shaderFileNames2);
-	mCloudVertexShader.Initialize(shaderFileNames2, VertexPNX::Format);
 
 	mTexturePixelShader.Initialize(shaderFileNames3);
 	mTextureVertexShader.Initialize(shaderFileNames3, VertexPX::Format);
@@ -124,7 +110,6 @@ void GameState::Initialize()
 	mDepthMapBuffer.Initialize();
 
 	mTransformBuffer.Initialize();
-	mTransformCloudBuffer.Initialize();
 	mLightBuffer.Initialize();
 	mMaterialBuffer.Initialize();
 	mSettingBuffer.Initialize();
@@ -142,7 +127,7 @@ void GameState::Initialize()
 
 
 	//mSkybox.Initialize("../../Assets/Images/Space_Skybox.jpg");
-	mSkybox.Initialize("../../Assets/Images/Skybox_04.png");
+	mSkybox.Initialize("../../Assets/Images/Skybox_04.jpg");
 
 	mSampler.Initialize(Sampler::Filter::Anisotropic, Sampler::AddressMode::Clamp);
 	mBlendState.Initialize(KWSE::Graphics::BlendState::Mode::Additive);
@@ -185,8 +170,7 @@ void GameState::Terminate()
 	mOilPaintingVertexShader.Terminate();
 	mTextureVertexShader.Terminate();
 	mTexturePixelShader.Terminate();
-	mCloudVertexShader.Terminate();
-	mCloudPixelShader.Terminate();
+
 	mVertexShader.Terminate();
 	mPixelShader.Terminate();
 
@@ -199,7 +183,6 @@ void GameState::Terminate()
 	mMaterialBuffer.Terminate();
 	mLightBuffer.Terminate();
 
-	mTransformCloudBuffer.Terminate();
 	mTransformBuffer.Terminate();
 	mRenderTarger.Terminate();
 
@@ -219,10 +202,6 @@ void GameState::Terminate()
 	mPlane_Texrures.Terminate();
 	mMeshPlaneBuffer.Terminate();
 
-
-	mParticleEmitters[2].Terminate();
-	mParticleEmitters[1].Terminate();
-	mParticleEmitters[0].Terminate();
 
 
 	mSci_fi_Texrures.Terminate();
@@ -285,7 +264,7 @@ void GameState::Update(float deltaTime)
 	if (inputSystem->IsKeyDown(KeyCode::NUMPAD4))
 	{
 		mSriFiPosition.z -= deltaTime * 30.5f;
-		particleActive = true;
+	
 	}
 	if (inputSystem->IsKeyDown(KeyCode::NUMPAD6))
 	{
@@ -306,19 +285,8 @@ void GameState::Update(float deltaTime)
 	mShipElevation += inputSystem->GetMouseMoveY() * shipTurnSpeed * deltaTime;
 
 
-	// ParticleEmitter
-	mParticleEmitters[0].Start(30.0f);
-	mParticleEmitters[0].Update(deltaTime);
-	mParticleEmitters[0].SetPosition(mSriFiPosition - (Vector3{ -4.0f,0.0f,0.0f }));
-	
-	mParticleEmitters[1].Start(30.0f);
-	mParticleEmitters[1].Update(deltaTime);
-	mParticleEmitters[1].SetPosition(mSriFiPosition - (Vector3{ 4.0f, 0.0f, 0.0f }));
-	
-	mParticleEmitters[2].Start(30.0f);
-	mParticleEmitters[2].Update(deltaTime);
-	mParticleEmitters[2].SetPosition(mSriFiPosition - (Vector3{ 0.0f, 0.0f, -5.0f }));
 	mFPS = 1.0f / deltaTime;
+	mAnimationTimer += deltaTime;
 }
 void GameState::Render()
 {
@@ -479,11 +447,15 @@ void GameState::RenderDepthMap()
 
 	mDepthMapBuffer.BindVS(0);
 
-	auto matWorld =KWSE::Math::Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y) *Matrix4::RotationZ(mRotation.z)*Matrix4::Translation({ mSriFiPosition.x,mSriFiPosition.y,mSriFiPosition.z }); 
+	const auto pos = mAnimation.GetPosition(mAnimationTimer);
+	const auto rot = mAnimation.GetRotation(mAnimationTimer);
+
+	//auto matWorld =KWSE::Math::Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y) *Matrix4::RotationZ(mRotation.z)*Matrix4::Translation({ mSriFiPosition.x,mSriFiPosition.y,mSriFiPosition.z }); 
+	auto matWorld = Matrix4::Scaling(1.0f)*Matrix4::RotationQuaternion(rot)*Matrix4::Translation(pos);
 	auto wvp =Transpose(matWorld*matView*matProj);
 	mDepthMapBuffer.Update(wvp);
-	mDepthMapVertexShader.Bind();
-	mDepthMapPixelShader.Bind();
+	//mDepthMapVertexShader.Bind();
+	//mDepthMapPixelShader.Bind();
 
 	mSci_fi_Texrures.BindPS(0);
 	mSampler.BindVS(0);
@@ -498,8 +470,8 @@ void GameState::RenderScene()
 	mRenderTarger.BeginRender();
 	mUseWireframe ? mRasterizerStateWireframe.Set() : mRasterizerStateWireframe.Clear();
 
-
-
+	const auto pos = mAnimation.GetPosition(mAnimationTimer);
+	const auto rot = mAnimation.GetRotation(mAnimationTimer);
 
 	auto matView = mActiveCamera->GetViewMatrix();
 	auto matProj = mActiveCamera->GetProjectionMatrix();
@@ -554,7 +526,8 @@ void GameState::RenderScene()
 	mSampler.BindPS(slot);
 
 	// SciFi
-	matWorld = KWSE::Math::Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y) *Matrix4::RotationZ(mRotation.z)*Matrix4::Translation({ mSriFiPosition.x,mSriFiPosition.y,mSriFiPosition.z });
+	matWorld = Matrix4::Scaling(1.0f)*Matrix4::RotationQuaternion(rot)*Matrix4::Translation(pos);
+	//matWorld = KWSE::Math::Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y) *Matrix4::RotationZ(mRotation.z)*Matrix4::Translation({ mSriFiPosition.x,mSriFiPosition.y,mSriFiPosition.z });
 	data.world = Transpose(matWorld);
 	data.wvp[0] = Transpose(matWorld*(matView)*matProj);
 	data.wvp[1] = Transpose(matWorld*(matViewLight)*matProjLight);
@@ -585,16 +558,6 @@ void GameState::RenderScene()
 
 	Texture::UnbindPS(4);
 
-	if (particleActive)
-	{
-		mParticleEmitters[0].Render(*mActiveCamera);
-		mParticleEmitters[1].Render(*mActiveCamera);
-		mParticleEmitters[2].Render(*mActiveCamera);
-
-
-	}
-	//mCloudPixelShader.Bind();
-	//mCloudVertexShader.Bind();
 	//mLightBuffer.BindVS(1);
 	//mLightBuffer.BindPS(1);
 	//mMaterialBuffer.BindVS(2);
@@ -692,4 +655,29 @@ void GameState::PostProcess()
 	mRenderTarger.BindPS(0);
 	mScreenMeshBuffer.Render();
 	mRenderTarger.UnbindPS(0);
+}
+
+
+
+void GameState::SetAnimation()
+{
+	mAnimation = AnimationBuilder()
+		.SetTime(0.0f)
+		.AddPositionKey({ 15.0f,1.1f,1.0f })
+		.AddRotationKey({ Math::Quaternion::RotationAxis(Vector3(0.0f,0.0f,0.0f),0.0f) })
+		//.AddScaleKey({ 1.0f,1.0f,1.0f })
+		.AdvanceTime(2.0f)
+		.AddPositionKey({ 15.0f,10.0f,1.0f })
+		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,-1.0f))})
+		//.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,0.0f)) })
+		//.AddScaleKey({ 3.0f,3.0f,3.0f })
+		.AdvanceTime(2.0f)
+		//.AddPositionKey({ -7.0f,7.1f,1.0f })
+		//.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(-15.0f,15.0f,15.0f)) })
+		////.AddScaleKey({ 1.0f,1.0f,1.0f })
+		//.AdvanceTime(3.0f)
+		//.AddPositionKey({ 10.0f,10.1f,10.0f })
+		//.AdvanceTime(2.0f)
+		.SetLooping(true)
+		.Get();
 }

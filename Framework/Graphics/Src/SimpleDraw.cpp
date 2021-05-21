@@ -235,6 +235,22 @@ namespace
 			mVertices3D[mVertex3DCount++] = { Math::Vector3(maxX, maxY, minZ), color };
 			mVertices3D[mVertex3DCount++] = { Math::Vector3(minX, maxY, minZ), color };
 		}
+		//const float minX = aabb.center.x - aabb.extend.x;
+		//const float minY = aabb.center.y - aabb.extend.y;
+		//const float minZ = aabb.center.z - aabb.extend.z;
+		//const float maxX = aabb.center.x - aabb.extend.x;
+		//const float maxY = aabb.center.y - aabb.extend.y;
+		//const float maxZ = aabb.center.z - aabb.extend.z;
+
+		//const Math::Vector3 NNN = { minX,minY,minZ };
+		//const Math::Vector3 NNP = { minX,minY,maxZ };
+		//const Math::Vector3 NPN = { minX,maxY,minZ };
+		//const Math::Vector3 NPP = { minX,maxY,maxZ };
+		//const Math::Vector3 PNN = { maxX,minY,minZ };
+		//const Math::Vector3 PNP = { maxX,minY,maxZ };
+		//const Math::Vector3 PPN = { maxX,maxY,minZ };
+		//const Math::Vector3 PPP = { maxX,maxY,maxZ };
+
 
 	}
 
@@ -412,14 +428,14 @@ void KWSE::Graphics::SimpleDraw::AddAABB(const Math::Vector3 & center, const Mat
 	const float maxY = center.y + extend.y;
 	const float maxZ = center.z + extend.z;
 
-	const Math::Vector3 NNN = { minX, minY, minZ };
-	const Math::Vector3 NNP = { minX, minY, maxZ };
-	const Math::Vector3 NPN = { minX, maxY, minZ };
-	const Math::Vector3 NPP = { minX, maxY, maxZ };
-	const Math::Vector3 PNN = { maxX, minY, minZ };
-	const Math::Vector3 PNP = { maxX, minY, maxZ };
-	const Math::Vector3 PPN = { maxX, maxY, minZ };
-	const Math::Vector3 PPP = { maxX, maxY, maxZ };
+	const Math::Vector3 NNN = { minX,minY,minZ };
+	const Math::Vector3 NNP = { minX,minY,maxZ };
+	const Math::Vector3 NPN = { minX,maxY,minZ };
+	const Math::Vector3 NPP = { minX,maxY,maxZ };
+	const Math::Vector3 PNN = { maxX,minY,minZ };
+	const Math::Vector3 PNP = { maxX,minY,maxZ };
+	const Math::Vector3 PPN = { maxX,maxY,minZ };
+	const Math::Vector3 PPP = { maxX,maxY,maxZ };
 
 	if (fill)
 	{

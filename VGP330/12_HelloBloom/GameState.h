@@ -138,6 +138,8 @@ private:
 
 	KWSE::Graphics::MeshPX mScreenMesh;
 	KWSE::Graphics::MeshBuffer mScreenMeshBuffer;
+
+	bool ApplySun=false;
 };
 
 

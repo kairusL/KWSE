@@ -140,10 +140,11 @@ void GameState::Render()
 	//SimpleDraw::AddCylinder(Vector3::Zero, Vector3::YAxis, 1.0f,Colors::DarkGoldenrod);
 
 	//SimpleDraw::AddSphere(Vector3::Zero, 5.0f, Colors::DarkSlateBlue);
-	//SimpleDraw::AddGroundPlane(10.0f,Colors::DarkGoldenrod);
+	SimpleDraw::AddGroundPlane(10.0f,Colors::DarkGoldenrod);
 	//SimpleDraw::AddCone(Vector3::Zero, Vector3::One*2.0f, 2.0f, Colors::Orange);
 
-	SimpleDraw::AddAABB({ 2.0f,1.0f,0.0f }, Vector3::One, Colors::Orange);
+	SimpleDraw::AddAABB({ 0.0f,0.0f,0.0f }, Vector3::One, Colors::Orange);
+	
 	SimpleDraw::AddAABB({ -2.0f,1.0f,0.0f }, Vector3::One, Colors::Orange,true);
 
 	SimpleDraw::AddTransform(Matrix4::Identity);

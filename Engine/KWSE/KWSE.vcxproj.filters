@@ -72,6 +72,16 @@
     <ClInclude Include="Src\Precompiled.h">
       <Filter>Src\Pch</Filter>
     </ClInclude>
+    <ClInclude Include="Inc\GameWorld.h" />
+    <ClInclude Include="Inc\GameObjectHandle.h">
+      <Filter>Inc\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\AnimatorComponent.h">
+      <Filter>Inc\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\ModelComponent.h">
+      <Filter>Inc\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\KWSE.cpp">
@@ -97,6 +107,13 @@
     </ClCompile>
     <ClCompile Include="Src\Precompiled.cpp">
       <Filter>Src\Pch</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameWorld.cpp" />
+    <ClCompile Include="Src\AnimatorComponent.cpp">
+      <Filter>Src\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ModelComponent.cpp">
+      <Filter>Src\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

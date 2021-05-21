@@ -67,8 +67,10 @@ void GameState::Initialize()
 	mTexturePixelShader.Initialize(shaderFileNames3);
 	mTextureVertexShader.Initialize(shaderFileNames3, VertexPX::Format);
 
-	mBloomVertexShader.Initialize(L"../../Assets/Shaders/BloomPostProcess.fx", VertexPX::Format);
-	mBloomPixelShader.Initialize(L"../../Assets/Shaders/BloomPostProcess.fx");
+	//mBloomVertexShader.Initialize(L"../../Assets/Shaders/BloomPostProcess.fx", VertexPX::Format);
+	//mBloomPixelShader.Initialize(L"../../Assets/Shaders/BloomPostProcess.fx");
+	mBloomVertexShader.Initialize(L"../../Assets/Shaders/Bloom.fx", VertexPX::Format);
+	mBloomPixelShader.Initialize(L"../../Assets/Shaders/Bloom.fx");
 	
 	const wchar_t* shaderFileNames4 = L"../../Assets/Shaders/PostProcess.fx";
 	mPostProcessVertexShader.Initialize(shaderFileNames4, VertexPX::Format);
@@ -213,7 +215,8 @@ void GameState::Update(float deltaTime)
 		mRotation.x -= deltaTime;
 	//mRotation += deltaTime;
 	mFPS = 1.0f / deltaTime;
-	mCloudRotation += deltaTime * 0.1;
+	mRotation += deltaTime * 0.5f;
+	mCloudRotation += deltaTime * 0.7f;
 }
 void GameState::Render()
 {
@@ -292,6 +295,11 @@ void  GameState::DebugUI()
 		{
 			mSetting.specularWeight = mSpecular ? 1.0f : 0.0f;
 		}
+		if (ImGui::Checkbox("ApplySun", &ApplySun))
+		{
+			ApplySun ? 1.0f : 0.0f;
+		}
+
 	}
  		ImGui::DragInt("Blur Iterations", &mBlurIterations, 1, 0, 100);
 		ImGui::DragFloat("Blur Saturation", &mBlurSaturation, 0.001f, 0.0f, 1.0f);
@@ -347,8 +355,13 @@ void GameState::RenderScene()
 	mTextureVertexShader.Bind();
 	mTexturePixelShader.Bind();
 
-	mSunTexture.BindPS(0);
-	mSunMeshBuffer.Render();
+	if (ApplySun)
+	{
+		mSunTexture.BindPS(0);
+		mSunMeshBuffer.Render();
+
+	}
+
 
 	UINT slot = 0; // This needs to match the shader register index.
 	//mTransformCloudBuffer.BindPS(0);
@@ -364,7 +377,7 @@ void GameState::RenderScene()
 	mMaterialBuffer.BindVS(2);
 	mMaterialBuffer.BindPS(2);
 
-	auto matWorld = Matrix4::Translation({ 0.0f, 0.0f, -8.0f }) *Matrix4::Scaling(1.0f)*(KWSE::Math::Matrix4::RotationX(mRotation.x*mCloudRotation*5.0f) * Matrix4::RotationY(mRotation.y*mCloudRotation) *Matrix4::RotationZ(mRotation.z*mCloudRotation));//* Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y);
+	auto matWorld = (KWSE::Math::Matrix4::RotationY(mRotation.y*mCloudRotation))*Matrix4::Translation({ 0.0f, 0.0f, -8.0f }) *Matrix4::Scaling(1.0f);// *Matrix4::RotationY(mRotation.y*mCloudRotation) *Matrix4::RotationZ(mRotation.z*mCloudRotation));//* Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y);
 
 	data.world = Transpose(matWorld);
 	data.wvp = Transpose(matWorld*matView*matProj);
@@ -435,7 +448,8 @@ void GameState::RenderBrightness()
 	Matrix4 matView = mCamera.GetViewMatrix();
 	Matrix4 matProj = mCamera.GetProjectionMatrix();
 
-	Matrix4 matWorld = Matrix4::Translation({ 0.0f, 0.0f, -8.0f }) * Matrix4::RotationX(mRotation.x*mCloudRotation*5.0f) * Matrix4::RotationY(mRotation.y*mCloudRotation)*Matrix4::RotationZ(mRotation.z*mCloudRotation);
+	//Matrix4 matWorld = Matrix4::Translation({ 0.0f, 0.0f, -8.0f }) * Matrix4::RotationX(mRotation.x*mCloudRotation*5.0f) * Matrix4::RotationY(mRotation.y*mCloudRotation)*Matrix4::RotationZ(mRotation.z*mCloudRotation);
+	auto matWorld = (KWSE::Math::Matrix4::RotationY(mRotation.y*mCloudRotation))*Matrix4::Translation({ 0.0f, 0.0f, -8.0f }) *Matrix4::Scaling(1.0f);
 	mSunTransformBuffer.Update(Transpose(matWorld * matView * matProj));
 	mSunTransformBuffer.BindVS(0);
 
@@ -449,8 +463,11 @@ void GameState::RenderBrightness()
 
 	mSunTransformBuffer.Update(Transpose(matView * matProj));
 
-	mSunTexture.BindPS(0);
-	mSunMeshBuffer.Render();
+	if (ApplySun)
+	{
+		mSunTexture.BindPS(0);
+		mSunMeshBuffer.Render();
+	}
 
 	mBloomRenderTarget.EndRender();
 }

@@ -119,6 +119,7 @@ void KWSE::Graphics::SkeletonIO::Write(FILE * file, const Skeleton & skeleton)
 
 void KWSE::Graphics::SkeletonIO::Read(FILE * file, Skeleton & skeleton)
 {
+
 	int boneCount = 0;
 	fscanf_s(file, "%d ", &boneCount);
 

@@ -36,3 +36,20 @@ public:
 	};
 
 }
+
+#define MEMPOOL_DECLARE\
+	static KWSE::Core::BlockAllocator sAllocator;\
+	static void* operator new(std::size_t size);\
+	static void operator delete(void* ptr);
+
+// one actually defines it.
+#define MEMPOOL_DEFINE(Class,Capacity)\
+	KWSE::Core::BlockAllocator Class::sAllocator(sizeof(Class),Capacity);\
+	void* Class::operator new(std::size_t size)\
+	{\
+		return sAllocator.Allocate(); \
+	}\
+	void Class::operator delete(void* ptr)\
+	{\
+		sAllocator.Free(ptr);\
+	}

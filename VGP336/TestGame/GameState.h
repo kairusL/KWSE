@@ -13,14 +13,13 @@ public:
 
 	void Render() override;
 	void DebugUI() override;
-
-	void SetAnimation();
 private:
 	void RenderDepthMap();
 	void RenderScene();
 	void RenderBrightness();
 	void ApplyBlur();
 	void PostProcess();
+	void SetAnimation();
 
 	struct TransformData
 	{
@@ -46,25 +45,24 @@ private:
 		float normalWeight = 0.0f;
 		float specularWeight = 0.0f;
 		float depthBias= 0.000029f;
+		int Skinning;
+		KWSE::Math::Vector3 padding;
+	};
+	struct BoneTransformData
+	{
+		KWSE::Math::Matrix4 boneTransforms[256];
 	};
 	struct OilSetting
 	{
-		float screenSizeScale=2.0f;
+		//float screenSizeScale=2.0f;
+		float screenSizeScale=0.0f;
 		float paintRadius=3.0f;
 		float minSigma =1.0f;
 		float sizeWeight=0.0f;
-
-	};
-	struct ActiveSetting
-	{
-		float oilActive   =0.0f;
-		float heatActive  =0.0f;
-		float mosaicActive=0.0f;
-		float padding;
 	};
 	//ID3D11Buffer* mConstantBuffer = nullptr;
 
-	
+	using TransBoneBuffer = KWSE::Graphics::TypedConstantBuffer<BoneTransformData>;
 	using TransformBuffer = KWSE::Graphics::TypedConstantBuffer<TransformData>;
 	using TransformCloudBuffer = KWSE::Graphics::TypedConstantBuffer<TransformDataTextureWithLight>;
 	using TransformTextureBuffer = KWSE::Graphics::TypedConstantBuffer<TransformDataTexture>;
@@ -73,7 +71,6 @@ private:
 	using MaterialBuffer = KWSE::Graphics::TypedConstantBuffer<KWSE::Graphics::Material>;
 	using SettingBuffer = KWSE::Graphics::TypedConstantBuffer<Setting>;
 	using OilSettingBuffer = KWSE::Graphics::TypedConstantBuffer<OilSetting>;
-	using ActiveSettingBuffer = KWSE::Graphics::TypedConstantBuffer<ActiveSetting>;
 
 
 	KWSE::Graphics::DirectionalLight mDirectionLight;
@@ -98,7 +95,10 @@ private:
 	KWSE::Graphics::Texture mTerrainTexrures;
 	KWSE::Graphics::MeshBuffer mTerrainMeshBuffer;
 
-
+	//Model
+	KWSE::Graphics::Model model;
+	KWSE::Graphics::Animation anima;
+	KWSE::Graphics::Texture modelTexrure[2];
 	//SciFi
 	KWSE::Graphics::Mesh mSciFiMesh;
 	KWSE::Graphics::Texture mSci_fi_Texrures;
@@ -147,8 +147,6 @@ private:
 
 	OilSettingBuffer mOilSettingBuffer;
 	OilSetting mOilSetting;
-	ActiveSettingBuffer mActiveSettingBuffer;
-	ActiveSetting mActiveSetting;
 
 	KWSE::Math::Vector3 mRotation;
 	KWSE::Math::Vector3 mSriFiPosition;
@@ -157,9 +155,11 @@ private:
 	//float mRotationX= 0.f;
 	//float mRotation = 0.f;
 
+	TransBoneBuffer mTransBoneBuffer;
 
 	TransformCloudBuffer mTransformCloudBuffer;
 	KWSE::Graphics::TypedConstantBuffer<KWSE::Math::Vector4> mBlurSettingsBuffer;
+
 
 	LightBuffer  mLightBuffer;
 	MaterialBuffer mMaterialBuffer;
@@ -170,13 +170,9 @@ private:
 	KWSE::Graphics::Sampler mSampler;
 	KWSE::Graphics::BlendState mBlendState;
 
-	//water && refection
-	KWSE::Graphics::Mesh mWaterMesh;
-	KWSE::Graphics::MeshBuffer mWaterMeshBuffer;
-	KWSE::Graphics::Texture mBottomTexture;
-	KWSE::Graphics::Texture mReflectionTexture;
-	KWSE::Graphics::Texture mWaterNormalTexture;
-
+	KWSE::Graphics::Animator mAnimator;
+	KWSE::Graphics::Animation mAnimation;
+	float mAnimationTimer = 0.0f;
 
 	float mFPS = 0.0f;
 
@@ -186,15 +182,11 @@ private:
 	KWSE::Graphics::MeshPX mScreenMesh;
 	KWSE::Graphics::MeshBuffer mScreenMeshBuffer;
 
+
 	float mLightCameraDistance = 100.0f;
+	bool mAnimationLoop = false;
 
-	// ParticleEmitter
-	KWSE::Graphics::ParticleEmitter mParticleEmitters[3];
-	bool particleActive=false;
-
-	// Animator
-	KWSE::Graphics::Animator mAnimator;
-	KWSE::Graphics::Animation mAnimation;
-	float mAnimationTimer = 0.0f;
+	KWSE::GameWorld mGameWorld;
+	KWSE::GameObjectHandle mGameObjectHandle;
 };
 

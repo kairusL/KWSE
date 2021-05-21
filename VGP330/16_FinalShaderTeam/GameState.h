@@ -88,7 +88,7 @@ private:
 
 	KWSE::Graphics::RenderTarget mRenderTarger;
 
-	KWSE::Graphics::RenderTarget mDepthRebderTarget;   // <- record depth from light source
+	KWSE::Graphics::RenderTarget mDepthRenderTarget;   // <- record depth from light source
 	KWSE::Graphics::RenderTarget mBaseRenderTarget;     // < - original scene, think "screenshot"
 	KWSE::Graphics::RenderTarget mBloomRenderTarget;  // <- only the "bright" pixels
 	KWSE::Graphics::RenderTarget mBlurRenderTarget;     // <- amplify the brightness
@@ -97,22 +97,6 @@ private:
 	KWSE::Graphics::Mesh mTerrainMesh;
 	KWSE::Graphics::Texture mTerrainTexrures;
 	KWSE::Graphics::MeshBuffer mTerrainMeshBuffer;
-
-
-	//SciFi
-	KWSE::Graphics::Mesh mSciFiMesh;
-	KWSE::Graphics::Texture mSci_fi_Texrures;
-	KWSE::Graphics::MeshBuffer mSciFiMeshBuffer;
-	KWSE::Math::Vector3 mShipPosition;
-	KWSE::Math::Vector3 mShipDirection;
-	float mShipRotation = 0.0f;
-	float mShipElevation = 0.0f;
-	float mShipTilt = 0.0f;
-
-	//Plane
-	KWSE::Graphics::Mesh mMesh;
-	KWSE::Graphics::MeshBuffer mMeshPlaneBuffer;
-	KWSE::Graphics::Texture mPlane_Texrures;
 
 	//TransformData
 	TransformBuffer mTransformBuffer;
@@ -132,15 +116,9 @@ private:
 	KWSE::Graphics::VertexShader mVertexShader;
 	KWSE::Graphics::PixelShader mPixelShader;
 
-	KWSE::Graphics::VertexShader mCloudVertexShader;
-	KWSE::Graphics::PixelShader  mCloudPixelShader;
-
 	KWSE::Graphics::VertexShader mTextureVertexShader;
 	KWSE::Graphics::PixelShader  mTexturePixelShader;
 
-	KWSE::Graphics::VertexShader mGaussianBlurVertexShader;
-	KWSE::Graphics::PixelShader  mGaussianBlurPixelShaderX;
-	KWSE::Graphics::PixelShader  mGaussianBlurPixelShaderY;
 
 	KWSE::Graphics::VertexShader mOilPaintingVertexShader;
 	KWSE::Graphics::PixelShader mOilPaintingPixelShader;
@@ -150,17 +128,11 @@ private:
 	ActiveSettingBuffer mActiveSettingBuffer;
 	ActiveSetting mActiveSetting;
 
-	KWSE::Math::Vector3 mRotation;
-	KWSE::Math::Vector3 mSriFiPosition;
 	KWSE::Math::Vector3 mTerrainPosition;
-	//float mRotationY= 0.f;
-	//float mRotationX= 0.f;
-	//float mRotation = 0.f;
 
 
 	TransformCloudBuffer mTransformCloudBuffer;
-	KWSE::Graphics::TypedConstantBuffer<KWSE::Math::Vector4> mBlurSettingsBuffer;
-
+	
 	LightBuffer  mLightBuffer;
 	MaterialBuffer mMaterialBuffer;
 	SettingBuffer mSettingBuffer;
@@ -170,12 +142,6 @@ private:
 	KWSE::Graphics::Sampler mSampler;
 	KWSE::Graphics::BlendState mBlendState;
 
-	//water && refection
-	KWSE::Graphics::Mesh mWaterMesh;
-	KWSE::Graphics::MeshBuffer mWaterMeshBuffer;
-	KWSE::Graphics::Texture mBottomTexture;
-	KWSE::Graphics::Texture mReflectionTexture;
-	KWSE::Graphics::Texture mWaterNormalTexture;
 
 
 	float mFPS = 0.0f;
@@ -188,13 +154,63 @@ private:
 
 	float mLightCameraDistance = 100.0f;
 
-	// ParticleEmitter
-	KWSE::Graphics::ParticleEmitter mParticleEmitters[3];
-	bool particleActive=false;
-
+	//Air balloon0
+	KWSE::Graphics::Mesh	mAirBalloonMesh0;
+	KWSE::Graphics::Texture mAirBalloonTexrure0;
+	KWSE::Graphics::MeshBuffer mAirBalloonMeshBuffer0;
 	// Animator
 	KWSE::Graphics::Animator mAnimator;
 	KWSE::Graphics::Animation mAnimation;
 	float mAnimationTimer = 0.0f;
+
+	//Air balloon1
+	KWSE::Graphics::Texture mAirBalloonTexrure1;
+	KWSE::Graphics::MeshBuffer mAirBalloonMeshBuffer1;
+	// Animator
+	KWSE::Graphics::Animator mAnimator1;
+	KWSE::Graphics::Animation mAnimation1;
+	float mAnimationTimer1 = 0.0f;
+
+	//Air balloon2
+	KWSE::Graphics::Texture mAirBalloonTexrure2;
+	KWSE::Graphics::MeshBuffer mAirBalloonMeshBuffer2;
+	// Animator
+	KWSE::Graphics::Animator mAnimator2;
+	KWSE::Graphics::Animation mAnimation2;
+	float mAnimationTimer2 = 0.0f;
+
+	//Air balloon3
+	KWSE::Graphics::Texture mAirBalloonTexrure3;
+	KWSE::Graphics::MeshBuffer mAirBalloonMeshBuffer3;
+	// Animator
+	KWSE::Graphics::Animator mAnimator3;
+	KWSE::Graphics::Animation mAnimation3;
+	float mAnimationTimer3 = 0.0f;
+
+	//Air balloon4
+	KWSE::Graphics::Texture mAirBalloonTexrure4;
+	KWSE::Graphics::MeshBuffer mAirBalloonMeshBuffer4;
+	// Animator
+	KWSE::Graphics::Animator mAnimator4;
+	KWSE::Graphics::Animation mAnimation4;
+	float mAnimationTimer4 = 0.0f;
+
+	//Air balloon5
+	KWSE::Graphics::Texture mAirBalloonTexrure5;
+	KWSE::Graphics::MeshBuffer mAirBalloonMeshBuffer5;
+	// Animator
+	KWSE::Graphics::Animator mAnimator5;
+	KWSE::Graphics::Animation mAnimation5;
+	float mAnimationTimer5 = 0.0f;
+
+	//Air balloon6
+	KWSE::Graphics::Texture mAirBalloonTexrure6;
+	KWSE::Graphics::MeshBuffer mAirBalloonMeshBuffer6;
+	// Animator
+	KWSE::Graphics::Animator mAnimator6;
+	KWSE::Graphics::Animation mAnimation6;
+	float mAnimationTimer6 = 0.0f;
+
+
 };
 

@@ -250,22 +250,30 @@ void ModelLoader::LoadMaterial(std::filesystem::path fileName, Model & model)
 	fclose(file);
 }
 
-void KWSE::Graphics::ModelLoader::LoadSkeleton(std::filesystem::path fileName, Model& model)
+bool KWSE::Graphics::ModelLoader::LoadSkeleton(std::filesystem::path fileName, Model& model)
 {
-	fileName.replace_extension("skeleton");
 
+	fileName.replace_extension("skeleton");
+	if (!std::filesystem::exists(fileName))
+	{
+		return false;
+	}
 	FILE* file = nullptr;
 	fopen_s(&file, fileName.u8string().c_str(), "r");
 	model.skeleton = std::make_unique<Skeleton>();
 	SkeletonIO::Read(file, *model.skeleton);
 
 	fclose(file);
+	return true;
 }
 
 void ModelLoader::LoadAnimation(std::filesystem::path fileName, Model & model)
 {
 	fileName.replace_extension("anim");
-
+	if (!std::filesystem::exists(fileName))
+	{
+		return;
+	}
 	FILE* file = nullptr;
 	fopen_s(&file, fileName.u8string().c_str(),"r");
 	ASSERT(file, "ModelLoader - Failed to open model %s.", fileName.u8string().c_str());

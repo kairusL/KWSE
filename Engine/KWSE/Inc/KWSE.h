@@ -4,6 +4,17 @@
 // App
 #include"App.h"
 #include "AppState.h"
+// Component 
+#include "ColliderComponent.h"
+#include "TransformComponent.h"
+#include "ModelComponent.h"
+#include "AnimatorComponent.h"
+// World
+#include "Component.h"
+#include "GameObject.h"
+#include "GameObjectIO.h"
+#include "GameObjectHandle.h"
+#include "GameWorld.h"
 // Utilis
 #include "GUIUtili.h"
 

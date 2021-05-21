@@ -1,0 +1,18 @@
+{
+  "Components": {
+    "TransformComponent": {
+      "Position": [ 0, 0, 0 ]
+    },
+    "ColliderComponent": {
+      "Center": [ 0, 0, 0 ],
+      "Extend": [ 2, 2, 2 ]
+    },
+    "ModelComponent": {
+      "FileName": "../../Assets/Models/Model/Vanguard/Jump/Jump.model"
+    },
+    "AnimatorComponent": {
+
+    }
+  }
+}
+

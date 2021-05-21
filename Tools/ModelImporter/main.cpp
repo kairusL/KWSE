@@ -452,9 +452,10 @@ int main(int argc, char* argv[])
 			for (uint32_t i = 0; i < numVertices; ++i)
 			{
 				auto& vertex = mesh.vertices.emplace_back(BoneVertex{});
-				vertex.position = ConvertToV3(positions[i]) * args.scale;
-				vertex.normal = ConvertToV3(normals[i]);
-				vertex.tangent = ConvertToV3(tangents[i]);
+				//vertex.position = ConvertToV3(positions[i]) * args.scale;
+				vertex.position = positions? ConvertToV3(positions[i]) * args.scale :Vector3::Zero;
+				vertex.normal = normals? ConvertToV3(normals[i]) : Vector3::Zero;
+				vertex.tangent = tangents ? ConvertToV3(tangents[i]): Vector3::Zero;
 				//vertex.uv = texCoords ? Vector2{ texCoords[i].x, texCoords[i].y } : Vector2::Zero;
 				vertex.uv = texCoords ? ConvertToV2(texCoords[i]) : Vector2::Zero;
 			}
@@ -550,6 +551,7 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	
 	//Check if we found any skeleton information
 	if (model.skeleton)//(!boneIndexLookup.empty())
 	{
