@@ -157,7 +157,8 @@
     <ClInclude Include="Inc\ColliderComponent.h" />
     <ClInclude Include="Inc\Common.h" />
     <ClInclude Include="Inc\Component.h" />
-    <ClInclude Include="Inc\ComponentTypes.h" />
+    <ClInclude Include="Inc\RenderService.h" />
+    <ClInclude Include="Inc\TypeIds.h" />
     <ClInclude Include="Inc\GameObject.h" />
     <ClInclude Include="Inc\GameObjectHandle.h" />
     <ClInclude Include="Inc\GameObjectIO.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Inc\GUIUtili.h" />
     <ClInclude Include="Inc\KWSE.h" />
     <ClInclude Include="Inc\ModelComponent.h" />
+    <ClInclude Include="Inc\Service.h" />
     <ClInclude Include="Inc\TransformComponent.h" />
     <ClInclude Include="Src\Precompiled.h" />
   </ItemGroup>
@@ -184,6 +186,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Src\RenderService.cpp" />
     <ClCompile Include="Src\TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>

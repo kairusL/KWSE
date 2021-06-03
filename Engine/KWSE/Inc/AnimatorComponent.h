@@ -9,7 +9,7 @@ namespace KWSE
 	class AnimatorComponent final : public Component
 	{
 	public:
-		SET_COMPONENT_ID(ComponentId::Animator);
+		SET_TYPE_ID(ComponentId::Animator);
 		MEMPOOL_DECLARE;
 
 		AnimatorComponent() = default;

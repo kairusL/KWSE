@@ -60,23 +60,23 @@ void GameState::Initialize()
 
 	// Rota the Sun
 	mRotationSpeed.resize(10);
-	mRotationSpeed[0] = 1.f;
-	mRotationSpeed[1] = 0.1f;
-	mRotationSpeed[2] = 0.2f;
-	mRotationSpeed[3] = 0.3f;
-	mRotationSpeed[4] = 0.1f;
-	mRotationSpeed[5] = 0.2f;
-	mRotationSpeed[6] = 0.3f;
-	mRotationSpeed[7] = 0.4f;
-	mRotationSpeed[8] = 0.5f;
-	mRotationSpeed[9] = 0.6f;
+	mRotationSpeed[0] = 0.f;
+	mRotationSpeed[1] = 0.1f*0.5f;
+	mRotationSpeed[2] = 0.2f*0.5f;
+	mRotationSpeed[3] = 0.3f*0.5f;
+	mRotationSpeed[4] = 0.1f*0.5f;
+	mRotationSpeed[5] = 0.2f*0.5f;
+	mRotationSpeed[6] = 0.3f*0.5f;
+	mRotationSpeed[7] = 0.4f*0.5f;
+	mRotationSpeed[8] = 0.5f*0.5f;
+	mRotationSpeed[9] = 0.6f*0.5f;
 
 	// SelfRotation
 	mSelfRotationSpeed.resize(10);
-	mSelfRotationSpeed[0] = 1.f;
+	mSelfRotationSpeed[0] = 0.f;
 	mSelfRotationSpeed[1] = 0.012f;
 	mSelfRotationSpeed[2] = 0.013f;
-	mSelfRotationSpeed[3] = 0.014f;
+	mSelfRotationSpeed[3] = 0.054f;
 	mSelfRotationSpeed[4] = 0.015f;
 	mSelfRotationSpeed[5] = 0.016f;
 	mSelfRotationSpeed[6] = 0.017f;
@@ -87,15 +87,15 @@ void GameState::Initialize()
 	// Planets size
 	mSize.resize(10);
 	mSize[0] = 5.f;
-	mSize[1] = 1.1f;
-	mSize[2] = 1.3f;
-	mSize[3] = 1.3f;
-	mSize[4] = 1.2f;
-	mSize[5] = 1.8f;
-	mSize[6] = 1.6f;
-	mSize[7] = 1.5f;
-	mSize[8] = 1.4f;
-	mSize[9] = 0.6f;
+	mSize[1] = 1.1f+0.3f;
+	mSize[2] = 1.3f+0.3f;
+	mSize[3] = 1.3f+0.3f;
+	mSize[4] = 1.2f+0.3f;
+	mSize[5] = 1.8f+0.3f;
+	mSize[6] = 1.6f+0.3f;
+	mSize[7] = 1.5f+0.3f;
+	mSize[8] = 1.4f+0.3f;
+	mSize[9] = 0.6f+0.3f;
 
 
 	mSampler.Initialize(Sampler::Filter::Anisotropic,Sampler::AddressMode::Clamp);
@@ -145,6 +145,10 @@ void GameState::Terminate()
 void GameState::Update(float deltaTime)
 {
 
+	if (mPause)
+	{
+		deltaTime = 0.0f;
+	}
 	auto inputSystem = InputSystem::Get();
 
 	//const float moveSpeed = 10.0f;
@@ -170,8 +174,14 @@ void GameState::Update(float deltaTime)
 	mShipTilt *= 0.95f;
 
 	const float shipTurnSpeed = .083f;
-	mShipRotation += inputSystem->GetMouseMoveX() * shipTurnSpeed * deltaTime;
-	mShipElevation += inputSystem->GetMouseMoveY() * shipTurnSpeed * deltaTime;
+	if (inputSystem->IsMouseDown(MouseButton::RBUTTON))
+	{
+		mShipRotation +=(inputSystem->GetMouseMoveX() * shipTurnSpeed * deltaTime);
+		mShipElevation+=(inputSystem->GetMouseMoveY() * shipTurnSpeed * deltaTime);
+	}
+
+	//mShipRotation += inputSystem->GetMouseMoveX() * shipTurnSpeed * deltaTime;
+	//mShipElevation += inputSystem->GetMouseMoveY() * shipTurnSpeed * deltaTime;
 	
 	mShipDirection = Vector3::ZAxis;
 	auto yawRotation = Math::Matrix4::RotationY(mShipRotation);
@@ -199,13 +209,36 @@ void GameState::Update(float deltaTime)
 
 		mShipPosition -= right * shipMoveSpeed;
 	}
+	if (inputSystem->IsKeyDown(KeyCode::Q))
+	{
+
+		mCameraTargetPosition = mShipPosition + (mShipDirection *10.0f);
+	}
+	else
+	{
+		mCameraTargetPosition = mShipPosition - (mShipDirection *mCameraDistanceOffset) + (Vector3::YAxis * mCameraHeightOffset);
+	}
 	
-	mCameraTargetPosition = mShipPosition - (mShipDirection *mCameraDistanceOffset) + (Vector3::YAxis * mCameraHeightOffset);
 	auto cameraPosition = Lerp(mCamera.GetPosition(), mCameraTargetPosition, 0.25f);
 	mCamera.SetPosition(cameraPosition);
 	mCamera.SetDirection(mShipDirection);
 
-	mRotation += deltaTime;
+	if (mActiveRotation)
+	{
+		mRotation += deltaTime;
+	}
+	else
+	{
+		mRotation = 0.0f;
+		for (auto rotationSpeed: mRotationSpeed)
+		{
+			rotationSpeed = 0.0f;
+		}
+		for (auto selfRotationSpeed : mSelfRotationSpeed)
+		{
+			selfRotationSpeed = 0.0f;
+		}
+	}
 
 
 	// Shooting Star
@@ -213,8 +246,8 @@ void GameState::Update(float deltaTime)
 	if (mShootingStarSpawnDelay>2.0f)
 	{
 
-		auto x = std::rand() % 60 - 50.0f;
-		auto y = std::rand() % 30 +10.0f;
+		auto x = std::rand() % 20 - 100.0f;
+		auto y = std::rand() %10 +50.0f;
 		mShootingStarSpawnDelay = 0.0f;
 		mShootingStarPos = { x,y,1.0f };
 		mShootingStarDir = { -x,-y,1.0f };
@@ -287,13 +320,22 @@ void GameState::Render()
 	mShootingStarTexrures.BindPS(slot);
 	mShootingStarMeshBuffer.Render();
 
+	auto scaling = Math::Matrix4::Scaling(mSize[0]);
+	mTexrures[0].BindPS(slot);
+	auto matSelfRotataion = Math::Matrix4::RotationY(mRotation);
+	auto matTranslation = Math::Matrix4::Translation({ 0.5f*0 + 0 * 15.f,0.0f,0.0f });
+	//                   Scaling size of planet,  planet selfrotation ,  distance from the sun(in centre) , Rotate around the Sun from Y , move camera
+	auto wvp = Math::Transpose(scaling*matTranslation*matView*matProj);
+	data.wvp = wvp;
+	mTransformBuffer.Update(data);
+	mPlanetsMeshBuffer.Render();
 
-	for (int i = 0; i < mTexrures.size()-1; ++i)
+	for (int i = 1; i < mTexrures.size()-1; ++i)
 	{
 		auto scaling = Math::Matrix4::Scaling(mSize[i]);
 		mTexrures[i].BindPS(slot);
 		matWorld = Math::Matrix4::RotationY(mRotation*mRotationSpeed[i]);
-		auto matSelfRotataion = Math::Matrix4::RotationY(mRotation*mSelfRotationSpeed[i]);
+		auto matSelfRotataion = Math::Matrix4::RotationY(mRotation);
 		auto matTranslation = Math::Matrix4::Translation({ 0.5f*i+i*15.f,0.0f,0.0f });
 		//                   Scaling size of planet,  planet selfrotation ,  distance from the sun(in centre) , Rotate around the Sun from Y , move camera
 		auto wvp = Math::Transpose(scaling*matSelfRotataion*matTranslation*matWorld*matView*matProj);
@@ -308,14 +350,15 @@ void GameState::Render()
 			continue;
 		}
 		mTexrures[9].BindPS(slot);
-		auto moonScaling = Math::Matrix4::Scaling(mSize[9]);
-		auto matMoonWorld = Math::Matrix4::RotationY(mRotation*mRotationSpeed[9]);
-		auto matMoonSelfRotataion = Math::Matrix4::RotationY(mRotation*mSelfRotationSpeed[9]);
-		auto matMoonTranslation = Math::Matrix4::Translation({5.f,0.0f,0.0f });
-		data.wvp = Math::Transpose(moonScaling*matMoonSelfRotataion*matMoonTranslation*matMoonWorld*matTranslation*matWorld*matView*matProj);
-		mTransformBuffer.Update(data);
-		mPlanetsMeshBuffer.Render();
 	}
+		//auto moonScaling = Math::Matrix4::Scaling(mSize[9]);
+		//auto matMoonWorld = Math::Matrix4::RotationY(mRotation*mRotationSpeed[3]);
+		//auto matMoonSelfRotataion = Math::Matrix4::RotationY(mRotation*mSelfRotationSpeed[3]);
+		//auto matMoonTranslation = Math::Matrix4::Translation({5.f,0.0f,0.0f });
+		//auto matTranslation = Math::Matrix4::Translation({ 0.5f*3 + 3 * 15.f,0.0f,0.0f });
+		//data.wvp = Math::Transpose(moonScaling*matMoonSelfRotataion*matMoonTranslation*matMoonWorld*matTranslation*matWorld*matView*matProj);
+		//mTransformBuffer.Update(data);
+		//mPlanetsMeshBuffer.Render();
 
 	mParticleEmitter.Render(mCamera);
 
@@ -384,6 +427,16 @@ void  GameState::DebugUI()
 	}
 	//ImGui::Text("Hello");
 	//ImGui::Button("Boom");
+	bool activeRotation = mActiveRotation == 1.0f;
+	if (ImGui::Checkbox("RotationActive",&activeRotation))
+	{
+		mActiveRotation = activeRotation ? 1.0f : 0.0f;
+	}
+	bool pause = mPause == 1.0f;
+	if (ImGui::Checkbox("Pause", &pause))
+	{
+		mPause = pause ? 1.0f : 0.0f;
+	}
 	ImGui::End();
 
 	//ImGui::ShowDemoWindow();

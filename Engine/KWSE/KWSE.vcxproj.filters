@@ -34,6 +34,12 @@
     <Filter Include="Src\Pch">
       <UniqueIdentifier>{e3e9baf0-f8a0-49d0-90b4-f174c2a3656a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Inc\Service">
+      <UniqueIdentifier>{7961f20b-deb2-4603-9c8c-1157aad2a5de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Service">
+      <UniqueIdentifier>{b86a38f9-7104-442a-ba2b-5d80a25f9a45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Inc\Common.h">
@@ -63,9 +69,6 @@
     <ClInclude Include="Inc\TransformComponent.h">
       <Filter>Inc\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Inc\ComponentTypes.h">
-      <Filter>Inc\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Inc\ColliderComponent.h">
       <Filter>Inc\Components</Filter>
     </ClInclude>
@@ -81,6 +84,15 @@
     </ClInclude>
     <ClInclude Include="Inc\ModelComponent.h">
       <Filter>Inc\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Service.h">
+      <Filter>Inc\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\TypeIds.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\RenderService.h">
+      <Filter>Inc\Service</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +126,9 @@
     </ClCompile>
     <ClCompile Include="Src\ModelComponent.cpp">
       <Filter>Src\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\RenderService.cpp">
+      <Filter>Src\Service</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

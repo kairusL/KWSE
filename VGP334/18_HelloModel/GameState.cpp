@@ -26,13 +26,12 @@ void GameState::Initialize()
 	model.Initialize(L"../../Assets/Models/Model/Vanguard/Jump/Jump.model");
 	//model.Initialize(L"../../Assets/Models/Model/Vanguard/SillyDancing/SillyDancing.model");
 	//model.Initialize(L"../../Assets/Models/Model/Vanguard/StandingDodgeBackward/StandingDodgeBackward.model");
+	ModelLoader::LoadAnimation(L"../../Assets/Models/Model/Vanguard/StandingDodgeBackward/StandingDodgeBackward.anim", model);
 
 	//Animator
 	mAnimator.Initialize(&model);
 	mAnimator.Play();
 	mAnimator.SetLooping(true);
-	mAnimator.AddClip(L"../../Assets/Models/Model/Vanguard/StandingDodgeBackward/StandingDodgeBackward.anim");
-
 
 	mTransBoneBuffer.Initialize();
 	// Sci_fi_fighter
@@ -219,7 +218,6 @@ void GameState::Terminate()
 	//mSci_fi_Texrures.Terminate();
 	//mSciFiMeshBuffer.Terminate();
 	mTransBoneBuffer.Terminate();
-	mAnimator.Terminate();
 	model.Terminate();
 
 	mTerrainTexrures.Terminate();

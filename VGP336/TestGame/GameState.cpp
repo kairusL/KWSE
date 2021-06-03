@@ -14,10 +14,6 @@ void GameState::Initialize()
 {
 
 	//GraphicsSystem::Get()->SetClearColor(Colors::WhiteSmoke);
-	// Terrain
-	ModelLoader::LoadObj(L"../../Assets/Models/Mountain/terrain.obj", 500.0f, mTerrainMesh);
-	mTerrainMeshBuffer.Initialize(mTerrainMesh);
-	mTerrainTexrures.Initialize("../../Assets/Models/Mountain/file_.jpg");
 
 	// Model
 	//model.Initialize(L"../../Assets/Models/Model/Taunt1/Taunt.model");
@@ -25,21 +21,15 @@ void GameState::Initialize()
 	//model.Initialize(L"../../Assets/Models/Model/Vanguard/Jump/Jump.model");
 	//model.Initialize(L"../../Assets/Models/Model/Vanguard/SillyDancing/SillyDancing.model");
 	//model.Initialize(L"../../Assets/Models/Model/Vanguard/StandingDodgeBackward/StandingDodgeBackward.model");
+	//ModelLoader::LoadAnimation(L"../../Assets/Models/Model/Vanguard/StandingDodgeBackward/StandingDodgeBackward.anim", model);
 
 	//Animator
 	//mAnimator.Initialize(&model);
 	//mAnimator.Play();
 	//mAnimator.SetLooping(true);
-	//mAnimator.AddClip(L"../../Assets/Models/Model/Vanguard/StandingDodgeBackward/StandingDodgeBackward.anim");
 
 
 	mTransBoneBuffer.Initialize();
-	// Sci_fi_fighter
-	//ModelLoader::LoadObj(L"../../Assets/Models/sci_fi_fighter/sci_fi_fighter.obj", 20.0f, mSciFiMesh);
-	//mSciFiMeshBuffer.Initialize(mSciFiMesh);
-	//mSci_fi_Texrures.Initialize("../../Assets/Models/sci_fi_fighter/sci_fi_fighter_diffuse.jpg");
-	//modelTexrure[0].Initialize("../../Assets/Models/Model/Dizon/dizon_normal.png");
-	//modelTexrure[1].Initialize("../../Assets/Models/Model/Dizon/dizon_diffuse.png");
 	//2.15
 
 	//Plane
@@ -52,12 +42,10 @@ void GameState::Initialize()
 	//srifi animation
 	SetAnimation();
 	mSriFiPosition = { 0.0f,0.0f,0.0f };
-	mTerrainPosition = { 0.0f,-5.0f,0.0f };
-	//mDefaultCamera.SetPosition({ 2.30f, 19.14f, -20.74f });
+	mTerrainPosition = { 0.0f,0.0f,0.0f };
 	mDefaultCamera.SetPosition({ 0.0433705039f,2.54280877f,-8.64591217f });
 	mDefaultCamera.SetDirection({ 0.036f,-0.17f, 0.983f });
 	mDefaultCamera.SetNearPlane(0.001f);
-	//mDefaultCamera.SetFarPlane(100.0f);
 
 	mLightCamera.SetNearPlane(0.1f);
 	mLightCamera.SetFarPlane(500.0f);
@@ -165,6 +153,7 @@ void GameState::Initialize()
 
 	mScreenMeshBuffer.Initialize(mScreenMesh);
 
+	mGameWorld.AddService<RenderService>();
 	mGameWorld.Initialize(1000);
 	mGameObjectHandle = mGameWorld.CreateGameObject("../../Assets/Templates/test.json", "Kairus");
 	//GameObjectIO::Read(nullptr, mGameObject);
@@ -222,33 +211,15 @@ void GameState::Terminate()
 
 	modelTexrure[1].Terminate();
 	modelTexrure[0].Terminate();
-	//mSci_fi_Texrures.Terminate();
-	//mSciFiMeshBuffer.Terminate();
 	mTransBoneBuffer.Terminate();
-	//mAnimator.Terminate();
-	//model.Terminate();
 
-	mTerrainTexrures.Terminate();
-	mTerrainMeshBuffer.Terminate();
+
 }
 void GameState::Update(float deltaTime)
 {
 	auto inputSystem = InputSystem::Get();
 
-	//SciFi
-	mShipTilt *= 0.95f;
 
-	const float shipTurnSpeed = .33f;
-	mShipRotation += inputSystem->GetMouseMoveX() * shipTurnSpeed * deltaTime;
-	mShipElevation += inputSystem->GetMouseMoveY() * shipTurnSpeed * deltaTime;
-
-	mShipDirection = Vector3::ZAxis;
-	auto yawRotation = Math::Matrix4::RotationY(mShipRotation);
-	mShipDirection = Math::TransformNormal(mShipDirection, yawRotation);
-
-	const Math::Vector3 right = Math::Normalize(Cross(Math::Vector3::YAxis, mShipDirection));
-	const Math::Matrix4 pitchRotation = Math::Matrix4::RotationAxis(right, mShipElevation);
-	mShipDirection = Math::TransformNormal(mShipDirection, pitchRotation);
 
 	// Camera
 	const float moveSpeed = 10.0f;
@@ -302,12 +273,14 @@ void GameState::Update(float deltaTime)
 	auto animatorComponent = gameObject->GetComponent<AnimatorComponent>();
 	auto& animator = animatorComponent->GetAnimator();
 
-	if (gameObject)
-	{
-		gameObject->Update(deltaTime);
 
-		//animator.Update(deltaTime);
-	}
+	mGameWorld.Update(deltaTime);
+	//if (gameObject)
+	//{
+	//	gameObject->Update(deltaTime);
+	//
+	//	//animator.Update(deltaTime);
+	//}
 	//mGameObject.Update(deltaTime);
 }
 void GameState::Render()
@@ -328,7 +301,7 @@ void GameState::Render()
 	// Process screen shot before presenting
 	PostProcess();
 
-
+	mGameWorld.Render();
 	//mGameObject.Render();
 }
 
@@ -447,8 +420,11 @@ void  GameState::DebugUI()
 	ImGui::Checkbox("Skeleton", &showSkeleton);
 	ImGui::End();
 
+
+
 	//ImGui::ShowDemoWindow();
 	GameObject* gameObject = mGameWorld.GetGameObject(mGameObjectHandle);
+	mGameWorld.DebugUI();
 	if (gameObject)
 	{
 		gameObject->DebugUI();
@@ -480,9 +456,7 @@ void GameState::RenderDepthMap()
 	mDepthMapVertexShader.Bind();
 	mDepthMapPixelShader.Bind();
 
-	//mSci_fi_Texrures.BindPS(0);
 	mSampler.BindVS(0);
-	mSciFiMeshBuffer.Render();
 
 	mDepthRebderTarget.EndRender();
 
@@ -552,6 +526,7 @@ void GameState::RenderScene()
 	mSampler.BindVS(slot);
 	mSampler.BindPS(slot);
 
+
 	// SciFi
 	const auto pos = mAnimation.GetPosition(mAnimationTimer);
 	const auto rot = mAnimation.GetRotation(mAnimationTimer);
@@ -560,19 +535,12 @@ void GameState::RenderScene()
 		(KWSE::Math::Matrix4::RotationX(mRotation.x*5.0f) *
 			Matrix4::RotationY(mRotation.y)
 			*Matrix4::RotationZ(mRotation.z)
-			*Matrix4::Translation({ 0.0f,0.0f,0.0f }));//* Matrix4::RotationX(mRotation.x) * Matrix4::RotationY(mRotation.y);
-	//matWorld = Matrix4::Scaling(scale)* Matrix4::RotationQuaternion(rot) * Matrix4::Translation(pos);
-		//KWSE::Math::Matrix4::RotationX(mRotation.x) 
-		//* Matrix4::RotationY(mRotation.y) 
-		//*Matrix4::RotationZ(mRotation.z)
-		//*Matrix4::Translation({ mSriFiPosition.x,mSriFiPosition.y,mSriFiPosition.z });
+			*Matrix4::Translation({ 0.0f,0.0f,0.0f }));
 	data.world = Transpose(matWorld);
 	data.wvp[0] = Transpose(matWorld*(matView)*matProj);
 	data.wvp[1] = Transpose(matWorld*(matViewLight)*matProjLight);
 	mTransformBuffer.Update(data);
-	//modelTexrure[0].BindVS(3);//normal
-	//modelTexrure[1].BindPS(0);//diffuse
-	//mSci_fi_Texrures.BindPS(0);	
+
 	mDepthRebderTarget.BindPS(4);
 
 	//game object.
@@ -601,36 +569,32 @@ void GameState::RenderScene()
 			// Apply offset transform to align the model to bone space
 			auto& bones = game_model.skeleton.get()->bones;
 			for (auto& bone : bones)
-				boneData.boneTransforms[bone->index] = KWSE::Math::Transpose(animator.GetToLocalTransform()[bone->index]);
+				boneData.boneTransforms[bone->index] = 
+				KWSE::Math::Transpose(animator.GetToLocalTransform()[bone->index]);
+			mTransBoneBuffer.Update(boneData);
+			mTransBoneBuffer.BindVS(4);
 
 			for (const auto& mesh : game_model.meshData)
 			{
 				auto& material = game_model.materialData[mesh->materialIndex];
-				material.diffuseMap->BindPS(0);
-				material.normalMap->BindPS(3);
+				if (material.diffuseMap)
+				{
+					material.diffuseMap->BindPS(0);
+				}
+				if (material.specularMap)
+				{
+					material.specularMap->BindPS(1);
+				}
+				if (material.normalMap)
+				{
+					material.normalMap->BindPS(3);
+				}
 				mesh->meshBuffer.Render();
 			}
-			mTransBoneBuffer.Update(boneData);
-			mTransBoneBuffer.BindVS(4);
-
 		}
 		animator.Play();
 		animator.SetLooping(true);
 	}
-	//mSciFiMeshBuffer.Render();
-	//Texture::UnbindPS(0);
-	//Texture::UnbindPS(4);
-
-	// Terrain
-	//matWorld =Matrix4::Translation({ mTerrainPosition.x,mTerrainPosition.y,mTerrainPosition.z });
-	//data.world = Transpose(matWorld);
-	//data.wvp[0] = Transpose(matWorld*(matView)*matProj);
-	//data.wvp[1] = Transpose(matWorld*(matViewLight)*matProjLight);
-	//mTransformBuffer.Update(data);
-	//mTerrainTexrures.BindPS(0);
-	//mTerrainMeshBuffer.Render();
-
-
 	Texture::UnbindPS(4);
 
 	//SimpleDraw::AddTransform(Matrix4::Identity);

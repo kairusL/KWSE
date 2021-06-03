@@ -7,25 +7,6 @@ using namespace KWSE;
 using namespace KWSE::Graphics;
 using namespace KWSE::Math;
 
-Animator::~Animator()
-{
-	ASSERT(mModel == nullptr, "Animator -- Terminate must be called before destruction.");
-}
-
-void KWSE::Graphics::Animator::Terminate()
-{
-	if (mModel)
-	{
-		mModel = nullptr;
-		delete mModel;
-	}
-}
-
-void Animator::AddClip(std::filesystem::path fileName)
-{
-	ModelLoader::LoadAnimation(fileName, *mModel);
-}
-
 void KWSE::Graphics::Animator::PlayAnimation(int clipIndex)
 {
 	if (clipIndex!= mAnimClipIndex&& clipIndex < mModel->animSet.size())

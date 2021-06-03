@@ -19,33 +19,33 @@ void GameState::Initialize()
 	// AirBalloon
 	ModelLoader::LoadObj(L"../../Assets/Models/AirBallon/airBalloon.obj", 0.01f, mAirBalloonMesh0);
 	mAirBalloonMeshBuffer0.Initialize(mAirBalloonMesh0);
-	mAirBalloonTexrure0.Initialize("../../Assets/Models/AirBallon/top.jpg");
+	mAirBalloonTexrure0.Initialize("../../Assets/Models/AirBallon/top.png");
 
 	mAirBalloonMeshBuffer1.Initialize(mAirBalloonMesh0);
-	mAirBalloonTexrure1.Initialize("../../Assets/Models/AirBallon/top1.png");
+	mAirBalloonTexrure1.Initialize("../../Assets/Models/AirBallon/top6.png");
 
 	mAirBalloonMeshBuffer2.Initialize(mAirBalloonMesh0);
 	mAirBalloonTexrure2.Initialize("../../Assets/Models/AirBallon/top2.png");
 
 	mAirBalloonMeshBuffer3.Initialize(mAirBalloonMesh0);
-	mAirBalloonTexrure3.Initialize("../../Assets/Models/AirBallon/top2.png");
+	mAirBalloonTexrure3.Initialize("../../Assets/Models/AirBallon/top3.png");
 
 	mAirBalloonMeshBuffer4.Initialize(mAirBalloonMesh0);
-	mAirBalloonTexrure4.Initialize("../../Assets/Models/AirBallon/top2.png");
+	mAirBalloonTexrure4.Initialize("../../Assets/Models/AirBallon/top4.png");
 
 	mAirBalloonMeshBuffer5.Initialize(mAirBalloonMesh0);
-	mAirBalloonTexrure5.Initialize("../../Assets/Models/AirBallon/top2.png");
+	mAirBalloonTexrure5.Initialize("../../Assets/Models/AirBallon/top1.png");
 	
 
 	mAirBalloonMeshBuffer6.Initialize(mAirBalloonMesh0);
-	mAirBalloonTexrure6.Initialize("../../Assets/Models/AirBallon/top2.png");
+	mAirBalloonTexrure6.Initialize("../../Assets/Models/AirBallon/top5.png");
 
 	//AirBalloon
 
 	mTransformBuffer.Initialize();
-
+	
 	mTerrainPosition = {0.0f,-5.0f,0.0f};
-	mDefaultCamera.SetPosition({ 36.7295113f,34.4399986f,158.668091f });
+	mDefaultCamera.SetPosition({ 32.1472855f,31.8910484f,122.345062f });
 	mDefaultCamera.SetDirection({ -0.06837695f,-0.062366f,-0.99570f });
 	mDefaultCamera.SetNearPlane(0.001f);
 
@@ -54,8 +54,8 @@ void GameState::Initialize()
 	SetAnimation();
 
 	mLightCamera.SetNearPlane(0.01f);
-	mLightCamera.SetFarPlane(10000.0f);
-	mLightCamera.SetAspectRation(10.0f);
+	mLightCamera.SetFarPlane(1000.0f);
+	mLightCamera.SetAspectRation(15.0f);
 
 	mActiveCamera = &mDefaultCamera;
 
@@ -112,7 +112,8 @@ void GameState::Initialize()
 	mMaterialBuffer.Initialize();
 	mSettingBuffer.Initialize();
 
-	mDirectionLight.direction = Math::Normalize({ 0.0858676955f,-0.890302300f,-0.426999986f });
+
+	mDirectionLight.direction = Math::Normalize({ -0.3450202351f,-0.662131011f,-0.665239573f });
 	mDirectionLight.ambient = { 0.5f };
 	mDirectionLight.diffuse = { 0.784f };
 	mDirectionLight.specular = { 0.858f };
@@ -354,36 +355,36 @@ void  GameState::DebugUI()
 		}
 		ImGui::DragFloat("Depth Bias", &mSetting.depthBias, 0.000001f,0.0f,1.0f,"%.7f");
 	}
-	if (ImGui::CollapsingHeader("PostP"))
+	if (ImGui::CollapsingHeader("Post Processing Effects"))
 	{
-		bool oilactive = mActiveSetting.oilActive == 1.0f;
-		if (ImGui::Checkbox("Oil", &oilactive))
+		bool mosaicactive = mActiveSetting.mosaicActive == 1.0f;
+		if (ImGui::Checkbox("Mosaica Effect", &mosaicactive))
 		{
-			mActiveSetting.oilActive = oilactive ? 1.0f : 0.0f;
+			mActiveSetting.mosaicActive = mosaicactive ? 1.0f : 0.0f;
 		}
 
 		bool heatactive = mActiveSetting.heatActive == 1.0f;
-		if (ImGui::Checkbox("Heat", &heatactive))
+		if (ImGui::Checkbox("HeatMap Effect", &heatactive))
 		{
 			mActiveSetting.heatActive = heatactive ? 1.0f : 0.0f;
 		}
 
-		bool mosaicactive = mActiveSetting.mosaicActive == 1.0f;
-		if (ImGui::Checkbox("Mosaica", &mosaicactive))
+		bool oilactive = mActiveSetting.oilActive == 1.0f;
+		if (ImGui::Checkbox("OilPainting Effect", &oilactive))
 		{
-			mActiveSetting.mosaicActive = mosaicactive ? 1.0f : 0.0f;
+			mActiveSetting.oilActive = oilactive ? 1.0f : 0.0f;
 		}
 	}
 	if (ImGui::CollapsingHeader("OilSetting"))
 	{
 		ImGui::DragFloat("Screen Size Scale", &mOilSetting.screenSizeScale, 0.1f, 0.0f, 1000.0f);
 		ImGui::DragFloat("Brush Radius", &mOilSetting.paintRadius, 1.0f, 3.0f, 9.0f );
-		ImGui::DragFloat("Intensity", &mOilSetting.minSigma, 0.0f, 0.0f, 1.0f );
+		//ImGui::DragFloat("Intensity", &mOilSetting.minSigma, 0.0f, 0.0f, 1.0f );
 		bool _sizeWeight = mOilSetting.sizeWeight == 1.0f;
-		if (ImGui::Checkbox("Oil Stretch Width", &_sizeWeight))
-		{
-			mOilSetting.sizeWeight = _sizeWeight ? 1.0f : 0.0f;
-		}
+		//if (ImGui::Checkbox("Oil Stretch Width", &_sizeWeight))
+		//{
+		//	mOilSetting.sizeWeight = _sizeWeight ? 1.0f : 0.0f;
+		//}
 	}
 	if (ImGui::CollapsingHeader("Blur"))
 	{
@@ -426,7 +427,7 @@ void GameState::RenderDepthMap()
 	KWSE::Math::Quaternion  rot6 = mAnimation6.GetRotation(mAnimationTimer6);
 
 	//airballoon 0
-	auto matWorld = Matrix4::Scaling(1.0f)*Matrix4::RotationQuaternion(rot)*Matrix4::Translation(pos);
+	auto matWorld = Matrix4::RotationQuaternion(rot)*Matrix4::Translation(pos)*Matrix4::Scaling(1.0f);
 	auto wvp =Transpose(matWorld*matView*matProj);
 	mDepthMapBuffer.Update(wvp);
 	mDepthMapVertexShader.Bind();
@@ -436,7 +437,7 @@ void GameState::RenderDepthMap()
 	mSampler.BindVS(0);
 	mAirBalloonMeshBuffer0.Render();
 	//airballoon 1
-	matWorld = Matrix4::Scaling(1.0f)*Matrix4::RotationQuaternion(rot1)*Matrix4::Translation(pos1);
+	matWorld = Matrix4::RotationQuaternion(rot1)*Matrix4::Translation(pos1)*Matrix4::Scaling(1.0f);
 	wvp = Transpose(matWorld*matView*matProj);
 	mDepthMapBuffer.Update(wvp);
 	mDepthMapVertexShader.Bind();
@@ -445,7 +446,7 @@ void GameState::RenderDepthMap()
 	mSampler.BindVS(0);
 	mAirBalloonMeshBuffer1.Render();
 	//airballoon 2
-	matWorld = Matrix4::Scaling(1.0f)*Matrix4::RotationQuaternion(rot2)*Matrix4::Translation(pos2);
+	matWorld =Matrix4::RotationQuaternion(rot2)*Matrix4::Translation(pos2)*Matrix4::Scaling(1.0f);
 	wvp = Transpose(matWorld*matView*matProj);
 	mDepthMapBuffer.Update(wvp);
 	mDepthMapVertexShader.Bind();
@@ -454,7 +455,7 @@ void GameState::RenderDepthMap()
 	mSampler.BindVS(0);
 	mAirBalloonMeshBuffer2.Render();
 	//airballoon 3
-	matWorld = Matrix4::Scaling(1.0f)*Matrix4::RotationQuaternion(rot3)*Matrix4::Translation(pos3);
+	matWorld = Matrix4::RotationQuaternion(rot3)*Matrix4::Translation(pos3)*Matrix4::Scaling(1.0f);
 	wvp = Transpose(matWorld*matView*matProj);
 	mDepthMapBuffer.Update(wvp);
 	mDepthMapVertexShader.Bind();
@@ -463,7 +464,7 @@ void GameState::RenderDepthMap()
 	mSampler.BindVS(0);
 	mAirBalloonMeshBuffer3.Render();
 	//airballoon 4
-	matWorld = Matrix4::Scaling(1.0f)*Matrix4::RotationQuaternion(rot4)*Matrix4::Translation(pos4);
+	matWorld = Matrix4::RotationQuaternion(rot4)*Matrix4::Translation(pos4)*Matrix4::Scaling(1.0f);
 	wvp = Transpose(matWorld*matView*matProj);
 	mDepthMapBuffer.Update(wvp);
 	mDepthMapVertexShader.Bind();
@@ -472,7 +473,7 @@ void GameState::RenderDepthMap()
 	mSampler.BindVS(0);
 	mAirBalloonMeshBuffer4.Render();
 	//airballoon 5
-	matWorld = Matrix4::Scaling(1.0f)*Matrix4::RotationQuaternion(rot5)*Matrix4::Translation(pos5);
+	matWorld = Matrix4::RotationQuaternion(rot5)*Matrix4::Translation(pos5)*Matrix4::Scaling(1.0f);
 	wvp = Transpose(matWorld*matView*matProj);
 	mDepthMapBuffer.Update(wvp);
 	mDepthMapVertexShader.Bind();
@@ -481,7 +482,7 @@ void GameState::RenderDepthMap()
 	mSampler.BindVS(0);
 	mAirBalloonMeshBuffer5.Render();
 	//airballoon 6
-	matWorld = Matrix4::Scaling(1.0f)*Matrix4::RotationQuaternion(rot6)*Matrix4::Translation(pos6);
+	matWorld = Matrix4::RotationQuaternion(rot6)*Matrix4::Translation(pos6)*Matrix4::Scaling(1.0f);
 	wvp = Transpose(matWorld*matView*matProj);
 	mDepthMapBuffer.Update(wvp);
 	mDepthMapVertexShader.Bind();
@@ -576,7 +577,7 @@ void GameState::RenderScene()
 	KWSE::Math::Quaternion rot6 = mAnimation6.GetRotation(mAnimationTimer6);
 
 	// Air Balloon0
-	matWorld = Matrix4::Scaling(1.0f)*Matrix4::RotationQuaternion(rot)*Matrix4::Translation(pos);
+	matWorld = Matrix4::RotationQuaternion(rot)*Matrix4::Translation(pos)*Matrix4::Scaling(1.0f);
 	data.world = Transpose(matWorld);
 	data.wvp[0] = Transpose(matWorld*(matView)*matProj);
 	data.wvp[1] = Transpose(matWorld*(matViewLight)*matProjLight);
@@ -584,7 +585,7 @@ void GameState::RenderScene()
 	mAirBalloonTexrure0.BindPS(0);	
 	mAirBalloonMeshBuffer0.Render();
 	// Air Balloon1
-	matWorld = Matrix4::Scaling(1.0f)*Matrix4::RotationQuaternion(rot1)*Matrix4::Translation(pos1);
+	matWorld = Matrix4::RotationQuaternion(rot1)*Matrix4::Translation(pos1)*Matrix4::Scaling(1.0f);
 	data.world = Transpose(matWorld);
 	data.wvp[0] = Transpose(matWorld*(matView)*matProj);
 	data.wvp[1] = Transpose(matWorld*(matViewLight)*matProjLight);
@@ -592,7 +593,7 @@ void GameState::RenderScene()
 	mAirBalloonTexrure1.BindPS(0);
 	mAirBalloonMeshBuffer1.Render();
 	// Air Balloon2
-	matWorld = Matrix4::Scaling(1.0f)*Matrix4::RotationQuaternion(rot2)*Matrix4::Translation(pos2);
+	matWorld = Matrix4::RotationQuaternion(rot2)*Matrix4::Translation(pos2)*Matrix4::Scaling(1.0f);
 	data.world = Transpose(matWorld);
 	data.wvp[0] = Transpose(matWorld*(matView)*matProj);
 	data.wvp[1] = Transpose(matWorld*(matViewLight)*matProjLight);
@@ -600,7 +601,7 @@ void GameState::RenderScene()
 	mAirBalloonTexrure2.BindPS(0);
 	mAirBalloonMeshBuffer2.Render();
 	// Air Balloon3
-	matWorld = Matrix4::Scaling(1.0f)*Matrix4::RotationQuaternion(rot3)*Matrix4::Translation(pos3);
+	matWorld = Matrix4::RotationQuaternion(rot3)*Matrix4::Translation(pos3)*Matrix4::Scaling(1.0f);
 	data.world = Transpose(matWorld);
 	data.wvp[0] = Transpose(matWorld*(matView)*matProj);
 	data.wvp[1] = Transpose(matWorld*(matViewLight)*matProjLight);
@@ -608,7 +609,7 @@ void GameState::RenderScene()
 	mAirBalloonTexrure3.BindPS(0);
 	mAirBalloonMeshBuffer3.Render();
 	// Air Balloon4
-	matWorld = Matrix4::Scaling(1.0f)*Matrix4::RotationQuaternion(rot4)*Matrix4::Translation(pos4);
+	matWorld = Matrix4::RotationQuaternion(rot4)*Matrix4::Translation(pos4)*Matrix4::Scaling(1.0f);
 	data.world = Transpose(matWorld);
 	data.wvp[0] = Transpose(matWorld*(matView)*matProj);
 	data.wvp[1] = Transpose(matWorld*(matViewLight)*matProjLight);
@@ -616,7 +617,7 @@ void GameState::RenderScene()
 	mAirBalloonTexrure4.BindPS(0);
 	mAirBalloonMeshBuffer4.Render();
 	// Air Balloon5
-	matWorld = Matrix4::Scaling(1.0f)*Matrix4::RotationQuaternion(rot5)*Matrix4::Translation(pos5);
+	matWorld = Matrix4::RotationQuaternion(rot5)*Matrix4::Translation(pos5)*Matrix4::Scaling(1.0f);
 	data.world = Transpose(matWorld);
 	data.wvp[0] = Transpose(matWorld*(matView)*matProj);
 	data.wvp[1] = Transpose(matWorld*(matViewLight)*matProjLight);
@@ -624,7 +625,7 @@ void GameState::RenderScene()
 	mAirBalloonTexrure5.BindPS(0);
 	mAirBalloonMeshBuffer5.Render();
 	// Air Balloon6
-	matWorld = Matrix4::Scaling(1.0f)*Matrix4::RotationQuaternion(rot6)*Matrix4::Translation(pos6);
+	matWorld = Matrix4::RotationQuaternion(rot6)*Matrix4::Translation(pos6)*Matrix4::Scaling(1.0f);
 	data.world = Transpose(matWorld);
 	data.wvp[0] = Transpose(matWorld*(matView)*matProj);
 	data.wvp[1] = Transpose(matWorld*(matViewLight)*matProjLight);
@@ -729,7 +730,7 @@ void GameState::SetAnimation()
 		//.AddScaleKey({ 1.0f,1.0f,1.0f })
 		.AdvanceTime(100.0f)
 		.AddPositionKey({ 15.0f,100.0f,1.0f })
-		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,-1.0f))})
+		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,-5.0f))})
 		.AdvanceTime(100.0f)
 		.AddPositionKey({ 15.0f,100.0f,0.0f })
 		.AdvanceTime(10000.00)
@@ -745,6 +746,12 @@ void GameState::SetAnimation()
 		.AdvanceTime(10000.00)
 		.AddPositionKey({ 15.0f,100.0f,-600.0f })
 		.AdvanceTime(10000.00)
+		.AddPositionKey({ 15.0f,100.0f,-700.0f })
+		.AdvanceTime(10000.00)
+		.AddPositionKey({ 15.0f,100.0f,-800.0f })
+		.AdvanceTime(10000.00)
+		.AddPositionKey({ 15.0f,100.0f,-900.0f })
+		.AdvanceTime(10000.00)
 		.SetLooping(true)
 		.Get();
 
@@ -756,7 +763,7 @@ void GameState::SetAnimation()
 		//.AddScaleKey({ 1.0f,1.0f,1.0f })
 		.AdvanceTime(100.0f)
 		.AddPositionKey({ 30.0f,60.0f,1.0f })
-		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,-1.0f)) })
+		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,-5.0f)) })
 		.AdvanceTime(100.0f)
 		.AddPositionKey({ 30.0f,60.0f,0.0f })
 		.AdvanceTime(100.0f)
@@ -772,6 +779,12 @@ void GameState::SetAnimation()
 		.AdvanceTime(10000.00)
 		.AddPositionKey({ 30.0f,60.0f,-600.0f })
 		.AdvanceTime(10000.00)
+		.AddPositionKey({ 30.0f,60.0f,-700.0f })
+		.AdvanceTime(10000.00)
+		.AddPositionKey({ 30.0f,60.0f,-800.0f })
+		.AdvanceTime(10000.00)
+		.AddPositionKey({ 30.0f,60.0f,-900.0f })
+		.AdvanceTime(10000.00)
 		.SetLooping(true)
 		.Get();
 
@@ -782,8 +795,8 @@ void GameState::SetAnimation()
 		//.AddScaleKey({ 1.0f,1.0f,1.0f })
 		.AdvanceTime(150.0f)
 		.AddPositionKey({ 50.0f,55.0f,-100.0f })
-		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,-1.0f)) })
-		.AdvanceTime(150000.0f)
+		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,-5.0f)) })
+		.AdvanceTime(15000.0f)
 		.AddPositionKey({ 50.0f,55.0f,-200.0f })
 		.AdvanceTime(10000.00)
 		.AddPositionKey({ 50.0f,55.0f,-300.0f })
@@ -794,6 +807,12 @@ void GameState::SetAnimation()
 		.AdvanceTime(10000.00)
 		.AddPositionKey({ 50.0f,55.0f,-600.0f })
 		.AdvanceTime(10000.00)
+		.AddPositionKey({ 50.0f,55.0f,-700.0f })
+		.AdvanceTime(10000.00)
+		.AddPositionKey({ 50.0f,55.0f,-800.0f })
+		.AdvanceTime(10000.00)
+		.AddPositionKey({ 50.0f,55.0f,-900.0f })
+		.AdvanceTime(10000.00)
 		.SetLooping(true)
 		.Get();
 	mAnimation3 = AnimationBuilder()
@@ -803,7 +822,7 @@ void GameState::SetAnimation()
 		//.AddScaleKey({ 1.0f,1.0f,1.0f })
 		.AdvanceTime(100.0f)
 		.AddPositionKey({ 40.0f,60.0f,40.0f })
-		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,-1.0f)) })
+		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,-5.0f)) })
 		.AdvanceTime(1000.0f)
 		.AddPositionKey({ 40.0f,60.0f,0.0f })
 		.AdvanceTime(10000.00)
@@ -819,6 +838,12 @@ void GameState::SetAnimation()
 		.AdvanceTime(10000.00)
 		.AddPositionKey({ 40.0f,60.0f,-600.0f })
 		.AdvanceTime(10000.00)
+		.AddPositionKey({ 40.0f,60.0f,-700.0f })
+		.AdvanceTime(10000.00)
+		.AddPositionKey({ 40.0f,60.0f,-800.0f })
+		.AdvanceTime(10000.00)
+		.AddPositionKey({ 40.0f,60.0f,-900.0f })
+		.AdvanceTime(10000.00)
 		.SetLooping(true)
 		.Get();
 	mAnimation4 = AnimationBuilder()
@@ -826,23 +851,31 @@ void GameState::SetAnimation()
 		.AddPositionKey({ 80.0f,1.1f,20.0f })
 		.AddRotationKey({ Math::Quaternion::RotationAxis(Vector3(0.0f,0.0f,0.0f),0.0f) })
 		//.AddScaleKey({ 1.0f,1.0f,1.0f })
-		.AdvanceTime(200.0f)
-		.AddPositionKey({ 80.0f,55.0f,20.0f })
+		.AdvanceTime(50.0f)
+		.AddPositionKey({ 80.0f,75.0f,20.0f })
 		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,-1.0f)) })
-		.AdvanceTime(200.0f)
-		.AddPositionKey({ 80.0f,55.0f,0.0f })
+		.AdvanceTime(50.0f)
+		.AddPositionKey({ 80.0f,75.0f,0.0f })
 		.AdvanceTime(10000.00)
-		.AddPositionKey({ 80.0f,55.0f,-100.0f })
+		.AddPositionKey({ 80.0f,75.0f,-100.0f })
 		.AdvanceTime(10000.00)
-		.AddPositionKey({ 80.0f,55.0f,-200.0f })
+		.AddPositionKey({ 80.0f,75.0f,-200.0f })
 		.AdvanceTime(10000.00)
-		.AddPositionKey({ 80.0f,55.0f,-300.0f })
+		.AddPositionKey({ 80.0f,75.0f,-300.0f })
 		.AdvanceTime(10000.00)
-		.AddPositionKey({ 80.0f,55.0f,-400.0f })
+		.AddPositionKey({ 80.0f,75.0f,-400.0f })
 		.AdvanceTime(10000.00)
-		.AddPositionKey({ 80.0f,55.0f,-500.0f })
+		.AddPositionKey({ 80.0f,75.0f,-500.0f })
 		.AdvanceTime(10000.00)
-		.AddPositionKey({ 80.0f,55.0f,-600.0f })
+		.AddPositionKey({ 80.0f,75.0f,-600.0f })
+		.AdvanceTime(10000.00)
+		.AddPositionKey({ 80.0f,75.0f,-700.0f })
+		.AdvanceTime(10000.00)
+		.AddPositionKey({ 80.0f,75.0f,-800.0f })
+		.AdvanceTime(10000.00)
+		.AddPositionKey({ 80.0f,75.0f,-900.0f })
+		.AdvanceTime(10000.00)
+		.AddPositionKey({ 80.0f,75.0f,-1000.0f })
 		.AdvanceTime(10000.00)
 		.SetLooping(true)
 		.Get();
@@ -853,7 +886,7 @@ void GameState::SetAnimation()
 		//.AddScaleKey({ 1.0f,1.0f,1.0f })
 		.AdvanceTime(15.0f)
 		.AddPositionKey({ 10.0f,60.0f,55.0f })
-		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,-1.0f)) })
+		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,-5.0f)) })
 		.AdvanceTime(15.0f)
 		.AddPositionKey({ 10.0f,60.0f,0.0f })
 		.AdvanceTime(10000.00)
@@ -869,16 +902,22 @@ void GameState::SetAnimation()
 		.AdvanceTime(10000.00)
 		.AddPositionKey({ 10.0f,60.0f,-600.0f })
 		.AdvanceTime(10000.00)
+		.AddPositionKey({ 10.0f,60.0f,-700.0f })
+		.AdvanceTime(10000.00)
+		.AddPositionKey({ 10.0f,60.0f,-800.0f })
+		.AdvanceTime(10000.00)
+		.AddPositionKey({ 10.0f,60.0f,-900.0f })
+		.AdvanceTime(10000.00)
 		.SetLooping(true)
 		.Get();
 	mAnimation6 = AnimationBuilder()
 		.SetTime(0.0f)
-		.AddPositionKey({ 50.0f,1.1f,70.0f })
+		.AddPositionKey({ 50.0f,1.1f,100.0f })
 		.AddRotationKey({ Math::Quaternion::RotationAxis(Vector3(0.0f,0.0f,0.0f),0.0f) })
 		//.AddScaleKey({ 1.0f,1.0f,1.0f })
 		.AdvanceTime(10.0f)
-		.AddPositionKey({ 50.0f,30.0f,70.0f })
-		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,-1.0f)) })
+		.AddPositionKey({ 50.0f,30.0f,100.0f })
+		.AddRotationKey({ Math::Quaternion::RotationLook(Vector3(0.0f,0.0f,-5.0f)) })
 		.AdvanceTime(100.00)
 		.AddPositionKey({ 50.0f,30.0f,0.0f })
 		.AdvanceTime(100.00)
@@ -893,6 +932,12 @@ void GameState::SetAnimation()
 		.AddPositionKey({ 50.0f,30.0f,-500.0f })
 		.AdvanceTime(100.00)
 		.AddPositionKey({ 50.0f,30.0f,-600.0f })
+		.AdvanceTime(100.00)
+		.AddPositionKey({ 50.0f,30.0f,-700.0f })
+		.AdvanceTime(100.00)
+		.AddPositionKey({ 50.0f,30.0f,-800.0f })
+		.AdvanceTime(100.00)
+		.AddPositionKey({ 50.0f,30.0f,-900.0f })
 		.AdvanceTime(100.00)
 		.SetLooping(true)
 		.Get();

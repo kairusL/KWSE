@@ -84,13 +84,12 @@ void GameState::Initialize()
 	mSettingBuffer.Initialize();
 	mSunTransformBuffer.Initialize();
 
-
 	mDirectionLight.direction = Math::Normalize({ 0.854f, -0.552f, 0.229f });
-	mDirectionLight.ambient = { 0.145f };
-	mDirectionLight.diffuse = { 0.784f };
+	mDirectionLight.ambient = { 0.245f };
+	mDirectionLight.diffuse = { 0.884f };
 	mDirectionLight.specular = { 0.858f };
-	mMaterial.ambient = { 0.145f };
-	mMaterial.diffuse = { 0.784f };
+	mMaterial.ambient = { 0.245f };
+	mMaterial.diffuse = { 0.884f };
 	mMaterial.specular = { 0.39 };
 	mMaterial.power = 1.999f;
 
@@ -180,6 +179,38 @@ void GameState::Terminate()
 }
 void GameState::Update(float deltaTime)
 {
+	if (NightMode)
+	{
+		mDirectionLight.direction = Math::Normalize({ 0.843930721f, -0.345193297f, -0.410636812f });
+		mDirectionLight.ambient = { 0.f };
+		mDirectionLight.diffuse = { 0.f};
+		mDirectionLight.specular = {0.f };
+		mMaterial.ambient = { 0.f };
+		mMaterial.diffuse = { 0.f };
+		mMaterial.specular = {0.f};
+	}
+	else
+	{
+		mDirectionLight.direction = Math::Normalize({ 0.854f, -0.552f, 0.229f });
+		mDirectionLight.ambient = { 0.245f };
+		mDirectionLight.diffuse = { 0.884f };
+		mDirectionLight.specular = { 0.858f };
+		mMaterial.ambient = { 0.245f };
+		mMaterial.diffuse = { 0.884f };
+		mMaterial.specular = { 0.39 };
+	}
+	if (ApplySun)
+	{
+		mDirectionLight.direction = Math::Normalize({ 0.843930721f, -0.345193297f, -0.410636812f });
+	}
+	else
+	{
+		mDirectionLight.direction = Math::Normalize({ 0.854f, -0.552f, 0.229f });
+	}
+	if (mPause)
+	{
+		deltaTime = 0.0f;
+	}
 	auto inputSystem = InputSystem::Get();
 
 	const float moveSpeed = 10.0f;
@@ -215,8 +246,9 @@ void GameState::Update(float deltaTime)
 		mRotation.x -= deltaTime;
 	//mRotation += deltaTime;
 	mFPS = 1.0f / deltaTime;
-	mRotation += deltaTime * 0.5f;
-	mCloudRotation += deltaTime * 0.7f;
+	mRotation += deltaTime;
+	mCloudRotation += deltaTime*0.015f;
+	mRotaSunSpeed += deltaTime;
 }
 void GameState::Render()
 {
@@ -285,7 +317,7 @@ void  GameState::DebugUI()
 	}
 	if (ImGui::CollapsingHeader("Setting"))
 	{
-		ImGui::DragFloat("Displacement Weight", &mSetting.displacementWeight, 0.1f, 0.0f, 100.0f);
+		ImGui::DragFloat("Displacement Weight", &mSetting.displacementWeight, 0.1f, 0.001f, 100.0f);
 
 		if (ImGui::Checkbox("Normal", &mNormal))
 		{
@@ -299,7 +331,20 @@ void  GameState::DebugUI()
 		{
 			ApplySun ? 1.0f : 0.0f;
 		}
+		if (ImGui::Checkbox("ApplyCloud", &ApplyCloud))
+		{
+			ApplyCloud ? 1.0f : 0.0f;
+		}
+		if (ImGui::Checkbox("NightTime", &NightMode))
+		{
+			NightMode ? 1.0f : 0.0f;
+		}
 
+	}
+	bool pause = mPause == 1.0f;
+	if (ImGui::Checkbox("Pause", &pause))
+	{
+		mPause = pause ? 1.0f : 0.0f;
 	}
  		ImGui::DragInt("Blur Iterations", &mBlurIterations, 1, 0, 100);
 		ImGui::DragFloat("Blur Saturation", &mBlurSaturation, 0.001f, 0.0f, 1.0f);
@@ -350,14 +395,14 @@ void GameState::RenderScene()
 
 	mSkybox.Render(mCamera);
 
-	mSunTransformBuffer.Update(Matrix4::Identity);
+	mSunTransformBuffer.Update(Matrix4::Translation({ 0.0f, 0.0f, -8.0f }));
 	mSunTransformBuffer.BindVS(0);
 	mTextureVertexShader.Bind();
 	mTexturePixelShader.Bind();
 
+	mSunTexture.BindPS(0);
 	if (ApplySun)
 	{
-		mSunTexture.BindPS(0);
 		mSunMeshBuffer.Render();
 
 	}
@@ -401,6 +446,7 @@ void GameState::RenderScene()
 	mSettingBuffer.BindPS(3);
 	mMeshBuffer.Render(); //draw
 
+
 	mCloudPixelShader.Bind();
 	mCloudVertexShader.Bind();
 	//mLightBuffer.BindVS(1);
@@ -409,7 +455,7 @@ void GameState::RenderScene()
 	//mMaterialBuffer.BindPS(2);
 	//matWorld = Matrix4::Scaling(1.0f)*(KWSE::Math::Matrix4::RotationX(mRotation.x*mCloudRotation) * Matrix4::RotationY(mRotation.y*mCloudRotation) * Matrix4::RotationZ(mRotation.z*mCloudRotation));
 	//Matrix4::Translation({ 0.0f, 0.0f, -8.0f }) *Matrix4::Scaling(1.0f)*(KWSE::Math::Matrix4::RotationX(mRotation.x*mCloudRotation) * Matrix4::RotationY(mRotation.y*mCloudRotation) * Matrix4::RotationZ(mRotation.z*mCloudRotation));
-	
+
 	textureData.world = Transpose(matWorld);
 	textureData.wvp = KWSE::Math::Transpose(matWorld*matView*matProj);
 	mTransformCloudBuffer.Update(textureData);
@@ -418,7 +464,10 @@ void GameState::RenderScene()
 	mCloudTexture.BindPS(0);
 	mBlendState.Set();
 
-	mCloudMeshBuffer.Render();
+	if (ApplyCloud)
+	{
+		mCloudMeshBuffer.Render();	
+	}
 
 	BlendState::ClearState();
 
@@ -461,7 +510,7 @@ void GameState::RenderBrightness()
 	mBlankTexture.BindPS(0);
 	mMeshBuffer.Render();
 
-	mSunTransformBuffer.Update(Transpose(matView * matProj));
+	mSunTransformBuffer.Update(Transpose(Matrix4::Translation({ -8.0f, 0.0f, -8.0f })*matView * matProj));
 
 	if (ApplySun)
 	{
@@ -471,7 +520,6 @@ void GameState::RenderBrightness()
 
 	mBloomRenderTarget.EndRender();
 }
-
 void GameState::ApplyBlur()
 {
 	auto graphicsSystem = GraphicsSystem::Get();

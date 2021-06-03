@@ -9,12 +9,15 @@
 #include "TransformComponent.h"
 #include "ModelComponent.h"
 #include "AnimatorComponent.h"
+// Service header
+#include"RenderService.h"
 // World
 #include "Component.h"
 #include "GameObject.h"
 #include "GameObjectIO.h"
 #include "GameObjectHandle.h"
 #include "GameWorld.h"
+#include "Service.h"
 // Utilis
 #include "GUIUtili.h"
 

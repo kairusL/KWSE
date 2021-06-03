@@ -173,7 +173,3 @@ void GameState::Render()
 	mMeshBuffer.Render();
 }
 
-
-
-
-

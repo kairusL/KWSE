@@ -15,6 +15,8 @@ void GameState::Initialize()
 	//mTexture.Initialize("../../Assets/Images/WaterTurtle.jpg");
 	mPosition = Vector2(GraphicsSystem::Get()->GetBackBufferWidth() * 0.5f, GraphicsSystem::Get()->GetBackBufferHeight()* 0.5f);
 	mFont.Initialize();
+
+
 	
 }
 void GameState::Terminate()

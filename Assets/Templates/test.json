@@ -5,7 +5,7 @@
     },
     "ColliderComponent": {
       "Center": [ 0, 0, 0 ],
-      "Extend": [ 2, 2, 2 ]
+      "Extend": [ 0.1, 0.1, 0.1 ]
     },
     "ModelComponent": {
       "FileName": "../../Assets/Models/Model/Vanguard/Jump/Jump.model"

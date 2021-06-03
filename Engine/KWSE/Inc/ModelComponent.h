@@ -7,7 +7,7 @@ namespace KWSE
 	class ModelComponent final : public Component
 	{
 	public:
-		SET_COMPONENT_ID(ComponentId::Model);
+		SET_TYPE_ID(ComponentId::Model);
 		MEMPOOL_DECLARE;
 
 		ModelComponent() = default;

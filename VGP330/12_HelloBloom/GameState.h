@@ -101,6 +101,7 @@ private:
 	KWSE::Graphics::PixelShader  mPostProcessPixelShader;
 
 	KWSE::Math::Vector3 mRotation;
+	float mRotaSunSpeed;
 	float mCloudRotation = 0.0f;
 	//float mRotationY= 0.f;
 	//float mRotationX= 0.f;
@@ -132,6 +133,7 @@ private:
 	bool mSpecular = true;
 
 	float mFPS = 0.0f;
+	bool mPause = false;
 
 	int mBlurIterations = 10;
 	float mBlurSaturation = 0.28f;
@@ -140,6 +142,8 @@ private:
 	KWSE::Graphics::MeshBuffer mScreenMeshBuffer;
 
 	bool ApplySun=false;
+	bool ApplyCloud=false;
+	bool NightMode = false;
 };
 
 

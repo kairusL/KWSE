@@ -8,15 +8,11 @@ namespace KWSE::Graphics
 	{
 	public:
 		Animator() = default;
-		~Animator();
 
 		Animator(const Animator&) = delete;
 		Animator& operator=(const Animator&) = delete;
 
-		void Initialize(KWSE::Graphics::Model* model) { mModel = model; }
-		void Terminate();
-
-		void AddClip(std::filesystem::path fileName);
+		void Initialize(const KWSE::Graphics::Model* model) { mModel = model; }
 
 		//void PlayAnimation(const char* clipName);
 		void PlayAnimation(int clipIndex);
@@ -32,7 +28,7 @@ namespace KWSE::Graphics
 		void SetLooping(bool loop) { mLooping = loop; }
 
 	private:
-		KWSE::Graphics::Model* mModel = nullptr;
+		const KWSE::Graphics::Model* mModel = nullptr;
 		std::vector<KWSE::Math::Matrix4> mSkeletonTransform;
 		std::vector<KWSE::Math::Matrix4> mToLocalTransform;
 		float mAnimationTimer = 0.0f;

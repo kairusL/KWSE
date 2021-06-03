@@ -45,6 +45,9 @@ private:
 	float mRotationX= 0.f;
 	float mRotation = 0.f;
 
+	bool mActiveRotation=false;
+	bool mPause=false;
+
 	TransformBuffer mTransformBuffer;
 	KWSE::Graphics::Skybox mSkybox;
 

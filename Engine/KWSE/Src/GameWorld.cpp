@@ -5,25 +5,46 @@
 
 void GameWorld::Initialize(uint32_t capacity)
 {
+	for (auto& service : mServices)
+	{
+		service->Initialize();
+	}
 	mGameObjectSlots.resize(capacity);
 	mFreeSolts.resize(capacity);
 	std::iota(mFreeSolts.begin(), mFreeSolts.end(), 0);
 }
 void GameWorld::Terminate()
 {
-
+	for (auto& service : mServices)
+	{
+		service->Terminate();
+	}
 }
 void GameWorld::Update(float deltaTime)
 {
+	for (auto& service : mServices)
+	{
+		service->Update(deltaTime);
+	}
+	for (auto& gameObject : mUpdateList)
+	{
+		gameObject->Update(deltaTime);
+	}
 
 }
 void GameWorld::Render()
 {
-
+	for (auto& service : mServices)
+	{
+		service->Render();
+	}
 }
 void GameWorld::DebugUI()
 {
-
+	for (auto& service : mServices)
+	{
+		service->DebugUI();
+	}
 }
 
 GameObjectHandle KWSE::GameWorld::CreateGameObject(const std::filesystem::path & templateFileName, std::string name)
@@ -69,6 +90,8 @@ GameObjectHandle KWSE::GameWorld::CreateGameObject(const std::filesystem::path &
 	newObject->mName = name;
 	newObject->Initialize();
 
+	// Add game object to update list
+	mUpdateList.push_back(newObject.get());
 	return handle;
 }
 

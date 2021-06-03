@@ -8,7 +8,7 @@ namespace KWSE
 	class ColliderComponent final : public Component
 	{
 	public:
-		SET_COMPONENT_ID(ComponentId::Collider);
+		SET_TYPE_ID(ComponentId::Collider);
 		MEMPOOL_DECLARE;
 		ColliderComponent() = default;
 

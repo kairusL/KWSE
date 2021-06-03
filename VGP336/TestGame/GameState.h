@@ -90,24 +90,12 @@ private:
 	KWSE::Graphics::RenderTarget mBloomRenderTarget;  // <- only the "bright" pixels
 	KWSE::Graphics::RenderTarget mBlurRenderTarget;     // <- amplify the brightness
 
-	//Terrain
-	KWSE::Graphics::Mesh mTerrainMesh;
-	KWSE::Graphics::Texture mTerrainTexrures;
-	KWSE::Graphics::MeshBuffer mTerrainMeshBuffer;
+
 
 	//Model
 	KWSE::Graphics::Model model;
 	KWSE::Graphics::Animation anima;
 	KWSE::Graphics::Texture modelTexrure[2];
-	//SciFi
-	KWSE::Graphics::Mesh mSciFiMesh;
-	KWSE::Graphics::Texture mSci_fi_Texrures;
-	KWSE::Graphics::MeshBuffer mSciFiMeshBuffer;
-	KWSE::Math::Vector3 mShipPosition;
-	KWSE::Math::Vector3 mShipDirection;
-	float mShipRotation = 0.0f;
-	float mShipElevation = 0.0f;
-	float mShipTilt = 0.0f;
 
 	//Plane
 	KWSE::Graphics::Mesh mMesh;
