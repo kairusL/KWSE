@@ -84,11 +84,15 @@ void GameObjectIO::Read(FILE* file,GameObject& gameObject)
 				const auto& FName = component.value["FileName"].GetString();
 				model->SetFileName(FName);
 			}
+			if (component.value.HasMember("AnimationFileName"))
+			{
+				const auto& FName = component.value["AnimationFileName"].GetString();
+				model->SetFileName(FName);
+			}
 		}
 		else if (strcmp(componentName, "AnimatorComponent") == 0)
 		{
 			auto animator = gameObject.AddComponent<AnimatorComponent>();
-
 		}
 	}
 }

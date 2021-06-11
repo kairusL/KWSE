@@ -1,6 +1,6 @@
 #pragma once
 // Reason for use BlockAllocator
-// Mixing large and small allocations can ca use memory fragnebtation
+// Mixing large and small allocations can cause memory fragnebtation
 namespace KWSE::Core
 {
 	// Constant time allocate/ free  -> no search time

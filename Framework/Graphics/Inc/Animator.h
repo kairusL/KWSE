@@ -21,8 +21,8 @@ namespace KWSE::Graphics
 
 		void Update(float deltaTime);
 
-		const std::vector<KWSE::Math::Matrix4> GetSkeletonTransform(const KWSE::Math::Matrix4 matWorld = KWSE::Math::Matrix4::Identity);;
-		const std::vector<KWSE::Math::Matrix4> GetToLocalTransform() const { return mToLocalTransform; };
+		const std::vector<KWSE::Math::Matrix4>& GetSkeletonTransform() const { return mSkeletonTransform; }
+		const std::vector<KWSE::Math::Matrix4>& GetToLocalTransform() const { return mToLocalTransform; };
 
 		void SetAnimationSpeed(float speed) { mAnimationSpeed = speed; }
 		void SetLooping(bool loop) { mLooping = loop; }

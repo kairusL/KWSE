@@ -45,6 +45,7 @@ void App::Run(AppConfig appConfig)
 	SpriteRenderer::StaticInitialize();
 	TextureManager::StaticInitialize("../../Assets/Images/");
 	FontManager::StaticInitialize();
+	ModelManager::StaticInitialize();
 	SimpleDraw::StaticInitialize();
 	DebugUI::StaticInitialize(handle);
 
@@ -116,6 +117,7 @@ void App::Run(AppConfig appConfig)
 
 	DebugUI::StaticTerminate();
 	SimpleDraw::StaticTerminate();
+	ModelManager::StaticTerminate();
 	FontManager::StaticTerminate();
 	TextureManager::StaticTerminate();
 	SpriteRenderer::StaticTerminate();

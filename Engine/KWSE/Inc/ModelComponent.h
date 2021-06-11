@@ -16,10 +16,12 @@ namespace KWSE
 		void Terminate() override;
 
 		void SetFileName(const char* fileName) { mFileName = fileName; }
-		const Graphics::Model& GetModel() const { return mModel; }
+		void SetAnimationFileName(const char* animationFileName) { mAnimationFileName = animationFileName; }
+		const Graphics::Model& GetModel() const;
 
 	private:
 		std::string mFileName;
-		Graphics::Model mModel;
+		std::string mAnimationFileName;
+		Graphics::ModelId mModelId = 0;
 	};
 }

@@ -181,7 +181,7 @@ void GameState::Update(float deltaTime)
 {
 	if (NightMode)
 	{
-		mDirectionLight.direction = Math::Normalize({ 0.843930721f, -0.345193297f, -0.410636812f });
+		//mDirectionLight.direction = Math::Normalize({ 0.843930721f, -0.345193297f, -0.410636812f });
 		mDirectionLight.ambient = { 0.f };
 		mDirectionLight.diffuse = { 0.f};
 		mDirectionLight.specular = {0.f };
@@ -191,7 +191,7 @@ void GameState::Update(float deltaTime)
 	}
 	else
 	{
-		mDirectionLight.direction = Math::Normalize({ 0.854f, -0.552f, 0.229f });
+		//mDirectionLight.direction = Math::Normalize({ 0.854f, -0.552f, 0.229f });
 		mDirectionLight.ambient = { 0.245f };
 		mDirectionLight.diffuse = { 0.884f };
 		mDirectionLight.specular = { 0.858f };
@@ -201,11 +201,11 @@ void GameState::Update(float deltaTime)
 	}
 	if (ApplySun)
 	{
-		mDirectionLight.direction = Math::Normalize({ 0.843930721f, -0.345193297f, -0.410636812f });
+		//mDirectionLight.direction = Math::Normalize({ 0.843930721f, -0.345193297f, -0.410636812f });
 	}
 	else
 	{
-		mDirectionLight.direction = Math::Normalize({ 0.854f, -0.552f, 0.229f });
+		//mDirectionLight.direction = Math::Normalize({ 0.854f, -0.552f, 0.229f });
 	}
 	if (mPause)
 	{

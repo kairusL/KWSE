@@ -8,7 +8,7 @@ namespace KWSE
 		public:
 			GameObjectHandle() = default;
 
-			bool IsValid() const { return mIndex != -1 && mGeneration != -1; }
+			//bool IsValid() const { return mIndex != -1 && mGeneration != -1; }
 	private:
 		friend class GameWorld;
 		int mIndex = -1;

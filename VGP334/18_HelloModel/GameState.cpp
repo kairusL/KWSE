@@ -567,7 +567,7 @@ void GameState::RenderScene()
 				*model.skeleton,
 				//KWSE::Graphics::CalculateBoneMatrices(*model.skeleton, matWorld, *animationClip, mAnimationTimer),
 				//Skeleton::DrawType::cone);
-				mAnimator.GetSkeletonTransform(matWorld),
+				mAnimator.GetSkeletonTransform(),
 				Skeleton::DrawType::cone);
 		SimpleDraw::Render(*mActiveCamera);
 	}

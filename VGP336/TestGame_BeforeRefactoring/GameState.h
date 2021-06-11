@@ -13,8 +13,6 @@ public:
 
 	void Render() override;
 	void DebugUI() override;
-
-	void SetAnimation();
 private:
 	void RenderDepthMap();
 	void RenderScene();
@@ -46,25 +44,24 @@ private:
 		float normalWeight = 0.0f;
 		float specularWeight = 0.0f;
 		float depthBias= 0.000029f;
+		int Skinning;
+		KWSE::Math::Vector3 padding;
+	};
+	struct BoneTransformData
+	{
+		KWSE::Math::Matrix4 boneTransforms[256];
 	};
 	struct OilSetting
 	{
-		float screenSizeScale=1.0f;
+		//float screenSizeScale=2.0f;
+		float screenSizeScale=0.0f;
 		float paintRadius=3.0f;
 		float minSigma =1.0f;
 		float sizeWeight=0.0f;
-
-	};
-	struct ActiveSetting
-	{
-		float oilActive   =0.0f;
-		float heatActive  =0.0f;
-		float mosaicActive=0.0f;
-		float fluorescentActive = 0.0f;
 	};
 	//ID3D11Buffer* mConstantBuffer = nullptr;
 
-	
+	using TransBoneBuffer = KWSE::Graphics::TypedConstantBuffer<BoneTransformData>;
 	using TransformBuffer = KWSE::Graphics::TypedConstantBuffer<TransformData>;
 	using TransformCloudBuffer = KWSE::Graphics::TypedConstantBuffer<TransformDataTextureWithLight>;
 	using TransformTextureBuffer = KWSE::Graphics::TypedConstantBuffer<TransformDataTexture>;
@@ -73,7 +70,6 @@ private:
 	using MaterialBuffer = KWSE::Graphics::TypedConstantBuffer<KWSE::Graphics::Material>;
 	using SettingBuffer = KWSE::Graphics::TypedConstantBuffer<Setting>;
 	using OilSettingBuffer = KWSE::Graphics::TypedConstantBuffer<OilSetting>;
-	using ActiveSettingBuffer = KWSE::Graphics::TypedConstantBuffer<ActiveSetting>;
 
 
 	KWSE::Graphics::DirectionalLight mDirectionLight;
@@ -88,15 +84,18 @@ private:
 
 	KWSE::Graphics::RenderTarget mRenderTarger;
 
-	KWSE::Graphics::RenderTarget mDepthRenderTarget;   // <- record depth from light source
+	KWSE::Graphics::RenderTarget mDepthRebderTarget;   // <- record depth from light source
 	KWSE::Graphics::RenderTarget mBaseRenderTarget;     // < - original scene, think "screenshot"
 	KWSE::Graphics::RenderTarget mBloomRenderTarget;  // <- only the "bright" pixels
 	KWSE::Graphics::RenderTarget mBlurRenderTarget;     // <- amplify the brightness
 
-	//Terrain
-	KWSE::Graphics::Mesh mTerrainMesh;
-	KWSE::Graphics::Texture mTerrainTexrures;
-	KWSE::Graphics::MeshBuffer mTerrainMeshBuffer;
+
+
+	//Model
+	KWSE::Graphics::Model model;
+	KWSE::Graphics::Animation anima;
+	KWSE::Graphics::Texture modelTexrure[2];
+
 
 	//TransformData
 	TransformBuffer mTransformBuffer;
@@ -116,23 +115,30 @@ private:
 	KWSE::Graphics::VertexShader mVertexShader;
 	KWSE::Graphics::PixelShader mPixelShader;
 
+	KWSE::Graphics::VertexShader mCloudVertexShader;
+	KWSE::Graphics::PixelShader  mCloudPixelShader;
+
 	KWSE::Graphics::VertexShader mTextureVertexShader;
 	KWSE::Graphics::PixelShader  mTexturePixelShader;
 
+	KWSE::Graphics::VertexShader mGaussianBlurVertexShader;
+	KWSE::Graphics::PixelShader  mGaussianBlurPixelShaderX;
+	KWSE::Graphics::PixelShader  mGaussianBlurPixelShaderY;
 
 	KWSE::Graphics::VertexShader mOilPaintingVertexShader;
 	KWSE::Graphics::PixelShader mOilPaintingPixelShader;
 
 	OilSettingBuffer mOilSettingBuffer;
 	OilSetting mOilSetting;
-	ActiveSettingBuffer mActiveSettingBuffer;
-	ActiveSetting mActiveSetting;
 
-	KWSE::Math::Vector3 mTerrainPosition;
+	KWSE::Math::Vector3 mRotation;
 
+	TransBoneBuffer mTransBoneBuffer;
 
 	TransformCloudBuffer mTransformCloudBuffer;
-	
+	KWSE::Graphics::TypedConstantBuffer<KWSE::Math::Vector4> mBlurSettingsBuffer;
+
+
 	LightBuffer  mLightBuffer;
 	MaterialBuffer mMaterialBuffer;
 	SettingBuffer mSettingBuffer;
@@ -142,7 +148,9 @@ private:
 	KWSE::Graphics::Sampler mSampler;
 	KWSE::Graphics::BlendState mBlendState;
 
-
+	KWSE::Graphics::Animator mAnimator;
+	KWSE::Graphics::Animation mAnimation;
+	float mAnimationTimer = 0.0f;
 
 	float mFPS = 0.0f;
 
@@ -152,67 +160,11 @@ private:
 	KWSE::Graphics::MeshPX mScreenMesh;
 	KWSE::Graphics::MeshBuffer mScreenMeshBuffer;
 
-	float mLightCameraDistance = 150.0f;
 
-	//Air balloon0
-	KWSE::Graphics::Mesh	mAirBalloonMesh0;
-	KWSE::Graphics::Texture mAirBalloonTexrure0;
-	KWSE::Graphics::MeshBuffer mAirBalloonMeshBuffer0;
-	// Animator
-	KWSE::Graphics::Animator mAnimator;
-	KWSE::Graphics::Animation mAnimation;
-	float mAnimationTimer = 0.0f;
+	float mLightCameraDistance = 100.0f;
+	bool mAnimationLoop = false;
 
-	//Air balloon1
-	KWSE::Graphics::Texture mAirBalloonTexrure1;
-	KWSE::Graphics::MeshBuffer mAirBalloonMeshBuffer1;
-	// Animator
-	KWSE::Graphics::Animator mAnimator1;
-	KWSE::Graphics::Animation mAnimation1;
-	float mAnimationTimer1 = 0.0f;
-
-	//Air balloon2
-	KWSE::Graphics::Texture mAirBalloonTexrure2;
-	KWSE::Graphics::MeshBuffer mAirBalloonMeshBuffer2;
-	// Animator
-	KWSE::Graphics::Animator mAnimator2;
-	KWSE::Graphics::Animation mAnimation2;
-	float mAnimationTimer2 = 0.0f;
-
-	//Air balloon3
-	KWSE::Graphics::Texture mAirBalloonTexrure3;
-	KWSE::Graphics::MeshBuffer mAirBalloonMeshBuffer3;
-	// Animator
-	KWSE::Graphics::Animator mAnimator3;
-	KWSE::Graphics::Animation mAnimation3;
-	float mAnimationTimer3 = 0.0f;
-
-	//Air balloon4
-	KWSE::Graphics::Texture mAirBalloonTexrure4;
-	KWSE::Graphics::MeshBuffer mAirBalloonMeshBuffer4;
-	// Animator
-	KWSE::Graphics::Animator mAnimator4;
-	KWSE::Graphics::Animation mAnimation4;
-	float mAnimationTimer4 = 0.0f;
-
-	//Air balloon5
-	KWSE::Graphics::Texture mAirBalloonTexrure5;
-	KWSE::Graphics::MeshBuffer mAirBalloonMeshBuffer5;
-	// Animator
-	KWSE::Graphics::Animator mAnimator5;
-	KWSE::Graphics::Animation mAnimation5;
-	float mAnimationTimer5 = 0.0f;
-
-	//Air balloon6
-	KWSE::Graphics::Texture mAirBalloonTexrure6;
-	KWSE::Graphics::MeshBuffer mAirBalloonMeshBuffer6;
-	// Animator
-	KWSE::Graphics::Animator mAnimator6;
-	KWSE::Graphics::Animation mAnimation6;
-	float mAnimationTimer6 = 0.0f;
-
-	bool mPause = false;
-
-
+	KWSE::GameWorld mGameWorld;
+	KWSE::GameObjectHandle mGameObjectHandle;
 };
 

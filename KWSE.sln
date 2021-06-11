@@ -54,6 +54,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{B20E
 		Assets\Shaders\DoTexturing.fx = Assets\Shaders\DoTexturing.fx
 		Assets\Shaders\DoTransform.fx = Assets\Shaders\DoTransform.fx
 		Assets\Shaders\GaussianBlur.fx = Assets\Shaders\GaussianBlur.fx
+		Assets\Shaders\ModelDepthMap.fx = Assets\Shaders\ModelDepthMap.fx
 		Assets\Shaders\Particles.fx = Assets\Shaders\Particles.fx
 		Assets\Shaders\PostProcess.fx = Assets\Shaders\PostProcess.fx
 		Assets\Shaders\PostProcessOilPainting.fx = Assets\Shaders\PostProcessOilPainting.fx
@@ -153,6 +154,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "19_HelloTempModel", "VGP334\19_HelloTempModel\19_HelloTempModel.vcxproj", "{FD01DC75-6BC3-495C-9F7C-D09B63DF2CE6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "16_FinalShaderTeam", "VGP330\16_FinalShaderTeam\16_FinalShaderTeam.vcxproj", "{B9DA8153-8D0D-48AA-A033-8459C59CFD29}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestGame_BeforeRefactoring", "VGP336\TestGame_BeforeRefactoring\TestGame_BeforeRefactoring.vcxproj", "{239C3D0C-1BC6-4724-9D3B-29EEB9C6C786}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -530,6 +533,14 @@ Global
 		{B9DA8153-8D0D-48AA-A033-8459C59CFD29}.Release|x64.Build.0 = Release|x64
 		{B9DA8153-8D0D-48AA-A033-8459C59CFD29}.Release|x86.ActiveCfg = Release|Win32
 		{B9DA8153-8D0D-48AA-A033-8459C59CFD29}.Release|x86.Build.0 = Release|Win32
+		{239C3D0C-1BC6-4724-9D3B-29EEB9C6C786}.Debug|x64.ActiveCfg = Debug|x64
+		{239C3D0C-1BC6-4724-9D3B-29EEB9C6C786}.Debug|x64.Build.0 = Debug|x64
+		{239C3D0C-1BC6-4724-9D3B-29EEB9C6C786}.Debug|x86.ActiveCfg = Debug|Win32
+		{239C3D0C-1BC6-4724-9D3B-29EEB9C6C786}.Debug|x86.Build.0 = Debug|Win32
+		{239C3D0C-1BC6-4724-9D3B-29EEB9C6C786}.Release|x64.ActiveCfg = Release|x64
+		{239C3D0C-1BC6-4724-9D3B-29EEB9C6C786}.Release|x64.Build.0 = Release|x64
+		{239C3D0C-1BC6-4724-9D3B-29EEB9C6C786}.Release|x86.ActiveCfg = Release|Win32
+		{239C3D0C-1BC6-4724-9D3B-29EEB9C6C786}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -583,12 +594,13 @@ Global
 		{113A792F-9DC8-4B69-9277-635A9DD89997} = {258D5CE8-17EB-42D5-ABA0-0BCC84E66C04}
 		{FD01DC75-6BC3-495C-9F7C-D09B63DF2CE6} = {90D50E27-6D95-450A-8B1D-AEC7197B7F0C}
 		{B9DA8153-8D0D-48AA-A033-8459C59CFD29} = {B23D2D4B-6CFF-4A38-8CA4-3BACFB5BE0FE}
+		{239C3D0C-1BC6-4724-9D3B-29EEB9C6C786} = {FAC7FF80-BF60-4037-9909-EA4FB13E108D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C041DC44-92D1-453E-BCFA-5B9E9DF9D604}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 47
+		SccNumberOfProjects = 48
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://dev.azure.com/kairusl
 		SccLocalPath0 = .
@@ -776,5 +788,9 @@ Global
 		SccProjectTopLevelParentUniqueName46 = KWSE.sln
 		SccProjectName46 = VGP330/16_FinalShaderTeam
 		SccLocalPath46 = VGP330\\16_FinalShaderTeam
+		SccProjectUniqueName47 = VGP336\\TestGame_BeforeRefactoring\\TestGame_BeforeRefactoring.vcxproj
+		SccProjectTopLevelParentUniqueName47 = KWSE.sln
+		SccProjectName47 = VGP336/TestGame_BeforeRefactoring
+		SccLocalPath47 = VGP336\\TestGame_BeforeRefactoring
 	EndGlobalSection
 EndGlobal

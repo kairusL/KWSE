@@ -55,9 +55,15 @@ namespace KWSE
 
 
 
-		GameObjectHandle CreateGameObject(const std::filesystem::path & templateFileName, std::string name);
+		GameObject* CreateGameObject(const std::filesystem::path & templateFileName, std::string name);
 		GameObject* GetGameObject(GameObjectHandle handle);
+		GameObject* FindGameObject(const std::string& name);
+	
+		void Destory(GameObjectHandle handle);
 	private:
+		bool IsValid(GameObjectHandle handle) const;
+		void ProcessDestoryList();
+
 		struct Slot
 		{
 			std::unique_ptr<GameObject> gameObject;
@@ -74,9 +80,11 @@ namespace KWSE
 
 		GameObjectSlots mGameObjectSlots;
 		std::vector<uint32_t> mFreeSolts;
+		std::vector<uint32_t> mToBeDestoryed;
 
 		GameObjectList mUpdateList;
 
 		bool mInitialized = false;
+		bool mUpdating = false;
 	};
 }

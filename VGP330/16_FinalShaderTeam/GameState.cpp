@@ -221,7 +221,10 @@ void GameState::Update(float deltaTime)
 {
 	auto inputSystem = InputSystem::Get();
 
-
+	if (mPause)
+	{
+		deltaTime = 0.0f;
+	}
 
 	// Camera
 	const float moveSpeed = 10.0f;
@@ -369,6 +372,12 @@ void  GameState::DebugUI()
 			mActiveSetting.heatActive = heatactive ? 1.0f : 0.0f;
 		}
 
+		//bool fluorescentactive = mActiveSetting.fluorescentActive == 1.0f;
+		//if (ImGui::Checkbox("Fluorescent Effect", &fluorescentactive))
+		//{
+		//	mActiveSetting.fluorescentActive = fluorescentactive ? 1.0f : 0.0f;
+		//}
+
 		bool oilactive = mActiveSetting.oilActive == 1.0f;
 		if (ImGui::Checkbox("OilPainting Effect", &oilactive))
 		{
@@ -394,6 +403,11 @@ void  GameState::DebugUI()
 	if (ImGui::CollapsingHeader("DepthMap"))
 	{
 		ImGui::Image(mDepthRenderTarget.GetRawData(), { 200.0f,200.0f });
+	}
+	bool pause = mPause == 1.0f;
+	if (ImGui::Checkbox("Pause", &pause))
+	{
+		mPause = pause ? 1.0f : 0.0f;
 	}
 	ImGui::End();
 

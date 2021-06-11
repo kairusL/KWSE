@@ -19,6 +19,7 @@ namespace KWSE
 		void Update(float deltaTime) override;
 
 		Graphics::Animator& GetAnimator() { return mAnimator; }
+		const Graphics::Animator& GetAnimator() const { return mAnimator; }
 
 	private:
 		const ModelComponent* mModelComponent = nullptr;

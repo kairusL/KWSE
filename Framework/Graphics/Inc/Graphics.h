@@ -24,6 +24,7 @@
 #include "MeshBuffer.h"
 #include "MeshBuilder.h"
 #include "Model.h"
+#include "ModelManager.h"
 #include "MeshIO.h"
 #include "MeshTypes.h"
 #include "ModelLoader.h"

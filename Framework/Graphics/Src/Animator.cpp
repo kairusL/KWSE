@@ -37,17 +37,8 @@ void Animator::Update(float deltaTime)
 		mToLocalTransform = KWSE::Graphics::CalculateSkinningMatrices(*(mModel->skeleton));
 		mSkeletonTransform = CalculateBoneMatrices(*(mModel->skeleton));
 	}
+
 	auto& bones = mModel->skeleton.get()->bones;
 	for (auto& bone : bones)
 		mToLocalTransform[bone->index] = bone->offsetTransform * mToLocalTransform[bone->index];
-}
-
-const std::vector<KWSE::Math::Matrix4> KWSE::Graphics::Animator::GetSkeletonTransform(const KWSE::Math::Matrix4 matWorld)
-{
-	
-		for (auto& matrix : mSkeletonTransform)
-			matrix = matrix * matWorld;
-
-		return mSkeletonTransform;
-	
 }
