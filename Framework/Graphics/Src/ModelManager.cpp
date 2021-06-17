@@ -53,6 +53,11 @@ ModelId ModelManager::LoadModel(std::filesystem::path filePath)
 	entry.model.Initialize(filePath);
 	return mModels.size();
 }
+ Model& ModelManager::GetModel(ModelId id) 
+{
+	 auto constModel = static_cast<const ModelManager*>(this);
+	 return const_cast<Model&>(constModel->GetModel(id));
+}
 
 const Model& ModelManager::GetModel(ModelId id) const
 {

@@ -8,11 +8,17 @@
       "Extend": [ 0.1, 0.1, 0.1 ]
     },
     "ModelComponent": {
-      "FileName": "../../Assets/Models/Model/Vanguard/Jump/Jump.model"
-    },
-    "AnimatorComponent": {
+      "FileName": "../../Assets/Models/Model/Vanguard/model/vanguard.model",
+      "AnimationFileName": [
+        "../../Assets/Models/Model/Vanguard/Walking/Walking.model",
+        "../../Assets/Models/Model/Vanguard/Jump/Jump.model",
+        "../../Assets/Models/Model/Vanguard/StandingDodgeBackward/StandingDodgeBackward.anim",
+        "../../Assets/Models/Model/Vanguard/CrouchToStand/CrouchToStand.anim"
+      ]
 
-    }
+    },
+    "AnimatorComponent": {},
+    "MovementComponent": {}
   }
 }
 

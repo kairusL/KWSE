@@ -19,7 +19,7 @@ void RenderService::Initialize()
 	mDefaultCamera.SetPosition({ 0.0433705039f,2.54280877f,-8.64591217f });
 	mDefaultCamera.SetDirection({ 0.036f,-0.17f, 0.983f });
 	mDefaultCamera.SetNearPlane(0.001f);
-
+	//activeCamDir = mDefaultCamera.GetDirection();
 	mLightCamera.SetNearPlane(0.1f);
 	mLightCamera.SetFarPlane(500.0f);
 	mLightCamera.SetAspectRation(1.0f);
@@ -301,6 +301,7 @@ void RenderService::DebugUI()
 
 	}
 	ImGui::Checkbox("Skeleton", &showSkeleton);
+
 	ImGui::End();
 }
 
@@ -396,12 +397,13 @@ void RenderService::RenderScene()
 	for (auto& entry : mRenderEntries)
 	{
 		Vector3 position = entry.transformComponent->GetPosition();
-		Vector3 rotation = entry.transformComponent->GetRotation();
+		auto rotation = entry.transformComponent->GetRotation();
 		auto matWorld =
 			//Matrix4::Scaling(10.0f)*		// HACK
-			Matrix4::RotationX(rotation.x)*
-			Matrix4::RotationY(rotation.y)*
-			Matrix4::RotationZ(rotation.z)*
+			//Matrix4::RotationX(rotation.x)*
+			//Matrix4::RotationY(rotation.y)*
+			//Matrix4::RotationZ(rotation.z)*
+			Matrix4::RotationQuaternion(rotation)*
 			Matrix4::Translation(position);
 		data.world = Transpose(matWorld);
 		data.wvp[0] = Transpose(matWorld*matView*matProj);

@@ -44,6 +44,7 @@ Quaternion Quaternion::RotationAxis(const Vector3& axis, float rad)
 	const float c = cos(rad * 0.5f);
 	const float s = sin(rad * 0.5f);
 	const Math::Vector3 a = Math::Normalize(axis);
+
 	return Quaternion(c,a.x * s, a.y * s, a.z * s);
 }
 Quaternion Quaternion::RotationMatrix(const Matrix4& matrix) 

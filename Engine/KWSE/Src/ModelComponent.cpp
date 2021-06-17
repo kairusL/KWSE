@@ -18,6 +18,14 @@ void ModelComponent::Initialize()
 	renderService->Register(this);
 
 	mModelId = ModelManager::Get()->LoadModel(mFileName);
+	if (!mAnimationFileName.empty())
+	{
+		for (auto& animName : mAnimationFileName)
+		{
+			ModelLoader::LoadAnimation(animName, ModelManager::Get()->GetModel(mModelId));
+		}
+		mAnimationFileName.clear();
+	}
 
 }
 

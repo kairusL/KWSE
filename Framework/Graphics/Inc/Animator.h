@@ -16,6 +16,7 @@ namespace KWSE::Graphics
 
 		//void PlayAnimation(const char* clipName);
 		void PlayAnimation(int clipIndex);
+		void PlayAnimation(int clipIndex,bool play);
 		void Play() { mAnimate = true; }
 		void Stop() { mAnimate = false; }
 
@@ -25,6 +26,7 @@ namespace KWSE::Graphics
 		const std::vector<KWSE::Math::Matrix4>& GetToLocalTransform() const { return mToLocalTransform; };
 
 		void SetAnimationSpeed(float speed) { mAnimationSpeed = speed; }
+		float GetAnimationSpeed() { return mAnimationSpeed; }
 		void SetLooping(bool loop) { mLooping = loop; }
 
 	private:

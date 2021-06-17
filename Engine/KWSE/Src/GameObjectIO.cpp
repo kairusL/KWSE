@@ -7,6 +7,7 @@
 #include "ColliderComponent.h"
 #include "TransformComponent.h"
 #include "ModelComponent.h"
+#include "MovementComponent.h"
 
 
 #include <rapidjson/document.h>
@@ -34,6 +35,7 @@ void GameObjectIO::Read(FILE* file,GameObject& gameObject)
 	// 1. grab the object by name.
 	document.HasMember("Components");
 	auto components = document["Components"].GetObj();
+
 	// 2. iterate the stuff in it.
 	for (auto& component : components)
 	{
@@ -84,15 +86,20 @@ void GameObjectIO::Read(FILE* file,GameObject& gameObject)
 				const auto& FName = component.value["FileName"].GetString();
 				model->SetFileName(FName);
 			}
-			if (component.value.HasMember("AnimationFileName"))
+			const auto& extendAnimation = component.value["AnimationFileName"].GetArray();
+			for (size_t i = 0; i < extendAnimation.Size(); ++i)
 			{
-				const auto& FName = component.value["AnimationFileName"].GetString();
-				model->SetFileName(FName);
+				const auto& FName = extendAnimation[i].GetString();
+				model->SetAnimationFileName(FName);
 			}
 		}
 		else if (strcmp(componentName, "AnimatorComponent") == 0)
 		{
 			auto animator = gameObject.AddComponent<AnimatorComponent>();
+		}
+		else if (strcmp(componentName, "MovementComponent") == 0)
+		{
+			auto movement = gameObject.AddComponent<MovementComponent>();
 		}
 	}
 }

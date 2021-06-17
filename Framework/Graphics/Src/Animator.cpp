@@ -15,6 +15,14 @@ void KWSE::Graphics::Animator::PlayAnimation(int clipIndex)
 	}
 	 mAnimClipIndex = clipIndex < mModel->animSet.size() ? clipIndex : mAnimClipIndex; 
 }
+void KWSE::Graphics::Animator::PlayAnimation(int clipIndex,bool play)
+{
+	if (play && clipIndex < mModel->animSet.size())
+	{
+		mAnimationTimer = 0.0f;
+	}
+	mAnimClipIndex = clipIndex < mModel->animSet.size() ? clipIndex : mAnimClipIndex;
+}
 
 void Animator::Update(float deltaTime)
 {

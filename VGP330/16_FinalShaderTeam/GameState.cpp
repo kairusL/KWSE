@@ -123,7 +123,8 @@ void GameState::Initialize()
 	mMaterial.power = 1.999f;
 
 
-	mSkybox.Initialize("../../Assets/Images/Skybox_04.jpg");
+	//mSkybox.Initialize("../../Assets/Images/Skybox_04.jpg");
+	mSkybox.Initialize("../../Assets/Images/moonSkybox.png");
 
 	mSampler.Initialize(Sampler::Filter::Anisotropic, Sampler::AddressMode::Clamp);
 	mBlendState.Initialize(KWSE::Graphics::BlendState::Mode::Additive);
@@ -221,6 +222,7 @@ void GameState::Update(float deltaTime)
 {
 	auto inputSystem = InputSystem::Get();
 
+	mOilSetting.iTime = KWSE::Core::TimeUtil::GetTime();
 	if (mPause)
 	{
 		deltaTime = 0.0f;
@@ -361,9 +363,10 @@ void  GameState::DebugUI()
 	if (ImGui::CollapsingHeader("Post Processing Effects"))
 	{
 		bool mosaicactive = mActiveSetting.mosaicActive == 1.0f;
-		if (ImGui::Checkbox("Mosaica Effect", &mosaicactive))
+		bool snow  = 0.0f;
+		if (ImGui::Checkbox("Mosaica Effect", &snow))
+		//if (ImGui::Checkbox("Mosaica Effect", &mosaicactive))
 		{
-			mActiveSetting.mosaicActive = mosaicactive ? 1.0f : 0.0f;
 		}
 
 		bool heatactive = mActiveSetting.heatActive == 1.0f;
@@ -372,16 +375,21 @@ void  GameState::DebugUI()
 			mActiveSetting.heatActive = heatactive ? 1.0f : 0.0f;
 		}
 
-		//bool fluorescentactive = mActiveSetting.fluorescentActive == 1.0f;
-		//if (ImGui::Checkbox("Fluorescent Effect", &fluorescentactive))
-		//{
-		//	mActiveSetting.fluorescentActive = fluorescentactive ? 1.0f : 0.0f;
-		//}
+		bool fluorescentactive = mActiveSetting.fluorescentActive == 1.0f;
+		if (ImGui::Checkbox("Fluorescent Effect", &fluorescentactive))
+		{
+			mActiveSetting.fluorescentActive = fluorescentactive ? 1.0f : 0.0f;
+		}
 
 		bool oilactive = mActiveSetting.oilActive == 1.0f;
 		if (ImGui::Checkbox("OilPainting Effect", &oilactive))
 		{
 			mActiveSetting.oilActive = oilactive ? 1.0f : 0.0f;
+		}
+		//if (ImGui::Checkbox("Snow Effect", &snow))
+		if (ImGui::Checkbox("Snow Effect", &mosaicactive))
+		{
+			mActiveSetting.mosaicActive = mosaicactive ? 1.0f : 0.0f;
 		}
 	}
 	if (ImGui::CollapsingHeader("OilSetting"))

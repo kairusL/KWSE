@@ -11,8 +11,8 @@ void GameWorld::Initialize(uint32_t capacity)
 		service->Initialize();
 	}
 	mGameObjectSlots.resize(capacity);
-	mFreeSolts.resize(capacity);
-	std::iota(mFreeSolts.begin(), mFreeSolts.end(), 0);
+	mFreeSlots.resize(capacity);
+	std::iota(mFreeSlots.begin(), mFreeSlots.end(), 0);
 	mInitialized = true;
 }
 void GameWorld::Terminate()
@@ -87,7 +87,7 @@ GameObject* KWSE::GameWorld::CreateGameObject(const std::filesystem::path & temp
 	GameObjectHandle handle;
 
 	// if empty then exit. run out space
-	if (mFreeSolts.empty())
+	if (mFreeSlots.empty())
 	{
 		return nullptr;
 	}
@@ -103,8 +103,8 @@ GameObject* KWSE::GameWorld::CreateGameObject(const std::filesystem::path & temp
 	}
 	//Open file
 
-	uint32_t freeslot = mFreeSolts.back();
-	mFreeSolts.pop_back();
+	uint32_t freeslot = mFreeSlots.back();
+	mFreeSlots.pop_back();
 
 	auto& slot = mGameObjectSlots[freeslot];
 	auto& newObject = slot.gameObject;
@@ -207,7 +207,7 @@ void  GameWorld::ProcessDestoryList()
 		
 		// Delete the game object and recycle the slot
 		slot.gameObject.reset();
-		mFreeSolts.push_back(index);	
+		mFreeSlots.push_back(index);	
 	}
 	mToBeDestoryed.clear();
 

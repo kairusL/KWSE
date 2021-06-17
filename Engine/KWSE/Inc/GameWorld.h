@@ -79,7 +79,7 @@ namespace KWSE
 		Services mServices;
 
 		GameObjectSlots mGameObjectSlots;
-		std::vector<uint32_t> mFreeSolts;
+		std::vector<uint32_t> mFreeSlots;
 		std::vector<uint32_t> mToBeDestoryed;
 
 		GameObjectList mUpdateList;

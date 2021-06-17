@@ -51,8 +51,8 @@ private:
 	{
 		float screenSizeScale=1.0f;
 		float paintRadius=3.0f;
-		float minSigma =1.0f;
 		float sizeWeight=0.0f;
+		float iTime=0.0f;
 
 	};
 	struct ActiveSetting

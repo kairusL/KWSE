@@ -19,7 +19,7 @@ namespace KWSE::Graphics
 		ModelId LoadModel(std::filesystem::path filePath);
 
 		const Model& GetModel(ModelId id) const;
-
+		Model& GetModel(ModelId id) ;
 	private:
 		struct Entry
 		{

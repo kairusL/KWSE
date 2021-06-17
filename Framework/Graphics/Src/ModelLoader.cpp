@@ -267,7 +267,7 @@ bool KWSE::Graphics::ModelLoader::LoadSkeleton(std::filesystem::path fileName, M
 	return true;
 }
 
-void ModelLoader::LoadAnimation(std::filesystem::path fileName, Model & model)
+void ModelLoader::LoadAnimation(std::filesystem::path fileName, Model& model)
 {
 	fileName.replace_extension("anim");
 	if (!std::filesystem::exists(fileName))

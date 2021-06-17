@@ -45,6 +45,8 @@ void GameState::Update(float deltaTime)
 	{
 		auto newObject = mGameWorld.CreateGameObject("../../Assets/Templates/test.json", std::to_string(mNextId++));
 		newObject->GetComponent<TransformComponent>()->SetPosition({ mNextPositionX,0.0f,0.0f });
+		newObject->GetComponent<AnimatorComponent>()->GetAnimator().Play();
+		newObject->GetComponent<AnimatorComponent>()->GetAnimator().SetLooping(true);
 		mNextPositionX += 1.0f;
 
 		if (mNextId >=5)
@@ -57,14 +59,14 @@ void GameState::Update(float deltaTime)
 
 
 
-	if (inputSystem->IsKeyDown(KeyCode::LEFT))
-		mRotation.y += deltaTime;
-	if (inputSystem->IsKeyDown(KeyCode::RIGHT))
-		mRotation.y -= deltaTime;
-	if (inputSystem->IsKeyDown(KeyCode::UP))
-		mRotation.x += deltaTime;
-	if (inputSystem->IsKeyDown(KeyCode::DOWN))
-		mRotation.x -= deltaTime;
+	//if (inputSystem->IsKeyDown(KeyCode::LEFT))
+	//	mRotation.y += deltaTime;
+	//if (inputSystem->IsKeyDown(KeyCode::RIGHT))
+	//	mRotation.y -= deltaTime;
+	//if (inputSystem->IsKeyDown(KeyCode::UP))
+	//	mRotation.x += deltaTime;
+	//if (inputSystem->IsKeyDown(KeyCode::DOWN))
+	//	mRotation.x -= deltaTime;
 	//mRotation += deltaTime;
 
 
@@ -75,6 +77,15 @@ void GameState::Update(float deltaTime)
 	GameObject* gameObject = mGameWorld.GetGameObject(mGameObjectHandle);
 	auto animatorComponent = gameObject->GetComponent<AnimatorComponent>();
 	auto& animator = animatorComponent->GetAnimator();
+	if (gameObject)
+	{
+		auto animatorComponent = gameObject->GetComponent<AnimatorComponent>();
+		//if (animatorComponent)
+		//{
+		//
+		//	animatorComponent->GetAnimator().PlayAnimation(animF);
+		//}
+	}
 
 
 	mGameWorld.Update(deltaTime);
@@ -126,15 +137,15 @@ void  GameState::DebugUI()
 
 	if (ImGui::CollapsingHeader("Animation"))
 	{
-		if (ImGui::Checkbox("Loop", &mAnimationLoop))
-		{
-			//mAnimationLoop= (mAnimation = AnimationBuilder().SetLooping(true)) ? 1.0f : 0.0f;
-		}
+		//if (ImGui::Checkbox("Loop", &mAnimationLoop))
+		//{
+		//	//mAnimationLoop= (mAnimation = AnimationBuilder().SetLooping(true)) ? 1.0f : 0.0f;
+		//}
 	}
-	if (ImGui::CollapsingHeader("ChangeAnimation"))
-	{
-		ImGui::DragInt("Anim", &animF);
-	}
+	//if (ImGui::CollapsingHeader("ChangeAnimation"))
+	//{
+	//	ImGui::DragInt("Anim", &animF);
+	//}
 
 	ImGui::End();
 
@@ -150,7 +161,7 @@ void  GameState::DebugUI()
 		if (animatorComponent)
 		{
 			auto& animator = animatorComponent->GetAnimator();
-			animator.SetLooping(mAnimationLoop);
+			//animator.SetLooping(mAnimationLoop);
 		}
 	}
 }

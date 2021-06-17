@@ -24,6 +24,9 @@ namespace KWSE
 		void Register(const ModelComponent* modelComponent);
 		void Unregister(const ModelComponent* modelComponent);
 
+
+		Camera& GetDefaultCamera() {return mDefaultCamera;}
+		Camera& GetActionCamera() {return *mActiveCamera;}
 	private:
 		void RenderDepthMap();
 		void RenderScene();
@@ -95,7 +98,7 @@ namespace KWSE
 		KWSE::Graphics::Camera mDefaultCamera;
 		KWSE::Graphics::Camera mLightCamera;
 		KWSE::Graphics::Camera* mActiveCamera = nullptr;
-
+		KWSE::Math::Vector3 activeCamDir;
 		float mLightCameraDistance = 100.0f;
 		/// Camera
 

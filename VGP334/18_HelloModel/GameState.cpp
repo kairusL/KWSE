@@ -27,6 +27,7 @@ void GameState::Initialize()
 	//model.Initialize(L"../../Assets/Models/Model/Vanguard/SillyDancing/SillyDancing.model");
 	//model.Initialize(L"../../Assets/Models/Model/Vanguard/StandingDodgeBackward/StandingDodgeBackward.model");
 	ModelLoader::LoadAnimation(L"../../Assets/Models/Model/Vanguard/StandingDodgeBackward/StandingDodgeBackward.anim", model);
+	ModelLoader::LoadAnimation(L"../../Assets/Models/Model/Vanguard/CrouchToStand/CrouchToStand.anim", model);
 
 	//Animator
 	mAnimator.Initialize(&model);

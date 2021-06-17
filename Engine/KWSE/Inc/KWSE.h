@@ -8,6 +8,7 @@
 #include "ColliderComponent.h"
 #include "TransformComponent.h"
 #include "ModelComponent.h"
+#include "MovementComponent.h"
 #include "AnimatorComponent.h"
 // Service header
 #include"RenderService.h"

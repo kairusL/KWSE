@@ -12,7 +12,6 @@ public:
 	BlockAllocator(std::size_t blockSize,std::size_t capacity);
 	~BlockAllocator();
 
-
 	//make one bloakAllocator and thats the only one 
 	BlockAllocator(const BlockAllocator&) = delete; // copy constructor
 	BlockAllocator& operator=(const BlockAllocator&) = delete; // copy assignment operator

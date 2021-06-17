@@ -9,9 +9,8 @@ cbuffer OilSetting: register(b0)
 {
 	float screenSizeScale;
 	float paintRadius;
-	float minSigma;
 	float sizeWeight;
-
+	float iTime;
 }
 cbuffer ActiveSetting: register(b1)
 {
@@ -43,6 +42,51 @@ VS_OUTPUT VS(VS_INPUT input)
 	return output;
 }
 
+float2 mod289(float2 x) {
+	return x - floor(x * (1.0f / 289.0f)) * 289.0f;
+}
+
+float3 mod289(float3 x) {
+	return x - floor(x * (1.0f / 289.0f)) * 289.0f;
+}
+
+float4 mod289(float4 x) {
+	return x - floor(x * (1.0f / 289.0f)) * 289.0f;
+}
+
+float3 permute(float3 x) {
+	return mod289(((x*34.0f) + 1.0f)*x);
+}
+
+float4 permute(float4 x) {
+	return fmod((34.0f * x + 1.0f) * x, 289.0f);
+}
+
+float cellular2x2(float2 P)
+{
+#define K 0.142857142857 // 1/7
+#define K2 0.0714285714285 // K/2
+#define jitter 0.8 // jitter 1.0 makes F1 wrong more often
+
+	float2 Pi = fmod(floor(P), 289.0f);
+	float2 Pf = frac(P);
+	float4 Pfx = Pf.x + float4(-0.5f, -1.5f, -0.5f, -1.5f);
+	float4 Pfy = Pf.y + float4(-0.5f, -0.5f, -1.5f, -1.5f);
+	float4 p = permute(Pi.x + float4(0.0f, 1.0f, 0.0f, 1.0f));
+	p = permute(p + Pi.y + float4(0.0f, 0.0f, 1.0f, 1.0f));
+	float4 ox = fmod(p, 7.0f)*K + K2;
+	float4 oy = fmod(floor(p*K), 7.0f)*K + K2;
+	float4 dx = Pfx + jitter * ox;
+	float4 dy = Pfy + jitter * oy;
+	float4 d = dx * dx + dy * dy; // d11, d12, d21 and d22, squared
+	// Sort out the two smallest distances
+
+	// Cheat and pick only F1
+	d.xy = min(d.xy, d.zw);
+	d.x = min(d.x, d.y);
+	return d.x; // F1 duplicated, F2 not computed
+}
+
 float4 PS(VS_OUTPUT input) : SV_Target
 {
 
@@ -50,6 +94,8 @@ float4 PS(VS_OUTPUT input) : SV_Target
 	float vx_offset = 0.5;
 	float pixel_w = 15.0;
 	float pixel_h = 10.0f;
+	float minSigma = 1.0f;
+	float2 iResolution = float2(0.08f, -0.065f);
 	// oil
 	//float2 size = 2.0f / textureSampler;
 	// samples->calculating mean value -> the number of samples going to take later.
@@ -316,15 +362,63 @@ float4 PS(VS_OUTPUT input) : SV_Target
 	if (mosaicActive != 0.0f)
 	{
 
-	//if (uv.x < (vx_offset - 0.005))
-	//{
-		float dx = pixel_w * (1. / rt_w);
-		float dy = pixel_h * (1. / rt_h);
-		float2 coord = float2(dx*floor(uv.x / dx),
-			dy*floor(uv.y / dy));
-		tc = (float3)textureMap.Sample(textureSampler, coord).rgb;
-		return float4(tc, 1);
-	//}
+		//float dx = pixel_w * (1. / rt_w);
+		//float dy = pixel_h * (1. / rt_h);
+		//float2 coord = float2(dx*floor(uv.x / dx),
+		//	dy*floor(uv.y / dy));
+		//tc = (float3)textureMap.Sample(textureSampler, coord).rgb;
+		//return float4(tc, 1);
+
+
+		float speed = 2.0f;
+		
+		
+		uv = uv / iResolution.xy;
+		
+		uv.x *= (iResolution.x / iResolution.y);
+		
+		
+		float2 GA= float2(0.0f,0.0f);
+		GA.x -= iTime * 0.5;
+		GA.y += iTime * 0.3;
+		GA *= speed;
+		
+		float F1 = 0.0f, F2 = 0.0f, F3 = 0.0f, F4 = 0.0f, F5 = 0.0f, N1 = 0.0f, N2 = 0.0f, N3 = 0.0f, N4 = 0.0f, N5 = 0.0f;
+		float A =  0.0f, A1 = 0.0f, A2 = 0.0f, A3 = 0.0f, A4 = 0.0f, A5 = 0.0f;
+		
+		
+		// Attentuation
+		A = (uv.x - (uv.y*0.3f));
+		A = clamp(A, 0.0f, 1.0f);
+		
+		// Snow layers, somewhat like an fbm with worley layers.
+		F1 = 1.0f - cellular2x2((uv + (GA*0.1f))*8.0f);
+		A1 = 1.0f - (A*1.0f);
+		N1 = smoothstep(0.998f, 1.0f, F1)*1.0f*A1;
+		
+		F2 = 1.0f - cellular2x2((uv + (GA*0.2f))*6.0f);
+		A2 = 1.0f - (A*0.8f);
+		N2 = smoothstep(0.995f, 1.0f, F2)*0.85f*A2;
+		
+		F3 = 1.0f - cellular2x2((uv + (GA*0.4f))*4.0f);
+		A3 = 1.0f - (A*0.6f);
+		N3 = smoothstep(0.99f, 1.0f, F3)*0.65f*A3;
+		
+		F4 = 1.0f - cellular2x2((uv + (GA*0.6f))*3.0f);
+		A4 = 1.0f - (A*1.0f);
+		N4 = smoothstep(0.98f, 1.0f, F4)*0.4f*A4;
+		
+		F5 = 1.0f - cellular2x2((uv + (GA))*1.2f);
+		A5 = 1.0f - (A*1.0f);
+		N5 = smoothstep(0.98f, 1.0f, F5)*0.25f*A5;
+		
+		float Snowout = N5 + N4 + N3 + N2 + N1;
+		
+		Snowout = 0.35f + N1 + N2 + N3 + N4 + N5;
+		
+		float4 fragColor = float4(Snowout*0.9f*color.r, Snowout*color.g, Snowout*1.1f*color.b, 1.0f);
+		return fragColor;
+
 	}
 	//else if (uv.x >= (vx_offset + 0.005))
 	//{
