@@ -362,62 +362,62 @@ float4 PS(VS_OUTPUT input) : SV_Target
 	if (mosaicActive != 0.0f)
 	{
 
-		//float dx = pixel_w * (1. / rt_w);
-		//float dy = pixel_h * (1. / rt_h);
-		//float2 coord = float2(dx*floor(uv.x / dx),
-		//	dy*floor(uv.y / dy));
-		//tc = (float3)textureMap.Sample(textureSampler, coord).rgb;
-		//return float4(tc, 1);
+		float dx = pixel_w * (1. / rt_w);
+		float dy = pixel_h * (1. / rt_h);
+		float2 coord = float2(dx*floor(uv.x / dx),
+			dy*floor(uv.y / dy));
+		tc = (float3)textureMap.Sample(textureSampler, coord).rgb;
+		return float4(tc, 1);
 
 
-		float speed = 2.0f;
-		
-		
-		uv = uv / iResolution.xy;
-		
-		uv.x *= (iResolution.x / iResolution.y);
-		
-		
-		float2 GA= float2(0.0f,0.0f);
-		GA.x -= iTime * 0.5;
-		GA.y += iTime * 0.3;
-		GA *= speed;
-		
-		float F1 = 0.0f, F2 = 0.0f, F3 = 0.0f, F4 = 0.0f, F5 = 0.0f, N1 = 0.0f, N2 = 0.0f, N3 = 0.0f, N4 = 0.0f, N5 = 0.0f;
-		float A =  0.0f, A1 = 0.0f, A2 = 0.0f, A3 = 0.0f, A4 = 0.0f, A5 = 0.0f;
-		
-		
-		// Attentuation
-		A = (uv.x - (uv.y*0.3f));
-		A = clamp(A, 0.0f, 1.0f);
-		
-		// Snow layers, somewhat like an fbm with worley layers.
-		F1 = 1.0f - cellular2x2((uv + (GA*0.1f))*8.0f);
-		A1 = 1.0f - (A*1.0f);
-		N1 = smoothstep(0.998f, 1.0f, F1)*1.0f*A1;
-		
-		F2 = 1.0f - cellular2x2((uv + (GA*0.2f))*6.0f);
-		A2 = 1.0f - (A*0.8f);
-		N2 = smoothstep(0.995f, 1.0f, F2)*0.85f*A2;
-		
-		F3 = 1.0f - cellular2x2((uv + (GA*0.4f))*4.0f);
-		A3 = 1.0f - (A*0.6f);
-		N3 = smoothstep(0.99f, 1.0f, F3)*0.65f*A3;
-		
-		F4 = 1.0f - cellular2x2((uv + (GA*0.6f))*3.0f);
-		A4 = 1.0f - (A*1.0f);
-		N4 = smoothstep(0.98f, 1.0f, F4)*0.4f*A4;
-		
-		F5 = 1.0f - cellular2x2((uv + (GA))*1.2f);
-		A5 = 1.0f - (A*1.0f);
-		N5 = smoothstep(0.98f, 1.0f, F5)*0.25f*A5;
-		
-		float Snowout = N5 + N4 + N3 + N2 + N1;
-		
-		Snowout = 0.35f + N1 + N2 + N3 + N4 + N5;
-		
-		float4 fragColor = float4(Snowout*0.9f*color.r, Snowout*color.g, Snowout*1.1f*color.b, 1.0f);
-		return fragColor;
+		//float speed = 2.0f;
+		//
+		//
+		//uv = uv / iResolution.xy;
+		//
+		//uv.x *= (iResolution.x / iResolution.y);
+		//
+		//
+		//float2 GA= float2(0.0f,0.0f);
+		//GA.x -= iTime * 0.5;
+		//GA.y += iTime * 0.3;
+		//GA *= speed;
+		//
+		//float F1 = 0.0f, F2 = 0.0f, F3 = 0.0f, F4 = 0.0f, F5 = 0.0f, N1 = 0.0f, N2 = 0.0f, N3 = 0.0f, N4 = 0.0f, N5 = 0.0f;
+		//float A =  0.0f, A1 = 0.0f, A2 = 0.0f, A3 = 0.0f, A4 = 0.0f, A5 = 0.0f;
+		//
+		//
+		//// Attentuation
+		//A = (uv.x - (uv.y*0.3f));
+		//A = clamp(A, 0.0f, 1.0f);
+		//
+		//// Snow layers, somewhat like an fbm with worley layers.
+		//F1 = 1.0f - cellular2x2((uv + (GA*0.1f))*8.0f);
+		//A1 = 1.0f - (A*1.0f);
+		//N1 = smoothstep(0.998f, 1.0f, F1)*1.0f*A1;
+		//
+		//F2 = 1.0f - cellular2x2((uv + (GA*0.2f))*6.0f);
+		//A2 = 1.0f - (A*0.8f);
+		//N2 = smoothstep(0.995f, 1.0f, F2)*0.85f*A2;
+		//
+		//F3 = 1.0f - cellular2x2((uv + (GA*0.4f))*4.0f);
+		//A3 = 1.0f - (A*0.6f);
+		//N3 = smoothstep(0.99f, 1.0f, F3)*0.65f*A3;
+		//
+		//F4 = 1.0f - cellular2x2((uv + (GA*0.6f))*3.0f);
+		//A4 = 1.0f - (A*1.0f);
+		//N4 = smoothstep(0.98f, 1.0f, F4)*0.4f*A4;
+		//
+		//F5 = 1.0f - cellular2x2((uv + (GA))*1.2f);
+		//A5 = 1.0f - (A*1.0f);
+		//N5 = smoothstep(0.98f, 1.0f, F5)*0.25f*A5;
+		//
+		//float Snowout = N5 + N4 + N3 + N2 + N1;
+		//
+		//Snowout = 0.35f + N1 + N2 + N3 + N4 + N5;
+		//
+		//float4 fragColor = float4(Snowout*0.9f*color.r, Snowout*color.g, Snowout*1.1f*color.b, 1.0f);
+		//return fragColor;
 
 	}
 	//else if (uv.x >= (vx_offset + 0.005))

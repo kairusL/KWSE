@@ -15,13 +15,22 @@ void KWSE::Graphics::Animator::PlayAnimation(int clipIndex)
 	}
 	 mAnimClipIndex = clipIndex < mModel->animSet.size() ? clipIndex : mAnimClipIndex; 
 }
-void KWSE::Graphics::Animator::PlayAnimation(int clipIndex,bool play)
+void KWSE::Graphics::Animator::PlayAnimation(std::string name)
 {
-	if (play && clipIndex < mModel->animSet.size())
+	for (int i=0;i<mModel->animSet.size();++i)
+	{
+		if (mModel->animSet[i]->name ==name)
+		{
+			clip = i;
+			
+		}
+	}
+	if (clip != mAnimClipIndex && clip < mModel->animSet.size())
 	{
 		mAnimationTimer = 0.0f;
 	}
-	mAnimClipIndex = clipIndex < mModel->animSet.size() ? clipIndex : mAnimClipIndex;
+	mAnimClipIndex = clip < mModel->animSet.size() ? clip : mAnimClipIndex;
+
 }
 
 void Animator::Update(float deltaTime)

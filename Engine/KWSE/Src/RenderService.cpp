@@ -421,7 +421,7 @@ void RenderService::RenderScene()
 
 		mDepthRebderTarget.BindPS(4);
 
-		auto& game_model = entry.modelComponent->GetModel();
+		auto game_model = entry.modelComponent->GetModel();
 		if (entry.animatorComponent)
 		{
 			auto& animator = entry.animatorComponent->GetAnimator();
@@ -435,9 +435,9 @@ void RenderService::RenderScene()
 				for (auto& transform : transforms)
 					transform = transform * matWorld;
 
-				auto& animationClip = game_model.animSet[0];
+				auto& animationClip = game_model->animSet[0];
 				KWSE::Graphics::DrawSkeleton(
-					*game_model.skeleton,
+					*game_model->skeleton,
 					transforms,
 					Skeleton::DrawType::cone);
 				mSetting.Skinning = 0;
@@ -446,7 +446,7 @@ void RenderService::RenderScene()
 			{
 				BoneTransformData boneData;
 				// Apply offset transform to align the model to bone space
-				auto& bones = game_model.skeleton.get()->bones;
+				auto& bones = game_model->skeleton.get()->bones;
 				for (auto& bone : bones)
 					boneData.boneTransforms[bone->index] =
 					KWSE::Math::Transpose(animator.GetToLocalTransform()[bone->index]);
@@ -454,9 +454,9 @@ void RenderService::RenderScene()
 				mTransBoneBuffer.BindVS(4);
 				mSetting.Skinning = 1;
 
-				for (const auto& mesh : game_model.meshData)
+				for (const auto& mesh : game_model->meshData)
 				{
-					auto& material = game_model.materialData[mesh->materialIndex];
+					auto& material = game_model->materialData[mesh->materialIndex];
 					if (material.diffuseMap)
 					{
 						material.diffuseMap->BindPS(0);

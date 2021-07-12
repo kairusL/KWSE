@@ -10,6 +10,8 @@
 #include "ModelComponent.h"
 #include "MovementComponent.h"
 #include "AnimatorComponent.h"
+#include "StateComponent.h"
+#include "SpawnerComponent.h"
 // Service header
 #include"RenderService.h"
 // World

@@ -2,6 +2,7 @@
 #include "ModelManager.h"
 
 #include "Model.h"
+#include "ModelLoader.h"
 
 using namespace KWSE;
 using namespace KWSE::Graphics;
@@ -35,11 +36,11 @@ ModelManager* ModelManager::Get()
 void ModelManager::Terminate()
 {
 	for (auto& entry : mModels)
-		entry.model.Terminate();
+		entry.model->Terminate();
 	mModels.clear();
 }
 
-ModelId ModelManager::LoadModel(std::filesystem::path filePath)
+ModelId ModelManager::LoadModel(std::filesystem::path filePath, const std::vector<std::string>& animationFiles)
 {
 	auto iter = std::find_if(mModels.begin(), mModels.end(), [&](const auto& entry) {
 		return entry.filePath == filePath;
@@ -50,17 +51,17 @@ ModelId ModelManager::LoadModel(std::filesystem::path filePath)
 	}
 	auto& entry = mModels.emplace_back();
 	entry.filePath = filePath;
-	entry.model.Initialize(filePath);
+	entry.model = std::make_unique<Model>();
+	entry.model->Initialize(filePath);
+	for (auto& animationFile :animationFiles )
+	{
+		ModelLoader::LoadAnimation(animationFile, *entry.model);
+	}
 	return mModels.size();
 }
- Model& ModelManager::GetModel(ModelId id) 
-{
-	 auto constModel = static_cast<const ModelManager*>(this);
-	 return const_cast<Model&>(constModel->GetModel(id));
-}
 
-const Model& ModelManager::GetModel(ModelId id) const
+const Model* ModelManager::GetModel(ModelId id) const
 {
 	ASSERT(id > 0 && id <= mModels.size(), "ModelManager -- Invalid model id.");
-	return mModels[id - 1].model;
+	return mModels[id - 1].model.get();
 }

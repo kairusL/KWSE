@@ -2,8 +2,10 @@
 #include "MovementComponent.h"
 
 #include "GameObject.h"
+#include "GameWorld.h"
 #include "AnimatorComponent.h"
 #include "TransformComponent.h"
+#include "ColliderComponent.h"
 #include "RenderService.h"
 
 using namespace KWSE;
@@ -16,8 +18,6 @@ void MovementComponent::Initialize()
 {
 	mAnimatorComponent = GetOwner().GetComponent< AnimatorComponent>();
 	mTransformComponent = GetOwner().GetComponent<TransformComponent>();
-	mAnimatorComponent->Initialize();
-	mTransformComponent->Initialize();
 }
 
 void MovementComponent::Update(float deltaTime)
@@ -30,6 +30,9 @@ void MovementComponent::Update(float deltaTime)
 	auto horCamDir = Math::Vector3{ 0.99f,0.0049f, 0.019f };
 	auto camDir = Math::Vector3{ 0.036f,-0.17f, 0.983f };
 	auto speed = mAnimatorComponent->GetAnimator().GetAnimationSpeed();
+
+
+
 	if (mPos ==pos)
 	{
 		mAnimatorComponent->GetAnimator().SetLooping(stop);
@@ -79,6 +82,13 @@ void MovementComponent::Update(float deltaTime)
 		mAnimatorComponent->GetAnimator().SetLooping(play);
 	}
 
+}
 
-
+void MovementComponent::TargetColliderCheck(Math::AABB aabb, std::string areaname)
+{
+	if (Math::Intersect(mPos, aabb))
+	{
+		mAnimatorComponent->GetAnimator().PlayAnimation(areaname);
+		mAnimatorComponent->GetAnimator().SetLooping(true);
+	}
 }

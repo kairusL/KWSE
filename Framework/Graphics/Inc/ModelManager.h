@@ -16,15 +16,14 @@ namespace KWSE::Graphics
 	public:
 		void Terminate();
 
-		ModelId LoadModel(std::filesystem::path filePath);
+		ModelId LoadModel(std::filesystem::path filePath, const std::vector<std::string>& animationFiles);
 
-		const Model& GetModel(ModelId id) const;
-		Model& GetModel(ModelId id) ;
+		const Model* GetModel(ModelId id) const;
 	private:
 		struct Entry
 		{
 			std::filesystem::path filePath;
-			Model model;
+			std::unique_ptr<Model> model;
 		};
 
 		std::vector<Entry> mModels;

@@ -78,6 +78,10 @@ void GameWorld::DebugUI()
 	{
 		service->DebugUI();
 	}
+	for (auto& gameObject : mUpdateList)
+	{
+		gameObject->DebugUI();
+	}
 }
 
 GameObject* KWSE::GameWorld::CreateGameObject(const std::filesystem::path & templateFileName, std::string name)

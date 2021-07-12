@@ -17,15 +17,9 @@ void ModelComponent::Initialize()
 	auto renderService = GetOwner().GetWorld().GetService<RenderService>();
 	renderService->Register(this);
 
-	mModelId = ModelManager::Get()->LoadModel(mFileName);
-	if (!mAnimationFileName.empty())
-	{
-		for (auto& animName : mAnimationFileName)
-		{
-			ModelLoader::LoadAnimation(animName, ModelManager::Get()->GetModel(mModelId));
-		}
-		mAnimationFileName.clear();
-	}
+	mModelId = ModelManager::Get()->LoadModel(mFileName,mAnimationFileNames);
+	auto model = ModelManager::Get()->GetModel(mModelId);
+
 
 }
 
@@ -37,7 +31,7 @@ void ModelComponent::Terminate()
 }
 
 
-const Graphics::Model& ModelComponent::GetModel() const
+const Graphics::Model* ModelComponent::GetModel() const
 {
 	return ModelManager::Get()->GetModel(mModelId);
 }

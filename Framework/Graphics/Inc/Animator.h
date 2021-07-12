@@ -16,7 +16,7 @@ namespace KWSE::Graphics
 
 		//void PlayAnimation(const char* clipName);
 		void PlayAnimation(int clipIndex);
-		void PlayAnimation(int clipIndex,bool play);
+		void PlayAnimation(std::string name);
 		void Play() { mAnimate = true; }
 		void Stop() { mAnimate = false; }
 
@@ -29,6 +29,8 @@ namespace KWSE::Graphics
 		float GetAnimationSpeed() { return mAnimationSpeed; }
 		void SetLooping(bool loop) { mLooping = loop; }
 
+
+
 	private:
 		const KWSE::Graphics::Model* mModel = nullptr;
 		std::vector<KWSE::Math::Matrix4> mSkeletonTransform;
@@ -38,5 +40,7 @@ namespace KWSE::Graphics
 		int mAnimClipIndex = 0;
 		bool mAnimate = false;
 		bool mLooping = false;
+		bool mNameFinded = false;
+		int clip=0;
 	};
 }

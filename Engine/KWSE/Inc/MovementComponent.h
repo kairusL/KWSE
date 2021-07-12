@@ -7,6 +7,7 @@ namespace KWSE
 	class AnimatorComponent;
 	class TransformComponent;
 	class RenderService;
+	class GameWorld;
 
 	class MovementComponent final : public Component
 	{
@@ -20,7 +21,9 @@ namespace KWSE
 
 		void Update(float deltaTime) override;
 
+		void TargetColliderCheck(Math::AABB aabb, std::string areaname);
 	private:
+		GameWorld* mWorld;
 		RenderService* mRenderService;
 		AnimatorComponent* mAnimatorComponent = nullptr;
 		TransformComponent* mTransformComponent = nullptr;

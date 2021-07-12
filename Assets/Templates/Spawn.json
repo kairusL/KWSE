@@ -1,0 +1,17 @@
+{
+  "Components": {
+    "TransformComponent": {
+      "Position": [ 0, 0, 0 ]
+    },
+    "SpawnerComponent": {
+      "SpawnFileName": "../../Assets/Templates/Target.json",
+      "SpawnObjectName": "path",
+      "SpawnAmount": 1,
+      "NextSpawnTime": 1.0,
+      "MaxSpawnAmount": 6,
+      "SpawnPath": {},
+      "SpawnJumpArea": {},
+      "SpawnBackflipArea": {}
+    }
+    }
+  }

@@ -59,6 +59,7 @@ namespace KWSE
 		GameObject* GetGameObject(GameObjectHandle handle);
 		GameObject* FindGameObject(const std::string& name);
 	
+		std::vector<GameObject*> GetAllGameObject(){ return mUpdateList; }
 		void Destory(GameObjectHandle handle);
 	private:
 		bool IsValid(GameObjectHandle handle) const;

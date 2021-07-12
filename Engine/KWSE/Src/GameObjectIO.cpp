@@ -8,6 +8,7 @@
 #include "TransformComponent.h"
 #include "ModelComponent.h"
 #include "MovementComponent.h"
+#include "SpawnerComponent.h"
 
 
 #include <rapidjson/document.h>
@@ -100,6 +101,49 @@ void GameObjectIO::Read(FILE* file,GameObject& gameObject)
 		else if (strcmp(componentName, "MovementComponent") == 0)
 		{
 			auto movement = gameObject.AddComponent<MovementComponent>();
+		}
+		else if (strcmp(component.name.GetString(), "SpawnerComponent") == 0)
+		{
+
+			auto spawner = gameObject.AddComponent<SpawnerComponent>();
+			if (component.value.HasMember("SpawnFileName"))
+			{
+				const auto& spawnFileName = component.value["SpawnFileName"].GetString();
+				spawner->SetTemplateFileName(spawnFileName);
+			}
+			if (component.value.HasMember("SpawnObjectName"))
+			{
+				const auto& objectName = component.value["SpawnObjectName"].GetString();
+				spawner->SetSpawnObjectName(objectName);
+			}
+			if (component.value.HasMember("SpawnAmount"))
+			{
+				const auto& spawnAmount = component.value["SpawnAmount"].GetInt();
+				spawner->SetSpawnAmount(spawnAmount);
+			}
+			if (component.value.HasMember("NextSpawnTime"))
+			{
+				const auto& nextSpawnTime = component.value["NextSpawnTime"].GetFloat();
+				spawner->SetSpawnWaitTime(nextSpawnTime);
+			}
+			if (component.value.HasMember("MaxSpawnAmount"))
+			{
+				const auto& maxSpawnAmount = component.value["MaxSpawnAmount"].GetInt();
+				spawner->SetMaxAmount(maxSpawnAmount);
+			}
+			if (component.value.HasMember("SpawnPath"))
+			{
+				spawner->SetSpawnPath(true);
+			}
+			if (component.value.HasMember("SpawnJumpArea"))
+			{
+				spawner->SetJumpActive(true);
+			}
+			if (component.value.HasMember("SpawnBackflipArea"))
+			{
+				spawner->SetBackflipAreaActive(true);
+			}
+
 		}
 	}
 }

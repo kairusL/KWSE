@@ -13,7 +13,8 @@
         "../../Assets/Models/Model/Vanguard/Walking/Walking.model",
         "../../Assets/Models/Model/Vanguard/Jump/Jump.model",
         "../../Assets/Models/Model/Vanguard/StandingDodgeBackward/StandingDodgeBackward.anim",
-        "../../Assets/Models/Model/Vanguard/CrouchToStand/CrouchToStand.anim"
+        "../../Assets/Models/Model/Vanguard/CrouchToStand/CrouchToStand.anim",
+        "../../Assets//Models/Model/Vanguard/Backflip/Backflip.model"
       ]
 
     },

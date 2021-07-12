@@ -1,0 +1,12 @@
+{
+  "Components": {
+    "TransformComponent": {
+      "Position": [3, 2,3]
+    },
+    "ColliderComponent": {
+      "Center": [ 0, 0, 0 ],
+      "Extend": [ 0.1,1 , 0.1 ]
+    }
+  }
+}
+

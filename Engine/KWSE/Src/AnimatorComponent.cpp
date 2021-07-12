@@ -12,7 +12,7 @@ MEMPOOL_DEFINE(AnimatorComponent, 1000)
 void AnimatorComponent::Initialize()
 {
 	mModelComponent = GetOwner().GetComponent<ModelComponent>();
-	mAnimator.Initialize(&mModelComponent->GetModel());
+	mAnimator.Initialize(mModelComponent->GetModel());
 }
 
 void AnimatorComponent::Update(float deltaTime)
